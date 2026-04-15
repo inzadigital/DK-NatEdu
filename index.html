@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NatEdu · Monitores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#07111f;--bg-card:#0e1f35;--bg-card2:#152840;--bg-surf:#1b3254;
+  --accent:#0ea5e9;--teal:#14b8a6;--amber:#f59e0b;--red:#f43f5e;--green:#22c55e;--purple:#a855f7;
+  --txt1:#e0f2fe;--txt2:#7dd3fc;--txtm:#4a7fa5;
+  --bdr:rgba(14,165,233,0.12);--bdrS:rgba(14,165,233,0.28);
+  --r:16px;--rsm:10px;--font:'Outfit',system-ui,sans-serif;
+  --navH:72px;--hdrH:60px
+}
+body{font-family:var(--font);background:var(--bg-base);color:var(--txt1);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--bg-surf);border-radius:2px}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;background:rgba(7,17,31,0.94);backdrop-filter:blur(14px);height:var(--hdrH);display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--bdr);gap:12px}
+.hdr-back{width:40px;height:40px;border:none;background:var(--bg-card);color:var(--txt2);border-radius:10px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-title{flex:1;font-size:17px;font-weight:600;color:var(--txt1)}
+.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px}
+.badge-a{background:rgba(168,85,247,.2);color:#c084fc}
+.badge-m{background:rgba(14,165,233,.15);color:var(--accent)}
+
+/* BOTTOM NAV */
+.nav{position:fixed;bottom:0;left:0;right:0;height:var(--navH);background:rgba(14,31,53,0.97);backdrop-filter:blur(14px);border-top:1px solid var(--bdr);display:flex;z-index:100}
+.nv{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:none;background:none;color:var(--txtm);font-family:var(--font);font-size:10px;font-weight:500;transition:color .2s;padding-bottom:8px}
+.nv.on{color:var(--accent)}
+.nv-ico{font-size:22px;line-height:1}
+
+/* MAIN */
+.main{padding:16px;padding-bottom:calc(var(--navH)+20px);max-width:520px;margin:0 auto}
+
+/* CARDS */
+.card{background:var(--bg-card);border-radius:var(--r);border:1px solid var(--bdr);padding:16px;margin-bottom:12px}
+.card-hi{border-color:var(--accent);background:rgba(14,165,233,0.05)}
+
+/* SESSION CARD */
+.sc{background:var(--bg-card);border-radius:var(--r);border:1px solid var(--bdr);padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,transform .1s;-webkit-tap-highlight-color:transparent}
+.sc:active{transform:scale(0.99)}
+.sc:hover{border-color:var(--bdrS)}
+.sc.ok{border-left:3px solid var(--green)}
+.sc.pend{border-left:3px solid var(--amber)}
+
+/* TAGS */
+.tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.3px}
+.tn{background:rgba(14,165,233,.15);color:var(--accent)}
+.te{background:rgba(20,184,166,.15);color:var(--teal)}
+.tc{background:rgba(255,255,255,.06);color:var(--txtm)}
+.tg{background:rgba(34,197,94,.15);color:var(--green)}
+.tam{background:rgba(245,158,11,.15);color:var(--amber)}
+.tr{background:rgba(244,63,94,.15);color:var(--red)}
+.tp{background:rgba(168,85,247,.15);color:var(--purple)}
+
+.smeta{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.stitle{font-size:17px;font-weight:600;color:var(--txt1);margin-bottom:4px}
+.ssub{font-size:13px;color:var(--txtm)}
+.stime{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:2px}
+
+/* SECTION */
+.sh{display:flex;align-items:center;justify-content:space-between;margin:20px 0 10px}
+.sl{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--txtm)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:12px;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;border:none;transition:opacity .15s,transform .1s;-webkit-tap-highlight-color:transparent;width:100%}
+.btn:active{transform:scale(0.98);opacity:.9}
+.btn-p{background:var(--accent);color:white}
+.btn-s{background:var(--bg-surf);color:var(--txt1)}
+.btn-o{background:transparent;border:1px solid var(--bdrS);color:var(--txt2)}
+.btn-g{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.btn-sm{padding:9px 16px;font-size:13px;border-radius:9px;width:auto}
+
+/* FORMS */
+label{font-size:12px;font-weight:600;color:var(--txtm);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+input,textarea,select{width:100%;background:var(--bg-base);border:1px solid var(--bdrS);border-radius:10px;color:var(--txt1);font-family:var(--font);font-size:15px;padding:12px 14px;margin-bottom:16px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:80px;line-height:1.5}
+select option{background:var(--bg-card2)}
+
+/* STARS */
+.stars{display:flex;gap:8px;margin:8px 0 16px;justify-content:center}
+.star{font-size:38px;cursor:pointer;transition:transform .1s;color:var(--bg-surf);-webkit-tap-highlight-color:transparent;user-select:none}
+.star.on{color:var(--amber)}
+.star:hover{transform:scale(1.1)}
+
+/* SCORE BTNS */
+.srow{display:flex;gap:6px;margin-bottom:16px}
+.sbtn{flex:1;padding:11px 4px;border-radius:10px;border:1px solid var(--bdr);background:var(--bg-base);color:var(--txtm);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.sbtn.v5,.sbtn.v4{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
+.sbtn.v3{background:rgba(245,158,11,.15);border-color:var(--amber);color:var(--amber)}
+.sbtn.v2,.sbtn.v1{background:rgba(244,63,94,.15);border-color:var(--red);color:var(--red)}
+
+/* CHAT */
+.chat-box{min-height:220px;max-height:420px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:10px;padding:4px 0}
+.msg{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.55;max-width:92%}
+.msg-u{background:var(--accent);color:white;align-self:flex-end;border-bottom-right-radius:4px}
+.msg-a{background:var(--bg-card2);color:var(--txt1);align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--bdr)}
+.msg-l{background:var(--bg-card2);color:var(--txtm);align-self:flex-start;border:1px solid var(--bdr)}
+.cinrow{display:flex;gap:8px}
+.cinrow input{margin-bottom:0;flex:1}
+.csend{width:48px;height:48px;border-radius:12px;background:var(--accent);border:none;color:white;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+
+/* IDEA CARD */
+.ic{background:var(--bg-card);border-radius:var(--r);border:1px solid var(--bdr);padding:14px;margin-bottom:10px}
+.ic-meta{font-size:11px;color:var(--txtm);margin-top:8px}
+.ic-txt{font-size:14px;color:var(--txt1);line-height:1.5}
+
+/* PHASE */
+.phase{background:var(--bg-surf);border-radius:var(--rsm);padding:12px;margin-bottom:8px;border-left:3px solid var(--accent)}
+.ph{display:flex;justify-content:space-between;margin-bottom:6px}
+.pn{font-size:14px;font-weight:600;color:var(--txt2)}
+.pt{font-size:12px;color:var(--accent);font-weight:600}
+.pd{font-size:13px;color:var(--txt1);line-height:1.55}
+
+/* MATERIAL */
+.mi{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:14px;color:var(--txt1)}
+.mi:last-child{border-bottom:none}
+.mdot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+
+/* SEP */
+.sep{height:1px;background:var(--bdr);margin:16px 0}
+
+/* METRIC */
+.mc{background:var(--bg-card);border-radius:var(--rsm);border:1px solid var(--bdr);padding:14px;text-align:center}
+.mv{font-size:28px;font-weight:700;color:var(--accent)}
+.ml{font-size:11px;color:var(--txtm);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+/* LOGIN */
+.lwrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px}
+.llogo{font-size:72px;margin-bottom:12px}
+.ltitle{font-size:30px;font-weight:700;color:var(--txt1);margin-bottom:4px;letter-spacing:-0.5px}
+.lsub{font-size:15px;color:var(--txtm);margin-bottom:40px;text-align:center;line-height:1.5}
+
+/* WEEK */
+.wk{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px}
+.wd{background:var(--bg-card);border-radius:10px;border:1px solid var(--bdr);padding:10px 6px;text-align:center;cursor:pointer;transition:all .15s}
+.wd.today{border-color:var(--accent);background:rgba(14,165,233,.1)}
+.wd.sel{border-color:var(--teal);background:rgba(20,184,166,.08)}
+.wdn{font-size:10px;font-weight:600;color:var(--txtm);text-transform:uppercase;letter-spacing:.5px}
+.wdnum{font-size:18px;font-weight:700;color:var(--txt1);margin:4px 0}
+.wdcnt{font-size:10px;color:var(--txtm)}
+.wdot{width:5px;height:5px;border-radius:50%;background:var(--accent);margin:2px auto}
+
+/* BAR */
+.bwrap{margin-bottom:12px}
+.blabel{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.blabel span:first-child{color:var(--txtm)}
+.blabel span:last-child{color:var(--txt1);font-weight:600}
+.btrack{height:6px;background:var(--bg-surf);border-radius:3px;overflow:hidden}
+.bfill{height:100%;border-radius:3px;transition:width .4s}
+
+/* CHIPS */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;padding:6px 14px;border-radius:20px;border:1px solid var(--bdr);background:transparent;color:var(--txtm);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .15s}
+.chip.on{background:var(--accent);border-color:var(--accent);color:white}
+
+/* TOAST */
+#toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:var(--bg-card2);border:1px solid var(--bdrS);color:var(--txt1);padding:10px 20px;border-radius:20px;font-size:14px;font-weight:500;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;pointer-events:none}
+#toast.show{opacity:1}
+
+/* INDICATOR */
+.ind{margin-bottom:18px}
+.indl{font-size:12px;font-weight:600;color:var(--txtm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+
+.empty{text-align:center;padding:48px 24px;color:var(--txtm)}
+.eico{font-size:48px;margin-bottom:12px}
+.etxt{font-size:15px}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse{animation:pulse 1.2s infinite}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fu .28s ease forwards}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<script>
+// ──────────────────────────────────────────────
+// SAMPLE DATA
+// ──────────────────────────────────────────────
+const SESSIONS = [
+  {id:'S001',codigo:'FAM-01',nombre:'El tesoro del agua',objetivo:'Familiarización con el medio acuático. Primer contacto lúdico y seguro con el agua, reduciendo el miedo y construyendo confianza desde la afectividad.',nivel:'Iniciación',edadMin:3,edadMax:4,duracion:30,grupoTarget:'Bebés',material:['Cubos y regaderas de colores x6','Churros de espuma x6','Aros de sumergir x4 (fondo)','Pelotas flotantes x4','Muñecos acuáticos x2'],
+  desarrollo:[
+    {fase:'Bienvenida',tiempo:5,desc:'Entrada progresiva por la escalera. Monitor en el agua recibe a cada niño. Se moja brazos y cara suavemente. Presentación del material.'},
+    {fase:'Juego libre',tiempo:8,desc:'Juego libre con cubos y regaderas. Los niños se mojan mutuamente. Monitor modela mojarse la cara sin miedo. Canciones y rimas del agua.'},
+    {fase:'El tesoro',tiempo:12,desc:'Aros en el fondo (zona ≤30cm). Los niños intentan recogerlos. Monitor asiste con flotación si es necesario. Progresión: desde el borde → hacia el centro. Celebrar cada logro.'},
+    {fase:'Cierre',tiempo:5,desc:'Flotación con churro en posición horizontal. Monitor sostiene a quienes no se sueltan. Espiraciones en el agua. "Concurso de burbujas" para salir.'}
+  ],
+  variantes:['Con familias presentes: los padres sostienen durante la actividad del tesoro','Progresión semana 2: añadir inmersión voluntaria en zona de 40cm','Adaptación miedo intenso: sustituir inmersión por tocar aro en superficie sin sumergir'],
+  indicadores:['El niño entra al agua sin llanto prolongado (≤1 min)','Se moja la cara voluntariamente al menos 1 vez','Participa en el juego del tesoro aunque sea desde el borde','Realiza al menos una espiración en el agua'],
+  obs:'La presión nunca es adecuada. Si un niño se niega a entrar, permanece en el borde con material. El objetivo es que quiera volver. La relación afectiva con el monitor es la clave de esta etapa. No forzar nunca la inmersión.'},
+
+  {id:'S002',codigo:'FAM-03',nombre:'Globos y cohetes',objetivo:'Iniciación a la flotación autónoma, el empuje y el deslizamiento horizontal. Introducción al salto al agua de forma lúdica.',nivel:'Iniciación',edadMin:4,edadMax:5,duracion:35,grupoTarget:'Iniciación A',material:['Churros x8','Tabla flotación x4','Globos con agua x8 (sorpresa)','Fideos colores x4'],
+  desarrollo:[
+    {fase:'Entrada y calentamiento',tiempo:5,desc:'Entrada libre. Juego con globos en superficie: mantenerlos en el aire sobre el agua. Carrera de globos entre dos paredes.'},
+    {fase:'Posición globo',tiempo:10,desc:'Tumbados en el agua con churro bajo axilas (posición globo). Monitor demuestra extensión del cuerpo, cara en el agua, espiración. Se trabaja mantener posición 5-10 segundos.'},
+    {fase:'Cohetes',tiempo:12,desc:'Empuje desde pared: posición fetal → extensión completa → deslizamiento. Énfasis en: cuerpo recto, orejas entre brazos, cara en el agua. Progresión: con tabla → sin tabla → con patada al final.'},
+    {fase:'Saltos',tiempo:5,desc:'Saltos desde el borde: primero sentados, luego de pie. Monitor en el agua. Solo para quien quiera. Celebrar a todos.'},
+    {fase:'Burbujas',tiempo:3,desc:'Concurso de burbujas en el borde. ¿Quién hace más? ¿Quién aguanta más? Cuenta de 1 a 5.'}
+  ],
+  variantes:['Sin flotadores: retirar churro para los más avanzados en la posición globo','Cohete profundo: deslizamiento hacia fondo en zona de 60cm','Carrera de cohetes: distancia máxima de deslizamiento sin patada'],
+  indicadores:['Mantiene posición globo horizontal >5 seg con churro','Realiza al menos 2 cohetes con extensión completa','Sumerge la cara durante el deslizamiento','Participa en los saltos (aunque sea sentado)'],
+  obs:'El cohete (deslizamiento en extensión) es el fundamento de todos los estilos. Corregir siempre la posición del cuerpo antes de añadir patada. Los globos con agua crean efecto sorpresa muy motivador para la edad. No forzar la cara en agua: es un proceso progresivo.'},
+
+  {id:'S003',codigo:'NAT-02',nombre:'El tren de los peces',objetivo:'Desarrollo de la propulsión de piernas en crol. Coordinación básica brazos-piernas con énfasis en técnica de patada correcta.',nivel:'Nivel 1',edadMin:6,edadMax:8,duracion:45,grupoTarget:'Progresión A',material:['Tablas flotación x8','Aletas x8 (opcional, 1 de cada 3 sesiones)','Churros x4 (ref. lateral)'],
+  desarrollo:[
+    {fase:'Calentamiento',tiempo:8,desc:'El tren: fila de niños agarrados por hombros, el primero guía con cambios de dirección. 2 min. Luego 2 largos nado libre con tabla (exploración).'},
+    {fase:'Técnica de piernas',tiempo:15,desc:'Con tabla: patada de crol. Énfasis: tobillo relajado (cola de pez), movimiento desde la cadera, piernas sin separar excesivamente. 4 series de 25m. Correcciones individuales. Metáfora: "el pie es un abanico".'},
+    {fase:'Coordinación',tiempo:15,desc:'Introducción brazada: "1 brazo + 6 patadas". Práctica en grupos pequeños. Monitor acompaña en el agua corrigiendo posición de cabeza. Progresión: contar en voz alta las patadas.'},
+    {fase:'Carrera de relevos',tiempo:5,desc:'Equipos de 3-4: carrera de relevos 12.5m con tabla. Énfasis en entrada correcta al agua en el relevo. Ambiente de juego.'},
+    {fase:'Cierre técnico',tiempo:2,desc:'Borde: ¿qué nota ha aprendido hoy? Nombrar el músculo que más ha trabajado (cuádriceps, glúteo).'}
+  ],
+  variantes:['Con aletas: 1 sesión de 3, para sentir el movimiento de cadera. Nunca abusar','Patada vertical: en zona profunda con churro, para trabajar fuerza y tobillo','Tabla en espalda: para avanzados, patada de espalda con tabla sobre el pecho'],
+  indicadores:['Mantiene patada correcta durante 25m sin parar','Tobillo relajado visible (no bicicleta)','Coordina al menos 3 ciclos brazada-patada','Completa los 4 largos de patada sin ayuda'],
+  obs:'La patada tipo bicicleta (rodilla muy flexionada) es el error más común. Usar metáfora de "abanico de cola de pez" para el tobillo. No corregir todo a la vez: priorizar primero la cadera, luego el tobillo. La filmación con móvil es muy útil para mostrar al alumno su propia técnica.'},
+
+  {id:'S004',codigo:'NAT-07',nombre:'Respiración rítmica en crol',objetivo:'Automatización de la respiración lateral en crol. Rotación correcta de cabeza y cuerpo. Espiración continua bajo el agua.',nivel:'Nivel 2',edadMin:8,edadMax:11,duracion:50,grupoTarget:'Avanzados A',material:['Sin material principal','Tablas x4 (calentamiento)','Pull-buoy x4','Churros x2 (referencia lateral opcional)'],
+  desarrollo:[
+    {fase:'Calentamiento',tiempo:10,desc:'200m libre ritmo suave. 4×25m patada con tabla. Ejercicio 6-3-6: 6 patadas lateral, 3 brazadas, 6 patadas lateral (control posición cuerpo).'},
+    {fase:'Técnica respiración',tiempo:20,desc:'Demo en el borde: posición de cabeza lateral (oído pegado al agua, boca justa fuera). Series 4×25m respirando cada 3 brazadas. Monitor corrige elevación excesiva de cabeza. Pull-buoy para aislar la respiración del movimiento de piernas.'},
+    {fase:'Aplicación',tiempo:15,desc:'4×50m crol técnico. V1: respirar solo en la pared. V2: respirar cada 3. Objetivos: mantener rotación de hombro, no levantar la cabeza (el agua debe partir la cara por la mitad), espiración continua en inmersión.'},
+    {fase:'Autoevaluación',tiempo:5,desc:'Cada alumno dice en qué mejoró hoy y qué le cuesta más. 100m suave enfriamiento. Feedback del monitor.'}
+  ],
+  variantes:['Respiración bilateral: alternar lado cada 3 brazadas (derecha-izquierda-derecha)','Un brazo extendido al frente, respirar siempre al lado del brazo que nada','Con referencia visual: palo vertical en agua para guiar la rotación'],
+  indicadores:['La oreja permanece en contacto con el agua durante la inspiración','No hay interrupción de la patada al respirar','Completa 50m sin parar con respiración cada 3','Espiración completa bajo el agua antes de girar'],
+  obs:'El error más común es levantar la cabeza (efecto "tomar el sol"). El agua debe partir la cara por la mitad durante la inspiración. Filmación lateral con móvil muy útil para que el alumno vea su propia posición. Trabajar primero la espiración completa antes de corregir la posición.'},
+
+  {id:'S005',codigo:'ESP-03',nombre:'Espalda: posición y patada',objetivo:'Establecer la posición correcta del cuerpo en espalda. Patada eficiente con énfasis en cadera alta y tobillo flexible.',nivel:'Nivel 2',edadMin:9,edadMax:12,duracion:50,grupoTarget:'Avanzados B',material:['Churros x4','Tablas flotación x4','Noodles x4'],
+  desarrollo:[
+    {fase:'Calentamiento',tiempo:8,desc:'150m libre. 50m espalda libre. Movilidad de hombros en el borde: círculos, cruces, estiramiento pectoral.'},
+    {fase:'Posición del cuerpo',tiempo:15,desc:'Posición estrella de espalda en zona poco profunda. Monitor apoya la nuca. Énfasis: caderas arriba, vista al techo, orejas en el agua, cuerpo perfectamente horizontal. Progresión: apoyado → churro bajo rodillas → libre.'},
+    {fase:'Patada de espalda',tiempo:18,desc:'Con tabla sobre el pecho: 6×25m patada de espalda. Correcciones: rodilla NO sale del agua, tobillo flexible, el pie "empuja" agua hacia arriba. Variante: tabla con brazos extendidos detrás de la cabeza.'},
+    {fase:'Integración',tiempo:7,desc:'2×50m espalda completo. Énfasis en mantener cadera alta durante toda la longitud. Feedback individual.'},
+    {fase:'Cierre',tiempo:2,desc:'¿Qué es lo más difícil de la espalda? Respuestas del grupo. El monitor relaciona con las banderas de espalda.'}
+  ],
+  variantes:['Posición banana: exagerar la postura arqueada para entender el opuesto correcto','Patada de fuerza en el borde: sentado en el borde, trabajar la patada fuera del agua','Espalda + crol: 25m espalda + 25m crol, transferencia técnica de posición de cuerpo'],
+  indicadores:['Las caderas permanecen en superficie durante 25m completos','La rodilla no sale del agua durante la patada','Completa 50m de espalda sin tocar el fondo','La vista permanece al techo durante toda la longitud'],
+  obs:'La espalda genera inseguridad en muchos alumnos por no ver hacia dónde van. Las banderas de espalda son fundamentales para la orientación. Enseñar a contar brazadas desde la bandera antes de trabajar el giro de vuelta. El error principal es hundir las caderas: el noodle bajo los glúteos ayuda a sentir la posición correcta.'}
+];
+
+// Today = 2026-04-15 (Wednesday)
+// Week: Mon Apr13, Tue Apr14, Wed Apr15, Thu Apr16, Fri Apr17
+const ENTRIES = [
+  // MON Apr 13
+  {id:'E01',sessionId:'S001',grupo:'Bebés A',fecha:'2026-04-13',hora:'10:00',monitorId:'MI'},
+  {id:'E02',sessionId:'S002',grupo:'Iniciación A',fecha:'2026-04-13',hora:'10:45',monitorId:'JB'},
+  {id:'E03',sessionId:'S003',grupo:'Progresión A',fecha:'2026-04-13',hora:'11:30',monitorId:'AG'},
+  // TUE Apr 14
+  {id:'E04',sessionId:'S001',grupo:'Bebés B',fecha:'2026-04-14',hora:'10:00',monitorId:'NL'},
+  {id:'E05',sessionId:'S004',grupo:'Avanzados A',fecha:'2026-04-14',hora:'10:45',monitorId:'MI'},
+  {id:'E06',sessionId:'S005',grupo:'Avanzados B',fecha:'2026-04-14',hora:'11:30',monitorId:'JB'},
+  // WED Apr 15 — HOY
+  {id:'E07',sessionId:'S002',grupo:'Iniciación B',fecha:'2026-04-15',hora:'10:00',monitorId:'MI'},
+  {id:'E08',sessionId:'S003',grupo:'Progresión A',fecha:'2026-04-15',hora:'10:45',monitorId:'AG'},
+  {id:'E09',sessionId:'S004',grupo:'Avanzados A',fecha:'2026-04-15',hora:'17:00',monitorId:'NL'},
+  // THU Apr 16
+  {id:'E10',sessionId:'S002',grupo:'Iniciación A',fecha:'2026-04-16',hora:'10:00',monitorId:'JB'},
+  {id:'E11',sessionId:'S005',grupo:'Avanzados B',fecha:'2026-04-16',hora:'10:45',monitorId:'MI'},
+  {id:'E12',sessionId:'S003',grupo:'Progresión B',fecha:'2026-04-16',hora:'17:00',monitorId:'AG'},
+  // FRI Apr 17
+  {id:'E13',sessionId:'S001',grupo:'Bebés A',fecha:'2026-04-17',hora:'10:00',monitorId:'NL'},
+  {id:'E14',sessionId:'S004',grupo:'Avanzados A',fecha:'2026-04-17',hora:'10:45',monitorId:'MI'},
+];
+
+const SAMPLE_IDEAS = [
+  {id:'I001',monitorId:'MI',sessionId:'S001',texto:'Usar canciones específicas de agua (tipo "La lluvia"). He notado que los niños que vienen con canciones en casa se adaptan antes. Propongo crear una playlist para las sesiones de bebés.',estado:'pendiente',fecha:'2026-04-13',origen:'monitor'},
+  {id:'I002',monitorId:'AG',sessionId:'S003',texto:'Los churros de referencia lateral para la respiración no son suficientemente visibles. Propongo usar churros de colores o con marcas de color para que el niño los localice de un vistazo.',estado:'probar',fecha:'2026-04-13',origen:'monitor'},
+  {id:'I003',monitorId:'JB',sessionId:'S004',texto:'En la sesión de respiración rítmica, grabar con el móvil 5 segundos de cada alumno y mostrárselo en el borde ha funcionado MUY bien. Los niños entienden en 10 segundos lo que en 5 minutos explicando no queda claro.',estado:'aprobada',fecha:'2026-04-10',origen:'monitor'},
+];
+
+const MONITORS = ['MI','JB','AG','NL','ES','LB'];
+
+// ──────────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────────
+const S = {
+  view:'login',role:null,user:null,
+  selSession:null,selEntry:null,selDay:null,
+  evalData:{},chatHistory:[],
+  libFilter:'all',ideasFilter:'all',
+  _role:null,_ini:null
+};
+
+// ──────────────────────────────────────────────
+// DB
+// ──────────────────────────────────────────────
+const DB = {
+  g(k,d=[]){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},
+  s(k,v){localStorage.setItem(k,JSON.stringify(v))},
+  sessions(){return this.g('ne_sessions',SESSIONS)},
+  entries(){return this.g('ne_entries',ENTRIES)},
+  evals(){return this.g('ne_evals',[])},
+  ideas(){return this.g('ne_ideas',SAMPLE_IDEAS)},
+  saveEval(ev){const arr=this.evals();const i=arr.findIndex(e=>e.id===ev.id);if(i>=0)arr[i]=ev;else arr.push(ev);this.s('ne_evals',arr)},
+  saveIdea(idea){const arr=this.ideas();arr.push(idea);this.s('ne_ideas',arr)},
+  saveSession(sess){const arr=this.sessions();const i=arr.findIndex(s=>s.id===sess.id);if(i>=0)arr[i]=sess;else arr.push(sess);this.s('ne_sessions',arr)},
+  apiKey(){return localStorage.getItem('ne_key')||''},
+  setKey(k){localStorage.setItem('ne_key',k)},
+  updateIdeaStatus(id,st){const arr=this.ideas();const i=arr.findIndex(x=>x.id===id);if(i>=0){arr[i].estado=st;this.s('ne_ideas',arr)}}
+};
+
+function initData(){if(!localStorage.getItem('ne_init')){DB.s('ne_sessions',SESSIONS);DB.s('ne_entries',ENTRIES);DB.s('ne_ideas',SAMPLE_IDEAS);localStorage.setItem('ne_init','1')}}
+
+// ──────────────────────────────────────────────
+// UTILS
+// ──────────────────────────────────────────────
+function today(){return new Date().toISOString().split('T')[0]}
+function fmt(ds){const d=new Date(ds+'T12:00:00');return d.toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'})}
+function dayN(ds){return new Date(ds+'T12:00:00').toLocaleDateString('es-ES',{weekday:'short'}).toUpperCase().replace('.','')}
+function dayNum(ds){return new Date(ds+'T12:00:00').getDate()}
+function weekDays(anchor){const d=new Date(anchor+'T12:00:00');const dw=d.getDay();const diff=dw===0?-6:1-dw;const mon=new Date(d);mon.setDate(d.getDate()+diff);return Array.from({length:5},(_,i)=>{const x=new Date(mon);x.setDate(mon.getDate()+i);return x.toISOString().split('T')[0]})}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+
+// ──────────────────────────────────────────────
+// NAV
+// ──────────────────────────────────────────────
+function go(view,params={}){Object.assign(S,params);S.view=view;render()}
+
+// ──────────────────────────────────────────────
+// CLAUDE API
+// ──────────────────────────────────────────────
+const SYS=`Eres un experto en natación educativa con 20 años de experiencia como coordinador de escuelas de natación y pedagogo acuático. Dominas metodología de enseñanza de natación para niños de 3 a 14 años, progresiones técnicas, gestión de grupos, psicomotricidad acuática y adaptación al medio. Respondes siempre en español, de forma directa y práctica, como entre compañeros expertos. Cuando propongas variantes o mejoras, sé específico: nombra el ejercicio, cómo ejecutarlo, qué observar. Propón siempre entre 2 y 4 mejoras/variantes concretas. Usa un tono profesional y cercano.`;
+
+async function askClaude(msgs){
+  const k=DB.apiKey();
+  if(!k)return'⚠️ API Key no configurada. Ve a Configuración (icono ⚙️ en el header).';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYS,messages:msgs})
+    });
+    const d=await r.json();
+    if(d.error)return`Error API: ${d.error.message}`;
+    return d.content[0].text;
+  }catch(e){return`Error de conexión: ${e.message}`}
+}
+
+// ──────────────────────────────────────────────
+// RENDER
+// ──────────────────────────────────────────────
+function render(){
+  const app=document.getElementById('app');
+  switch(S.view){
+    case'login':app.innerHTML=vLogin();break;
+    case'apikey':app.innerHTML=vApiKey();break;
+    case'home':app.innerHTML=vHome();break;
+    case'session':app.innerHTML=vSession();break;
+    case'eval':app.innerHTML=vEval();break;
+    case'calendar':app.innerHTML=vCalendar();break;
+    case'library':app.innerHTML=vLibrary();break;
+    case'ideas':app.innerHTML=vIdeas();break;
+    case'reports':app.innerHTML=vReports();break;
+    case'assistant':app.innerHTML=vAssistant();break;
+    default:app.innerHTML=vHome();
+  }
+  attachEvt();
+  const cm=document.getElementById('chat-msgs');
+  if(cm)cm.scrollTop=cm.scrollHeight;
+}
+
+// ──────────────────────────────────────────────
+// SHARED UI
+// ──────────────────────────────────────────────
+function hdr(title,back=true){
+  return`<div class="hdr">${back?`<button class="hdr-back" onclick="goBack()">←</button>`:''}<div class="hdr-title">${title}</div><span class="badge ${S.role==='admin'?'badge-a':'badge-m'}">${S.user}</span>${!back&&S.role?`<button class="hdr-back" onclick="go('apikey')" title="Configurar API Key">🔑</button>`:''}</div>`;
+}
+
+function nav(active){
+  const items=[
+    {id:'home',ico:'🏠',lbl:'Hoy'},
+    {id:'calendar',ico:'📅',lbl:'Semana'},
+    {id:'library',ico:'📚',lbl:'Biblioteca'},
+    {id:'ideas',ico:'💡',lbl:'Ideas'},
+    {id:S.role==='admin'?'reports':'assistant',ico:S.role==='admin'?'📊':'🤖',lbl:S.role==='admin'?'Informes':'Asistente'}
+  ];
+  return`<div class="nav">${items.map(i=>`<button class="nv ${active===i.id?'on':''}" onclick="go('${i.id}')"><span class="nv-ico">${i.ico}</span><span>${i.lbl}</span></button>`).join('')}</div>`;
+}
+
+function goBack(){
+  const map={session:'home',eval:'session',apikey:S.role?'home':'login'};
+  go(map[S.view]||'home',{selEntry:S.selEntry,selSession:S.selSession});
+}
+
+// ──────────────────────────────────────────────
+// VIEW: LOGIN
+// ──────────────────────────────────────────────
+function vLogin(){return`
+<div class="lwrap fu">
+  <div class="llogo">🏊</div>
+  <div class="ltitle">NatEdu</div>
+  <div class="lsub">App para Monitores de<br>Natación Educativa</div>
+  <div style="width:100%;max-width:360px;">
+    <div class="card">
+      <div class="sl" style="margin-bottom:14px;">¿Cómo accedes?</div>
+      <div class="g2" style="margin-bottom:16px;">
+        <button class="btn btn-s role-btn" data-role="monitor" style="flex-direction:column;gap:8px;padding:20px;border-radius:14px;">
+          <span style="font-size:36px;">🏊‍♂️</span><span>Monitor</span>
+        </button>
+        <button class="btn btn-s role-btn" data-role="admin" style="flex-direction:column;gap:8px;padding:20px;border-radius:14px;border:1px solid rgba(168,85,247,.3);">
+          <span style="font-size:36px;">⚙️</span><span style="color:#c084fc">Admin</span>
+        </button>
+      </div>
+      <div id="ini-wrap" style="display:none">
+        <label>Tus iniciales</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+          ${MONITORS.map(m=>`<button class="sbtn ini-btn" data-ini="${m}" style="flex:0 0 auto;min-width:48px;">${m}</button>`).join('')}
+        </div>
+      </div>
+      <div id="pw-wrap" style="display:none">
+        <label>Contraseña admin</label>
+        <input type="password" id="apw" placeholder="••••••••">
+      </div>
+      <button class="btn btn-p" id="login-btn" style="opacity:.4;pointer-events:none">Entrar →</button>
+    </div>
+    <p style="text-align:center;font-size:12px;color:var(--txtm);margin-top:12px">NatEdu v1.0 MVP</p>
+  </div>
+</div>`}
+
+// ──────────────────────────────────────────────
+// VIEW: API KEY
+// ──────────────────────────────────────────────
+function vApiKey(){return`
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px" class="fu">
+  <div style="width:100%;max-width:360px;">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-size:48px;margin-bottom:12px;">🔑</div>
+      <div style="font-size:22px;font-weight:700;margin-bottom:8px;">API Key</div>
+      <div style="font-size:14px;color:var(--txtm);">Introduce tu clave de Anthropic para activar el asistente de natación educativa.</div>
+    </div>
+    <div class="card">
+      <label>Anthropic API Key</label>
+      <input type="password" id="aki" placeholder="sk-ant-api03-..." value="${DB.apiKey()}">
+      <button class="btn btn-p" id="savek-btn">💾 Guardar</button>
+    </div>
+    <button class="btn btn-o" id="skipk-btn" style="margin-top:10px">Continuar sin IA</button>
+  </div>
+</div>`}
+
+// ──────────────────────────────────────────────
+// VIEW: HOME
+// ──────────────────────────────────────────────
+function vHome(){
+  const td=today();
+  const all=DB.entries();
+  const mine=all.filter(e=>e.fecha===td&&(S.role==='admin'||e.monitorId===S.user));
+  const sessions=DB.sessions();
+  const evals=DB.evals();
+  const wd=weekDays(td);
+  const wk=all.filter(e=>wd.includes(e.fecha)&&(S.role==='admin'||e.monitorId===S.user));
+  const wkEv=evals.filter(e=>wk.some(w=>w.id===e.entryId));
+  const d=new Date(td+'T12:00:00');
+  const dl=d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+  const h=new Date().getHours();
+  const gr=h<13?'Buenos días':h<20?'Buenas tardes':'Buenas noches';
+  return`
+${nav('home')}
+${hdr(`${gr}, ${S.user}`,false)}
+<div class="main fu">
+  <div style="margin-bottom:18px"><div style="font-size:13px;color:var(--txtm);text-transform:capitalize">${dl}</div></div>
+  <div class="g3" style="margin-bottom:20px">
+    <div class="mc"><div class="mv">${mine.length}</div><div class="ml">Hoy</div></div>
+    <div class="mc"><div class="mv">${wk.length}</div><div class="ml">Semana</div></div>
+    <div class="mc"><div class="mv" style="color:var(--green)">${wkEv.length}</div><div class="ml">Evaluadas</div></div>
+  </div>
+  <div class="sh"><span class="sl">Sesiones de hoy</span>${mine.length>0?`<span class="tag tn">${mine.length} clases</span>`:''}</div>
+  ${mine.length===0?`<div class="empty"><div class="eico">🌊</div><div class="etxt">No hay sesiones para hoy</div><div style="font-size:13px;color:var(--txtm);margin-top:6px">Consulta el calendario semanal</div></div>`
+  :mine.sort((a,b)=>a.hora.localeCompare(b.hora)).map(en=>{
+    const ss=sessions.find(s=>s.id===en.sessionId);if(!ss)return'';
+    const ev=evals.some(e=>e.entryId===en.id);
+    return`<div class="sc ${ev?'ok':'pend'}" onclick="go('session',{selEntry:'${en.id}',selSession:'${ss.id}'})">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div class="stime">${en.hora}</div>
+        <div>${ev?`<span class="tag tg">✓ Evaluada</span>`:`<span class="tag tam">Pendiente</span>`}</div>
+      </div>
+      <div class="stitle">${ss.nombre}</div>
+      <div class="ssub">${en.grupo} · ${ss.duracion} min · ${ss.nivel}</div>
+      <div class="smeta" style="margin-top:8px;margin-bottom:0">
+        <span class="tag tc">${ss.codigo}</span>
+        <span class="tag te">${ss.edadMin}-${ss.edadMax} años</span>
+        ${S.role==='admin'?`<span class="tag tn">👤 ${en.monitorId}</span>`:''}
+      </div>
+    </div>`;
+  }).join('')}
+  <div class="sh" style="margin-top:24px"><span class="sl">Accesos rápidos</span></div>
+  <div class="g2">
+    ${S.role==='admin'
+      ?`<button class="btn btn-s" onclick="go('library')" style="flex-direction:column;gap:6px;padding:20px;border-radius:14px"><span style="font-size:30px">📚</span><span>Biblioteca</span></button>
+         <button class="btn btn-s" onclick="go('reports')" style="flex-direction:column;gap:6px;padding:20px;border-radius:14px"><span style="font-size:30px">📊</span><span>Informes</span></button>`
+      :`<button class="btn btn-s" onclick="go('assistant')" style="flex-direction:column;gap:6px;padding:20px;border-radius:14px"><span style="font-size:30px">🤖</span><span>Asistente IA</span></button>
+         <button class="btn btn-s" onclick="go('ideas')" style="flex-direction:column;gap:6px;padding:20px;border-radius:14px"><span style="font-size:30px">💡</span><span>Mis ideas</span></button>`}
+  </div>
+</div>`}
+
+// ──────────────────────────────────────────────
+// VIEW: SESSION DETAIL
+// ──────────────────────────────────────────────
+function vSession(){
+  const entries=DB.entries();const sessions=DB.sessions();const evals=DB.evals();
+  const en=entries.find(e=>e.id===S.selEntry);
+  const ss=sessions.find(s=>s.id===S.selSession);
+  if(!ss)return'<div class="main"><div class="empty">Sesión no encontrada</div></div>';
+  const ev=en?evals.some(e=>e.entryId===en.id):false;
+  return`
+${hdr(ss.nombre,true)}
+<div class="main fu">
+  <div class="smeta" style="margin-bottom:12px">
+    <span class="tag tc">${ss.codigo}</span>
+    <span class="tag tn">${ss.nivel}</span>
+    <span class="tag te">${ss.edadMin}-${ss.edadMax} años</span>
+    <span class="tag tam">${ss.duracion} min</span>
+  </div>
+  ${en?`<div class="card card-hi" style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:22px;font-weight:700;color:var(--accent)">${en.hora}</div>
+      <div style="font-size:13px;color:var(--txtm)">${en.grupo} · ${fmt(en.fecha)}</div></div>
+      ${ev?`<span class="tag tg" style="font-size:13px;padding:6px 14px">✓ Evaluada</span>`:`<span class="tag tam" style="font-size:13px;padding:6px 14px">Pendiente</span>`}
+    </div>
+  </div>`:''}
+  
+  <div class="card" style="border-left:3px solid var(--teal)">
+    <div class="sl" style="margin-bottom:8px">🎯 Objetivo pedagógico</div>
+    <div style="font-size:14px;color:var(--txt1);line-height:1.6">${ss.objetivo}</div>
+  </div>
+  
+  <div class="sh"><span class="sl">🎽 Material necesario</span></div>
+  <div class="card">${ss.material.map(m=>`<div class="mi"><div class="mdot"></div>${m}</div>`).join('')}</div>
+  
+  <div class="sh"><span class="sl">📋 Desarrollo de la sesión</span></div>
+  ${ss.desarrollo.map((f,i)=>`<div class="phase">
+    <div class="ph"><span class="pn">${i+1}. ${f.fase}</span><span class="pt">⏱ ${f.tiempo} min</span></div>
+    <div class="pd">${f.desc}</div>
+  </div>`).join('')}
+  
+  <div class="sh"><span class="sl">🔄 Variantes</span></div>
+  <div class="card">${ss.variantes.map((v,i)=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr);${i===ss.variantes.length-1?'border-bottom:none':''}">
+    <span style="color:var(--accent);font-weight:700;font-size:13px;flex-shrink:0">${i+1}</span>
+    <span style="font-size:13px;color:var(--txt1);line-height:1.5">${v}</span>
+  </div>`).join('')}</div>
+  
+  <div class="sh"><span class="sl">✅ Indicadores de éxito</span></div>
+  <div class="card">${ss.indicadores.map(ind=>`<div class="mi">
+    <span style="color:var(--green);font-size:14px">◯</span>
+    <span style="font-size:13px">${ind}</span>
+  </div>`).join('')}</div>
+  
+  <div class="sh"><span class="sl">📝 Notas pedagógicas</span></div>
+  <div class="card" style="border-left:3px solid var(--purple)">
+    <div style="font-size:13px;color:var(--txt1);line-height:1.6">${ss.obs}</div>
+  </div>
+  
+  ${en?`<div class="sep"></div>
+  <button class="btn ${ev?'btn-o':'btn-p'}" onclick="go('eval',{selEntry:'${en.id}',selSession:'${ss.id}'})">${ev?'✏️ Ver / editar evaluación':'⭐ Evaluar esta sesión'}</button>
+  <button class="btn btn-s" onclick="go('assistant')" style="margin-top:10px">🤖 Consultar asistente IA</button>`
+  :`<div class="sep"></div><div style="text-align:center;font-size:13px;color:var(--txtm)">Sesión de biblioteca — sin asignación de calendario activa</div>`}
+</div>`}
+
+// ──────────────────────────────────────────────
+// VIEW: EVALUATION
+// ──────────────────────────────────────────────
+function vEval(){
+  const en=DB.entries().find(e=>e.id===S.selEntry);
+  const ss=DB.sessions().find(s=>s.id===S.selSession);
+  if(!ss||!en)return'<div class="main"><div class="empty">Error: sesión no encontrada</div></div>';
+  const existing=DB.evals().find(e=>e.entryId===en.id)||{};
+  const ev={...existing,...(S.evalData[en.id]||{})};
+  const g=ev.global||0;
+
+  function sr(key,lbl){
+    const v=ev[key]||0;
+    return`<div class="ind">
+      <div class="indl">${lbl}</div>
+      <div class="srow">
+        ${[1,2,3,4,5].map(n=>`<button class="sbtn ${v===n?`v${n}`:''}" onclick="setScore('${en.id}','${key}',${n})">${n}</button>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  return`
+${hdr('Evaluar sesión',true)}
+<div class="main fu">
+  <div class="card card-hi" style="margin-bottom:20px">
+    <div style="font-size:13px;color:var(--txtm)">${fmt(en.fecha)} · ${en.hora}</div>
+    <div style="font-size:17px;font-weight:600;margin:4px 0 2px">${ss.nombre}</div>
+    <div style="font-size:13px;color:var(--txtm)">${en.grupo}</div>
+  </div>
+  
+  <div class="sh"><span class="sl">⭐ Valoración global</span></div>
+  <div class="card" style="text-align:center">
+    <div class="stars">
+      ${[1,2,3,4,5].map(n=>`<span class="star ${g>=n?'on':''}" onclick="setScore('${en.id}','global',${n})">★</span>`).join('')}
+    </div>
+    <div style="font-size:13px;color:var(--txtm);margin-top:-4px">
+      ${g===0?'Toca para valorar':['','Muy a mejorar','A mejorar','Regular','Bien','Muy bien'][g]}
+    </div>
+  </div>
+  
+  <div class="sh"><span class="sl">📊 Criterios (1–5)</span></div>
+  <div class="card">
+    ${sr('nivelAdecuado','🎯 Nivel adecuado al grupo')}
+    ${sr('tiempo','⏱ Tiempo bien ajustado')}
+    ${sr('participacion','🙋 Participación del grupo')}
+    ${sr('dificultad','📈 Dificultad adecuada')}
+    ${sr('material','🎽 Material adecuado')}
+  </div>
+  
+  <div class="sh"><span class="sl">💬 Comentarios</span></div>
+  <div class="card">
+    <label>¿Qué ha funcionado bien?</label>
+    <textarea id="ef1" placeholder="Ejercicios, momentos o dinámicas que han funcionado...">${ev.queFunciono||''}</textarea>
+    <label>¿Qué mejorar?</label>
+    <textarea id="ef2" placeholder="Qué cambiarías para la próxima vez...">${ev.queMejorar||''}</textarea>
+    <label>Observaciones del grupo</label>
+    <textarea id="ef3" placeholder="Evolución, dificultades, notas individuales...">${ev.observaciones||''}</textarea>
+  </div>
+  
+  <div class="sh"><span class="sl">💡 Idea de mejora</span></div>
+  <div class="card">
+    <label>Propuesta o variante</label>
+    <textarea id="ef4" placeholder="Idea nueva, variante, propuesta de mejora... (se guardará en Bandeja de Ideas)">${ev.ideas||''}</textarea>
+  </div>
+  
+  <button class="btn btn-p" onclick="saveEval('${en.id}','${ss.id}')">💾 Guardar evaluación</button>
+  ${g?`<div class="sep"></div><button class="btn btn-s" onclick="go('assistant')" style="margin-top:4px">🤖 Pedir sugerencias IA sobre esta sesión</button>`:``}
+</div>`}
+
+// ──────────────────────────────────────────────
+// VIEW: CALENDAR
+// ──────────────────────────────────────────────
+function vCalendar(){
+  const td=today();
+  if(!S.selDay)S.selDay=td;
+  const wd=weekDays(S.selDay);
+  const all=DB.entries();const sessions=DB.sessions();const evals=DB.evals();
+  const dayEn=all.filter(e=>e.fecha===S.selDay&&(S.role==='admin'||e.monitorId===S.user));
+  return`
+${nav('calendar')}
+${hdr('Calendario',false)}
+<div class="main fu">
+  <div class="wk">
+    ${wd.map(day=>{
+      const cnt=all.filter(e=>e.fecha===day&&(S.role==='admin'||e.monitorId===S.user)).length;
+      return`<div class="wd ${day===td?'today':''} ${day===S.selDay?'sel':''}" onclick="selDay('${day}')">
+        <div class="wdn">${dayN(day)}</div>
+        <div class="wdnum">${dayNum(day)}</div>
+        ${cnt>0?`<div class="wdot"></div><div class="wdcnt">${cnt}</div>`:`<div class="wdcnt">—</div>`}
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="sh">
+    <span class="sl">${fmt(S.selDay)}</span>
+    <span class="tag tn">${dayEn.length} sesiones</span>
+  </div>
+  ${dayEn.length===0
+    ?`<div class="empty" style="padding:32px 16px"><div class="eico">📅</div><div class="etxt">Sin sesiones</div></div>`
+    :dayEn.sort((a,b)=>a.hora.localeCompare(b.hora)).map(en=>{
+      const ss=sessions.find(s=>s.id===en.sessionId);if(!ss)return'';
+      const ev=evals.some(e=>e.entryId===en.id);
+      return`<div class="sc ${ev?'ok':'pend'}" onclick="go('session',{selEntry:'${en.id}',selSession:'${ss.id}'})">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div class="stime">${en.hora}</div>
+          ${ev?`<span class="tag tg">✓</span>`:`<span class="tag tam">Pendiente</span>`}
+        </div>
+        <div class="stitle">${ss.nombre}</div>
+        <div class="ssub">${en.grupo} · ${ss.duracion} min</div>
+        <div class="smeta" style="margin-top:6px;margin-bottom:0">
+          <span class="tag tc">${ss.codigo}</span>
+          <span class="tag te">${ss.edadMin}-${ss.edadMax} años</span>
+          ${S.role==='admin'?`<span class="tag tn">👤 ${en.monitorId}</span>`:''}
+        </div>
+      </div>`;
+    }).join('')}
+</div>`}
+
+// ──────────────────────────────────────────────
+// VIEW: LIBRARY
+// ──────────────────────────────────────────────
+function vLibrary(){
+  const sessions=DB.sessions();
+  const levels=['all','Iniciación','Nivel 1','Nivel 2','Nivel 3'];
+  const filtered=S.libFilter==='all'?sessions:sessions.filter(s=>s.nivel===S.libFilter);
+  return`
+${nav('library')}
+${hdr('Biblioteca',false)}
+<div class="main fu">
+  <div class="chips">
+    ${levels.map(l=>`<button class="chip ${S.libFilter===l?'on':''}" onclick="setLF('${l}')">${l==='all'?'Todas':l}</button>`).join('')}
+  </div>
+  <div class="sh">
+    <span class="sl">Fichas de sesión</span>
+    <span class="tag tn">${filtered.length} sesiones</span>
+  </div>
+  ${filtered.map(ss=>`<div class="sc" onclick="go('session',{selEntry:null,selSession:'${ss.id}'})">
+    <div class="smeta" style="margin-bottom:8px">
+      <span class="tag tc">${ss.codigo}</span>
+      <span class="tag tn">${ss.nivel}</span>
+      <span class="tag te">${ss.edadMin}-${ss.edadMax} años</span>
+    </div>
+    <div class="stitle">${ss.nombre}</div>
+    <div class="ssub">${ss.duracion} min · ${ss.material.length} materiales · ${ss.desarrollo.length} fases</div>
+  </div>`).join('')}
+  ${S.role==='admin'?`<div class="sep"></div><button class="btn btn-p" onclick="toast('Nueva sesión — próximamente')">+ Nueva sesión</button>`:``}
+</div>`}
+
+// ──────────────────────────────────────────────
+// VIEW: IDEAS
+// ──────────────────────────────────────────────
+function vIdeas(){
+  const ideas=DB.ideas();
+  const states=['all','pendiente','probar','aprobada','descartada'];
+  const filtered=S.ideasFilter==='all'?ideas:ideas.filter(i=>i.estado===S.ideasFilter);
+  const stl={pendiente:'⏳ Pendiente',probar:'🔬 A probar',aprobada:'✅ Aprobada',descartada:'✗ Descartada'};
+  const stc={pendiente:'tam',probar:'tn',aprobada:'tg',descartada:'tr'};
+  return`
+${nav('ideas')}
+${hdr('Bandeja de ideas',false)}
+<div class="main fu">
+  <div class="chips">
+    ${states.map(st=>`<button class="chip ${S.ideasFilter===st?'on':''}" onclick="setIF('${st}')">${st==='all'?'Todas':stl[st]}</button>`).join('')}
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="sl" style="margin-bottom:10px">💡 Nueva idea</div>
+    <textarea id="ni-txt" placeholder="Describe tu idea, variante, propuesta de mejora..."></textarea>
+    <button class="btn btn-p" onclick="addIdea()">Añadir idea</button>
+  </div>
+  <div class="sh">
+    <span class="sl">Ideas</span>
+    <span class="tag tn">${filtered.length}</span>
+  </div>
+  ${filtered.length===0
+    ?`<div class="empty"><div class="eico">💡</div><div class="etxt">Sin ideas en este estado</div></div>`
+    :[...filtered].reverse().map(idea=>`<div class="ic">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div>
+          <span class="tag ${stc[idea.estado]}">${stl[idea.estado]}</span>
+          ${idea.origen==='ia'?`<span class="tag tp" style="margin-left:6px">🤖 IA</span>`:''}
+        </div>
+        ${S.role==='admin'?`<select onchange="updateIS('${idea.id}',this.value)" style="width:auto;margin:0;padding:4px 8px;font-size:12px;border-radius:6px">
+          ${states.filter(s=>s!=='all').map(st=>`<option value="${st}" ${idea.estado===st?'selected':''}>${stl[st]}</option>`).join('')}
+        </select>`:''}
+      </div>
+      <div class="ic-txt">${idea.texto}</div>
+      <div class="ic-meta">${idea.monitorId} · ${fmt(idea.fecha)}</div>
+    </div>`).join('')}
+</div>`}
+
+// ──────────────────────────────────────────────
+// VIEW: REPORTS
+// ──────────────────────────────────────────────
+function vReports(){
+  const evals=DB.evals();const sessions=DB.sessions();const entries=DB.entries();
+  if(evals.length===0)return`${nav('reports')}${hdr('Informes',false)}<div class="main fu"><div class="empty"><div class="eico">📊</div><div class="etxt">Aún no hay evaluaciones registradas</div><div style="font-size:13px;color:var(--txtm);margin-top:8px">Los monitores deben evaluar sus sesiones primero</div></div></div>`;
+  
+  const withGlobal=evals.filter(e=>e.global);
+  const avg=withGlobal.length>0?(withGlobal.reduce((a,e)=>a+e.global,0)/withGlobal.length).toFixed(1):'—';
+  const crits=['nivelAdecuado','tiempo','participacion','dificultad','material'];
+  const critL=['Nivel adecuado','Tiempo','Participación','Dificultad','Material'];
+  
+  const ssStats={};
+  evals.forEach(ev=>{
+    const en=entries.find(e=>e.id===ev.entryId);if(!en)return;
+    const sid=en.sessionId;
+    if(!ssStats[sid])ssStats[sid]={cnt:0,tot:0};
+    if(ev.global){ssStats[sid].cnt++;ssStats[sid].tot+=ev.global;}
+  });
+  const top=Object.entries(ssStats)
+    .map(([id,s])=>({id,avg:s.cnt>0?(s.tot/s.cnt).toFixed(1):0,cnt:s.cnt}))
+    .sort((a,b)=>b.avg-a.avg).slice(0,5);
+
+  return`
+${nav('reports')}
+${hdr('Informes',false)}
+<div class="main fu">
+  <div class="sh"><span class="sl">Resumen</span></div>
+  <div class="g3" style="margin-bottom:20px">
+    <div class="mc"><div class="mv">${evals.length}</div><div class="ml">Evaluadas</div></div>
+    <div class="mc"><div class="mv">${avg}</div><div class="ml">Media ★</div></div>
+    <div class="mc"><div class="mv">${entries.length}</div><div class="ml">Total clases</div></div>
+  </div>
+  
+  <div class="sh"><span class="sl">Media por criterio</span></div>
+  <div class="card">
+    ${crits.map((c,i)=>{
+      const vals=evals.filter(e=>e[c]).map(e=>e[c]);
+      const av=vals.length>0?(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+      const col=av>=4?'var(--green)':av>=3?'var(--amber)':'var(--red)';
+      return`<div class="bwrap">
+        <div class="blabel"><span>${critL[i]}</span><span>${av.toFixed(1)}/5</span></div>
+        <div class="btrack"><div class="bfill" style="width:${av/5*100}%;background:${col}"></div></div>
+      </div>`;
+    }).join('')}
+  </div>
+  
+  <div class="sh"><span class="sl">Mejor valoradas</span></div>
+  ${top.map((ts,i)=>{
+    const ss=sessions.find(s=>s.id===ts.id);if(!ss)return'';
+    return`<div class="sc" style="cursor:default">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:12px;color:var(--txtm)">#${i+1} · ${ts.cnt} eval.</div>
+          <div class="stitle">${ss.nombre}</div>
+          <div class="ssub">${ss.codigo} · ${ss.nivel}</div>
+        </div>
+        <div style="text-align:right;font-size:26px;font-weight:700;color:var(--amber)">★${ts.avg}</div>
+      </div>
+    </div>`;
+  }).join('')}
+  
+  <div class="sh"><span class="sl">Por monitor</span></div>
+  <div class="card">
+    ${MONITORS.map(m=>{
+      const me=evals.filter(e=>e.monitorId===m);
+      if(me.length===0)return'';
+      const ma=me.filter(e=>e.global);
+      const mav=ma.length>0?(ma.reduce((a,e)=>a+e.global,0)/ma.length).toFixed(1):'—';
+      return`<div class="mi">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--bg-surf);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:var(--accent);flex-shrink:0">${m}</div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600">${m}</div>
+        <div style="font-size:12px;color:var(--txtm)">${me.length} evaluaciones · media ${mav}</div></div>
+        <div style="color:var(--amber);font-weight:700">★ ${mav}</div>
+      </div>`;
+    }).join('')}
+  </div>
+  
+  <div class="sh"><span class="sl">Comentarios recientes</span></div>
+  <div class="card">
+    ${evals.filter(e=>e.queFunciono||e.queMejorar).slice(-3).map(ev=>{
+      const en=entries.find(e=>e.id===ev.entryId);
+      const ss=sessions.find(s=>s.id===ev.sessionId);
+      if(!ss||!en)return'';
+      return`<div style="padding:10px 0;border-bottom:1px solid var(--bdr)">
+        <div style="font-size:11px;color:var(--txtm);margin-bottom:4px">${ev.monitorId} · ${ss.nombre} · ${fmt(ev.fecha)}</div>
+        ${ev.queFunciono?`<div style="font-size:13px;color:var(--green);margin-bottom:3px">✓ ${ev.queFunciono}</div>`:''}
+        ${ev.queMejorar?`<div style="font-size:13px;color:var(--amber)">△ ${ev.queMejorar}</div>`:''}
+      </div>`;
+    }).join('') || '<div style="font-size:13px;color:var(--txtm)">Sin comentarios aún</div>'}
+  </div>
+  
+  <div class="sep"></div>
+  <button class="btn btn-o" onclick="exportRpt()">📄 Exportar informe .txt</button>
+</div>`}
+
+// ──────────────────────────────────────────────
+// VIEW: ASSISTANT
+// ──────────────────────────────────────────────
+function vAssistant(){
+  const msgs=S.chatHistory;
+  const hasKey=!!DB.apiKey();
+  return`
+${nav('assistant')}
+${hdr('Asistente IA',false)}
+<div class="main fu">
+  <div class="card" style="margin-bottom:14px;border-color:var(--bdrS)">
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <span style="font-size:26px">🤖</span>
+      <div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:4px">Experto en Natación Educativa</div>
+        <div style="font-size:13px;color:var(--txtm)">Consulta variantes, progresiones técnicas, gestión de grupos, materiales o cualquier duda pedagógica.</div>
+        ${!hasKey?`<div style="font-size:12px;color:var(--amber);margin-top:6px">⚠️ Sin API Key — <button onclick="go('apikey')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-family:var(--font);font-size:12px">Configurar →</button></div>`:''}
+      </div>
+    </div>
+  </div>
+  
+  <div class="chips">
+    <button class="chip" onclick="qp('Propón 3 variantes para trabajar la flotación con niños de 4-5 años que tienen miedo al agua')">💡 Flotación con miedo</button>
+    <button class="chip" onclick="qp('Dame 4 ejercicios en progresión para enseñar la respiración lateral en crol a niños de 8-9 años')">🌊 Respiración crol</button>
+    <button class="chip" onclick="qp('Ideas para hacer más motivador y dinámico el calentamiento acuático con grupos de 6-8 años')">🔥 Calentamiento lúdico</button>
+    <button class="chip" onclick="qp('¿Cómo gestiono un grupo con niveles muy diferentes — algunos en Nivel 1 y otros en Nivel 2?')">👥 Grupos mixtos</button>
+    <button class="chip" onclick="qp('¿Cómo progreso la enseñanza de espalda con niños que tienen mucho miedo a ir de espaldas?')">🏊 Espalda con miedo</button>
+  </div>
+  
+  <div class="card" style="padding:12px">
+    <div class="chat-box" id="chat-msgs">
+      ${msgs.length===0
+        ?`<div class="msg msg-a">¡Hola! Soy tu asistente de natación educativa. Puedo ayudarte con variantes de sesiones, estrategias pedagógicas, progresiones técnicas, gestión de grupos... ¿En qué puedo ayudarte hoy?</div>`
+        :msgs.map(m=>`<div class="msg msg-${m.role==='user'?'u':'a'}">${m.content.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`).join('')}
+    </div>
+    <div class="cinrow">
+      <input type="text" id="chat-in" placeholder="Escribe tu consulta..." onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="csend" onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+  ${msgs.length>0?`<button class="btn btn-o btn-sm" onclick="clearChat()" style="margin-top:10px;color:var(--red)">🗑️ Limpiar conversación</button>`:''}
+</div>`}
+
+// ──────────────────────────────────────────────
+// ACTIONS
+// ──────────────────────────────────────────────
+function selDay(d){S.selDay=d;render()}
+function setLF(f){S.libFilter=f;render()}
+function setIF(f){S.ideasFilter=f;render()}
+
+function setScore(entryId,key,val){
+  if(!S.evalData[entryId]){
+    const ex=DB.evals().find(e=>e.entryId===entryId)||{};
+    S.evalData[entryId]={...ex};
+  }
+  S.evalData[entryId][key]=val;
+  render();
+}
+
+function saveEval(entryId,sessionId){
+  const ev=S.evalData[entryId]||{};
+  const existing=DB.evals().find(e=>e.entryId===entryId)||{};
+  const final={...existing,...ev};
+  final.id=final.id||('ev_'+Date.now());
+  final.entryId=entryId;final.sessionId=sessionId;final.monitorId=S.user;
+  final.fecha=today();
+  final.queFunciono=document.getElementById('ef1')?.value||'';
+  final.queMejorar=document.getElementById('ef2')?.value||'';
+  final.observaciones=document.getElementById('ef3')?.value||'';
+  final.ideas=document.getElementById('ef4')?.value||'';
+  if(final.ideas.trim()){
+    DB.saveIdea({id:'I'+Date.now(),monitorId:S.user,sessionId,texto:final.ideas.trim(),estado:'pendiente',fecha:today(),origen:'monitor'});
+  }
+  DB.saveEval(final);
+  S.evalData[entryId]=final;
+  toast('Evaluación guardada ✓');
+  setTimeout(()=>go('session',{selEntry:entryId,selSession:sessionId}),600);
+}
+
+function addIdea(){
+  const t=document.getElementById('ni-txt')?.value?.trim();
+  if(!t){toast('Escribe alguna idea primero');return}
+  DB.saveIdea({id:'I'+Date.now(),monitorId:S.user,sessionId:null,texto:t,estado:'pendiente',fecha:today(),origen:'monitor'});
+  toast('Idea guardada ✓');render();
+}
+
+function updateIS(id,st){DB.updateIdeaStatus(id,st);toast('Estado actualizado')}
+
+async function sendMsg(){
+  const inp=document.getElementById('chat-in');
+  if(!inp)return;
+  const txt=inp.value.trim();if(!txt)return;
+  inp.value='';
+  S.chatHistory.push({role:'user',content:txt});
+  const box=document.getElementById('chat-msgs');
+  if(box){box.innerHTML+=`<div class="msg msg-l pulse" id="lmsg">Pensando...</div>`;box.scrollTop=box.scrollHeight}
+  const resp=await askClaude(S.chatHistory.map(m=>({role:m.role,content:m.content})));
+  S.chatHistory.push({role:'assistant',content:resp});
+  render();
+}
+
+function qp(txt){
+  S.chatHistory=[];
+  const inp=document.getElementById('chat-in');
+  if(inp){inp.value=txt;sendMsg()}else{S.chatHistory.push({role:'user',content:txt});render();setTimeout(async()=>{const resp=await askClaude([{role:'user',content:txt}]);S.chatHistory.push({role:'assistant',content:resp});render();},100)}
+}
+
+function clearChat(){S.chatHistory=[];render()}
+
+function exportRpt(){
+  const evals=DB.evals();const sessions=DB.sessions();const entries=DB.entries();
+  let r=`INFORME EVALUACIONES — NATACIÓN EDUCATIVA\n`;
+  r+=`Generado: ${new Date().toLocaleDateString('es-ES')}\n`;
+  r+=`Total evaluaciones: ${evals.length}\n`;
+  const wg=evals.filter(e=>e.global);
+  if(wg.length>0)r+=`Media global: ${(wg.reduce((a,e)=>a+e.global,0)/wg.length).toFixed(1)}/5\n`;
+  r+=`\n${'─'.repeat(50)}\nEVALUACIONES\n${'─'.repeat(50)}\n`;
+  evals.forEach(ev=>{
+    const en=entries.find(e=>e.id===ev.entryId);
+    const ss=sessions.find(s=>s.id===ev.sessionId);
+    if(!ss||!en)return;
+    r+=`\n[${ev.fecha}] ${ss.nombre} (${ev.monitorId})\n`;
+    r+=`Valoración global: ${ev.global||'—'}/5\n`;
+    if(ev.queFunciono)r+=`✓ Funcionó: ${ev.queFunciono}\n`;
+    if(ev.queMejorar)r+=`△ Mejorar: ${ev.queMejorar}\n`;
+    if(ev.observaciones)r+=`📝 ${ev.observaciones}\n`;
+  });
+  const blob=new Blob([r],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`informe_natedu_${today()}.txt`;a.click();
+  URL.revokeObjectURL(url);
+  toast('Informe exportado ✓');
+}
+
+// ──────────────────────────────────────────────
+// EVENT ATTACHMENT
+// ──────────────────────────────────────────────
+function attachEvt(){
+  // Role buttons
+  document.querySelectorAll('.role-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      S._role=btn.dataset.role;
+      document.querySelectorAll('.role-btn').forEach(b=>{b.style.opacity='.55';b.style.borderColor=''});
+      btn.style.opacity='1';
+      btn.style.borderColor=S._role==='admin'?'rgba(168,85,247,.6)':'var(--accent)';
+      document.getElementById('ini-wrap').style.display=S._role==='monitor'?'block':'none';
+      document.getElementById('pw-wrap').style.display=S._role==='admin'?'block':'none';
+      checkReady();
+    });
+  });
+
+  document.querySelectorAll('.ini-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.ini-btn').forEach(b=>b.classList.remove('v5'));
+      btn.classList.add('v5');S._ini=btn.dataset.ini;checkReady();
+    });
+  });
+
+  const pw=document.getElementById('apw');
+  if(pw)pw.addEventListener('input',checkReady);
+
+  const lb=document.getElementById('login-btn');
+  if(lb)lb.addEventListener('click',()=>{
+    if(S._role==='admin'){
+      if(document.getElementById('apw').value!=='admin123'){toast('Contraseña incorrecta');return}
+      S.role='admin';S.user='ADMIN';
+    }else{S.role='monitor';S.user=S._ini}
+    go('home');
+  });
+
+  const sk=document.getElementById('savek-btn');
+  if(sk)sk.addEventListener('click',()=>{const k=document.getElementById('aki').value.trim();DB.setKey(k);toast('API Key guardada ✓');setTimeout(()=>go('home'),600)});
+  const skp=document.getElementById('skipk-btn');
+  if(skp)skp.addEventListener('click',()=>go('home'));
+}
+
+function checkReady(){
+  const lb=document.getElementById('login-btn');if(!lb)return;
+  const ok=S._role==='admin'?(document.getElementById('apw')?.value?.length>=4):(S._ini!==null);
+  lb.style.opacity=ok?'1':'.4';lb.style.pointerEvents=ok?'auto':'none';
+}
+
+// ──────────────────────────────────────────────
+// BOOT
+// ──────────────────────────────────────────────
+initData();
+render();
+</script>
+</body>
+</html>
