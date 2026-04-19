@@ -1,1042 +1,951 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="eu">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>NatEdu · Monitores</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>NatEdu · Durango Kirolak</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg-base:#07111f;--bg-card:#0e1f35;--bg-card2:#152840;--bg-surf:#1b3254;
-  --accent:#0ea5e9;--teal:#14b8a6;--amber:#f59e0b;--red:#f43f5e;--green:#22c55e;--purple:#a855f7;
-  --txt1:#e0f2fe;--txt2:#7dd3fc;--txtm:#4a7fa5;
-  --bdr:rgba(14,165,233,0.12);--bdrS:rgba(14,165,233,0.28);
-  --r:16px;--rsm:10px;--font:'Outfit',system-ui,sans-serif;
-  --navH:72px;--hdrH:60px
+  --g:#007032;--g2:#005828;--g3:#e6f4ec;--g4:#c8e8d4;
+  --b:#00475C;--b2:#003347;--b3:#e0eff4;
+  --gl:#6AB023;--gl2:#4e8018;--gl3:#eef6e0;
+  --bg:#f2f5f2;--white:#fff;
+  --txt:#162216;--txt2:#3d5c3d;--txtm:#7a957a;
+  --bdr:#cde0d0;--bdr2:#aacfb4;
+  --warn:#f59e0b;--red:#e53935;--reds:#fdecea;
+  --r:14px;--rs:9px;
+  --nav:66px;--hdr:56px;
+  --fn:'Nunito',system-ui,sans-serif
 }
-body{font-family:var(--font);background:var(--bg-base);color:var(--txt1);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--bg-surf);border-radius:2px}
+body{font-family:var(--fn);background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
 
-/* HEADER */
-.hdr{position:sticky;top:0;z-index:100;background:rgba(7,17,31,0.94);backdrop-filter:blur(14px);height:var(--hdrH);display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--bdr);gap:12px}
-.hdr-back{width:40px;height:40px;border:none;background:var(--bg-card);color:var(--txt2);border-radius:10px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.hdr-title{flex:1;font-size:17px;font-weight:600;color:var(--txt1)}
-.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px}
-.badge-a{background:rgba(168,85,247,.2);color:#c084fc}
-.badge-m{background:rgba(14,165,233,.15);color:var(--accent)}
+/* ── HEADER ── */
+.hdr{position:sticky;top:0;z-index:200;background:var(--g);height:var(--hdr);display:flex;align-items:center;padding:0 14px;gap:10px;box-shadow:0 2px 10px rgba(0,112,50,.25)}
+.hdr-back{width:36px;height:36px;border:none;background:rgba(255,255,255,.18);color:white;border-radius:8px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fn)}
+.hdr-t{flex:1;font-size:15px;font-weight:800;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logo{display:flex;align-items:center;gap:8px;flex:1}
+.logo-dk{display:flex;flex-direction:column;line-height:1.1}
+.logo-d{font-size:13px;font-weight:900;color:white;letter-spacing:1.5px;text-transform:uppercase}
+.logo-k{font-size:13px;font-weight:900;color:var(--gl)}
+.logo-sq{width:30px;height:30px;background:white;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.22);color:white;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
-/* BOTTOM NAV */
-.nav{position:fixed;bottom:0;left:0;right:0;height:var(--navH);background:rgba(14,31,53,0.97);backdrop-filter:blur(14px);border-top:1px solid var(--bdr);display:flex;z-index:100}
-.nv{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:none;background:none;color:var(--txtm);font-family:var(--font);font-size:10px;font-weight:500;transition:color .2s;padding-bottom:8px}
-.nv.on{color:var(--accent)}
-.nv-ico{font-size:22px;line-height:1}
+/* ── NAV ── */
+.nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);background:var(--white);border-top:1.5px solid var(--bdr);display:flex;z-index:200}
+.nv{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:none;color:var(--txtm);font-family:var(--fn);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding-bottom:4px}
+.nv.on{color:var(--g)}
+.nv-i{font-size:21px;line-height:1}
 
-/* MAIN */
-.main{padding:16px;padding-bottom:calc(var(--navH)+20px);max-width:520px;margin:0 auto}
+/* ── MAIN ── */
+.main{padding:14px;padding-bottom:calc(var(--nav)+14px);max-width:560px;margin:0 auto}
 
-/* CARDS */
-.card{background:var(--bg-card);border-radius:var(--r);border:1px solid var(--bdr);padding:16px;margin-bottom:12px}
-.card-hi{border-color:var(--accent);background:rgba(14,165,233,0.05)}
+/* ── SECTION HEADER ── */
+.sh{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.9px;color:var(--txtm);margin:18px 0 8px;display:flex;align-items:center;justify-content:space-between}
 
-/* SESSION CARD */
-.sc{background:var(--bg-card);border-radius:var(--r);border:1px solid var(--bdr);padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,transform .1s;-webkit-tap-highlight-color:transparent}
-.sc:active{transform:scale(0.99)}
-.sc:hover{border-color:var(--bdrS)}
-.sc.ok{border-left:3px solid var(--green)}
-.sc.pend{border-left:3px solid var(--amber)}
+/* ── CARD ── */
+.card{background:var(--white);border-radius:var(--r);border:1px solid var(--bdr);padding:15px;margin-bottom:10px}
 
-/* TAGS */
-.tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.3px}
-.tn{background:rgba(14,165,233,.15);color:var(--accent)}
-.te{background:rgba(20,184,166,.15);color:var(--teal)}
-.tc{background:rgba(255,255,255,.06);color:var(--txtm)}
-.tg{background:rgba(34,197,94,.15);color:var(--green)}
-.tam{background:rgba(245,158,11,.15);color:var(--amber)}
-.tr{background:rgba(244,63,94,.15);color:var(--red)}
-.tp{background:rgba(168,85,247,.15);color:var(--purple)}
+/* ── SESSION CARD (home & calendar) ── */
+.scard{background:var(--white);border-radius:var(--r);border:1px solid var(--bdr);margin-bottom:10px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.scard.ev{border-color:var(--gl);border-left:4px solid var(--gl)}
+.scard.pend{border-left:4px solid var(--b)}
+.scard:active{opacity:.93}
+.scard-hdr{padding:14px 14px 12px;display:flex;gap:12px;align-items:flex-start}
+.scard-hora{font-size:26px;font-weight:900;color:var(--g);line-height:1;min-width:58px}
+.scard-info{flex:1}
+.scard-nom{font-size:15px;font-weight:800;color:var(--txt);margin-bottom:2px;line-height:1.25}
+.scard-sub{font-size:12px;color:var(--txt2);font-weight:600}
+.scard-st{font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;flex-shrink:0;align-self:flex-start}
+.st-ev{background:var(--gl3);color:var(--gl2)}
+.st-pend{background:var(--b3);color:var(--b2)}
+.scard-tags{padding:0 14px 12px;display:flex;gap:5px;flex-wrap:wrap}
 
-.smeta{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-.stitle{font-size:17px;font-weight:600;color:var(--txt1);margin-bottom:4px}
-.ssub{font-size:13px;color:var(--txtm)}
-.stime{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:2px}
+/* ── TAGS ── */
+.tag{font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;letter-spacing:.2px}
+.tg{background:var(--g3);color:var(--g2)}
+.tb{background:var(--b3);color:var(--b2)}
+.tgl{background:var(--gl3);color:var(--gl2)}
+.tw{background:var(--bg);color:var(--txtm);border:1px solid var(--bdr)}
 
-/* SECTION */
-.sh{display:flex;align-items:center;justify-content:space-between;margin:20px 0 10px}
-.sl{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--txtm)}
+/* ── SESSION DETAIL ── */
+.sec-hdr{background:var(--g);padding:16px 14px;margin:-14px -14px 14px}
+.sec-cod{font-size:11px;font-weight:900;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.sec-nom{font-size:18px;font-weight:900;color:white;line-height:1.2;margin-bottom:6px}
+.sec-meta{display:flex;gap:6px;flex-wrap:wrap}
+.sec-mtag{font-size:10px;font-weight:800;padding:3px 9px;border-radius:12px;background:rgba(255,255,255,.18);color:white}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:12px;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;border:none;transition:opacity .15s,transform .1s;-webkit-tap-highlight-color:transparent;width:100%}
-.btn:active{transform:scale(0.98);opacity:.9}
-.btn-p{background:var(--accent);color:white}
-.btn-s{background:var(--bg-surf);color:var(--txt1)}
-.btn-o{background:transparent;border:1px solid var(--bdrS);color:var(--txt2)}
-.btn-g{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.25)}
-.btn-sm{padding:9px 16px;font-size:13px;border-radius:9px;width:auto}
+.blk{margin-bottom:14px}
+.blk-title{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.9px;color:var(--txtm);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.blk-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
 
-/* FORMS */
-label{font-size:12px;font-weight:600;color:var(--txtm);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-input,textarea,select{width:100%;background:var(--bg-base);border:1px solid var(--bdrS);border-radius:10px;color:var(--txt1);font-family:var(--font);font-size:15px;padding:12px 14px;margin-bottom:16px;outline:none;transition:border-color .2s;-webkit-appearance:none}
-input:focus,textarea:focus,select:focus{border-color:var(--accent)}
-textarea{resize:vertical;min-height:80px;line-height:1.5}
-select option{background:var(--bg-card2)}
+.mat-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:14px;font-weight:600;color:var(--txt);line-height:1.4}
+.mat-item:last-child{border:none}
+.mat-dot{width:7px;height:7px;border-radius:50%;background:var(--gl);flex-shrink:0;margin-top:4px}
 
-/* STARS */
-.stars{display:flex;gap:8px;margin:8px 0 16px;justify-content:center}
-.star{font-size:38px;cursor:pointer;transition:transform .1s;color:var(--bg-surf);-webkit-tap-highlight-color:transparent;user-select:none}
-.star.on{color:var(--amber)}
-.star:hover{transform:scale(1.1)}
+.act{border-radius:var(--rs);padding:13px;margin-bottom:8px}
+.act-arr{background:var(--g3);border-left:3px solid var(--g)}
+.act-int{background:var(--b3);border-left:3px solid var(--b)}
+.act-ref{background:var(--gl3);border-left:3px solid var(--gl)}
+.act-lbl{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.act-arr .act-lbl{color:var(--g2)}
+.act-int .act-lbl{color:var(--b2)}
+.act-ref .act-lbl{color:var(--gl2)}
+.act-txt{font-size:13px;font-weight:600;color:var(--txt);line-height:1.6}
 
-/* SCORE BTNS */
-.srow{display:flex;gap:6px;margin-bottom:16px}
-.sbtn{flex:1;padding:11px 4px;border-radius:10px;border:1px solid var(--bdr);background:var(--bg-base);color:var(--txtm);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.sbtn.v5,.sbtn.v4{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
-.sbtn.v3{background:rgba(245,158,11,.15);border-color:var(--amber);color:var(--amber)}
-.sbtn.v2,.sbtn.v1{background:rgba(244,63,94,.15);border-color:var(--red);color:var(--red)}
+.pto{background:var(--bg);border-radius:var(--rs);padding:10px 12px;margin-bottom:14px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--txt2)}
 
-/* CHAT */
-.chat-box{min-height:220px;max-height:420px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:10px;padding:4px 0}
-.msg{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.55;max-width:92%}
-.msg-u{background:var(--accent);color:white;align-self:flex-end;border-bottom-right-radius:4px}
-.msg-a{background:var(--bg-card2);color:var(--txt1);align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--bdr)}
-.msg-l{background:var(--bg-card2);color:var(--txtm);align-self:flex-start;border:1px solid var(--bdr)}
-.cinrow{display:flex;gap:8px}
-.cinrow input{margin-bottom:0;flex:1}
-.csend{width:48px;height:48px;border-radius:12px;background:var(--accent);border:none;color:white;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+/* ── EVAL ── */
+.eval-section{background:var(--white);border-radius:var(--r);border:2px solid var(--bdr);overflow:hidden;margin-top:20px}
+.eval-hdr{background:var(--g);padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.eval-hdr-t{font-size:14px;font-weight:900;color:white}
+.eval-hdr-st{font-size:11px;font-weight:800;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,.2);color:white}
+.eval-hdr-st.done{background:var(--gl);color:white}
+.eval-body{padding:14px}
 
-/* IDEA CARD */
-.ic{background:var(--bg-card);border-radius:var(--r);border:1px solid var(--bdr);padding:14px;margin-bottom:10px}
-.ic-meta{font-size:11px;color:var(--txtm);margin-top:8px}
-.ic-txt{font-size:14px;color:var(--txt1);line-height:1.5}
+.crit{margin-bottom:16px}
+.crit-lbl{font-size:12px;font-weight:800;color:var(--txt);margin-bottom:8px}
+.scale{display:flex;gap:4px}
+.sb{flex:1;height:48px;border-radius:8px;border:1.5px solid var(--bdr);background:var(--bg);color:var(--txtm);font-family:var(--fn);font-size:14px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
+.sb:active{transform:scale(.93)}
+.sb.sel-n2,.sb.sel-n1{background:#fde8e8;border-color:#f43f5e;color:#b91c1c}
+.sb.sel-0{background:var(--b3);border-color:var(--b);color:var(--b2)}
+.sb.sel-p1,.sb.sel-p2{background:var(--g3);border-color:var(--g);color:var(--g2)}
 
-/* PHASE */
-.phase{background:var(--bg-surf);border-radius:var(--rsm);padding:12px;margin-bottom:8px;border-left:3px solid var(--accent)}
-.ph{display:flex;justify-content:space-between;margin-bottom:6px}
-.pn{font-size:14px;font-weight:600;color:var(--txt2)}
-.pt{font-size:12px;color:var(--accent);font-weight:600}
-.pd{font-size:13px;color:var(--txt1);line-height:1.55}
+.stars-row{display:flex;justify-content:center;gap:8px;padding:6px 0 2px}
+.star{font-size:40px;cursor:pointer;color:#d8e8d8;transition:color .1s,transform .1s;line-height:1}
+.star.on{color:var(--warn)}
+.star:active{transform:scale(.9)}
 
-/* MATERIAL */
-.mi{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:14px;color:var(--txt1)}
-.mi:last-child{border-bottom:none}
-.mdot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.cmt{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:9px;color:var(--txt);font-family:var(--fn);font-size:14px;padding:11px 13px;resize:none;outline:none;min-height:68px;font-weight:600;line-height:1.5;transition:border-color .2s}
+.cmt:focus{border-color:var(--g)}
+.autosave{text-align:right;font-size:11px;font-weight:700;color:var(--gl2);margin-top:5px;height:16px;transition:opacity .3s;opacity:0}
+.autosave.show{opacity:1}
 
-/* SEP */
-.sep{height:1px;background:var(--bdr);margin:16px 0}
+/* ── CALENDAR ── */
+.wk{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:14px}
+.wd{background:var(--white);border-radius:10px;border:1.5px solid var(--bdr);padding:9px 4px;text-align:center;cursor:pointer}
+.wd.today{border-color:var(--g);background:var(--g3)}
+.wd.sel{border-color:var(--b);background:var(--b3)}
+.wd-n{font-size:9px;font-weight:900;color:var(--txtm);text-transform:uppercase;letter-spacing:.4px}
+.wd-d{font-size:17px;font-weight:900;color:var(--txt);margin:3px 0 2px}
+.wd.today .wd-d{color:var(--g2)}
+.wd.sel .wd-d{color:var(--b2)}
+.wd-dot{width:5px;height:5px;border-radius:50%;background:var(--g);margin:0 auto}
 
-/* METRIC */
-.mc{background:var(--bg-card);border-radius:var(--rsm);border:1px solid var(--bdr);padding:14px;text-align:center}
-.mv{font-size:28px;font-weight:700;color:var(--accent)}
-.ml{font-size:11px;color:var(--txtm);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-
-/* GRID */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-
-/* LOGIN */
-.lwrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px}
-.llogo{font-size:72px;margin-bottom:12px}
-.ltitle{font-size:30px;font-weight:700;color:var(--txt1);margin-bottom:4px;letter-spacing:-0.5px}
-.lsub{font-size:15px;color:var(--txtm);margin-bottom:40px;text-align:center;line-height:1.5}
-
-/* WEEK */
-.wk{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px}
-.wd{background:var(--bg-card);border-radius:10px;border:1px solid var(--bdr);padding:10px 6px;text-align:center;cursor:pointer;transition:all .15s}
-.wd.today{border-color:var(--accent);background:rgba(14,165,233,.1)}
-.wd.sel{border-color:var(--teal);background:rgba(20,184,166,.08)}
-.wdn{font-size:10px;font-weight:600;color:var(--txtm);text-transform:uppercase;letter-spacing:.5px}
-.wdnum{font-size:18px;font-weight:700;color:var(--txt1);margin:4px 0}
-.wdcnt{font-size:10px;color:var(--txtm)}
-.wdot{width:5px;height:5px;border-radius:50%;background:var(--accent);margin:2px auto}
-
-/* BAR */
-.bwrap{margin-bottom:12px}
-.blabel{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
-.blabel span:first-child{color:var(--txtm)}
-.blabel span:last-child{color:var(--txt1);font-weight:600}
-.btrack{height:6px;background:var(--bg-surf);border-radius:3px;overflow:hidden}
-.bfill{height:100%;border-radius:3px;transition:width .4s}
-
-/* CHIPS */
-.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px}
+/* ── LIBRARY ── */
+.chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
 .chips::-webkit-scrollbar{display:none}
-.chip{white-space:nowrap;padding:6px 14px;border-radius:20px;border:1px solid var(--bdr);background:transparent;color:var(--txtm);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .15s}
-.chip.on{background:var(--accent);border-color:var(--accent);color:white}
+.chip{white-space:nowrap;padding:7px 14px;border-radius:20px;border:1.5px solid var(--bdr);background:transparent;color:var(--txtm);font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;flex-shrink:0}
+.chip.on{background:var(--g);border-color:var(--g);color:white}
 
-/* TOAST */
-#toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:var(--bg-card2);border:1px solid var(--bdrS);color:var(--txt1);padding:10px 20px;border-radius:20px;font-size:14px;font-weight:500;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;pointer-events:none}
-#toast.show{opacity:1}
+/* ── IDEAS ── */
+.ic{background:var(--white);border-radius:var(--r);border:1px solid var(--bdr);padding:13px;margin-bottom:8px}
+.ic-txt{font-size:14px;font-weight:600;color:var(--txt);line-height:1.55;margin-bottom:8px}
+.ic-ft{display:flex;align-items:center;justify-content:space-between}
+.ic-meta{font-size:11px;color:var(--txtm);font-weight:700}
+.ic-sel{font-size:12px;font-weight:800;padding:4px 10px;border-radius:12px;border:1.5px solid var(--bdr);background:transparent;color:var(--txt2);font-family:var(--fn);cursor:pointer;outline:none}
 
-/* INDICATOR */
-.ind{margin-bottom:18px}
-.indl{font-size:12px;font-weight:600;color:var(--txtm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+/* ── CHAT ── */
+.chatbox{min-height:180px;max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;margin-bottom:11px;padding:4px 0}
+.msg{padding:10px 13px;border-radius:12px;font-size:13px;font-weight:600;line-height:1.55;max-width:90%}
+.msg-u{background:var(--g);color:white;align-self:flex-end;border-bottom-right-radius:3px}
+.msg-a{background:var(--bg);color:var(--txt);border:1px solid var(--bdr);align-self:flex-start;border-bottom-left-radius:3px}
+.cin{display:flex;gap:8px}
+.cin input{flex:1;background:var(--bg);border:1.5px solid var(--bdr);border-radius:9px;color:var(--txt);font-family:var(--fn);font-size:14px;padding:11px 13px;outline:none;font-weight:600}
+.cin input:focus{border-color:var(--g)}
+.csend{width:46px;height:46px;border-radius:9px;background:var(--g);border:none;color:white;font-size:19px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 
-.empty{text-align:center;padding:48px 24px;color:var(--txtm)}
-.eico{font-size:48px;margin-bottom:12px}
-.etxt{font-size:15px}
+/* ── METRICS ── */
+.mc{background:var(--white);border-radius:var(--rs);border:1px solid var(--bdr);padding:13px;text-align:center}
+.mv{font-size:24px;font-weight:900;color:var(--g)}
+.ml{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.6px;color:var(--txtm);margin-top:2px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.bw{margin-bottom:9px}
+.bl{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px;color:var(--txt2)}
+.bl b{color:var(--txt)}
+.bt{height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.bf{height:100%;border-radius:3px}
 
+/* ── LOGIN ── */
+.lwrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;background:var(--bg)}
+.lcard{width:100%;max-width:340px;background:var(--white);border-radius:20px;border:1px solid var(--bdr);padding:28px 22px;box-shadow:0 4px 24px rgba(0,112,50,.08)}
+.llogo{width:56px;height:56px;background:var(--g);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.ltop{text-align:center;margin-bottom:22px}
+.lname{font-size:22px;font-weight:900;color:var(--txt);margin-bottom:2px}
+.lsub{font-size:13px;color:var(--txtm);font-weight:600}
+.rbtn{display:flex;flex-direction:column;align-items:center;gap:7px;padding:16px 10px;border-radius:12px;border:2px solid var(--bdr);background:var(--bg);cursor:pointer;font-family:var(--fn);font-size:13px;font-weight:800;color:var(--txt2);transition:all .15s;width:100%}
+.rbtn.sel{border-color:var(--g);background:var(--g3);color:var(--g2)}
+.rbtn-i{font-size:28px}
+.ini-grid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 16px}
+.ini-btn{padding:9px 12px;border-radius:9px;border:1.5px solid var(--bdr);background:var(--bg);color:var(--txt2);font-family:var(--fn);font-size:13px;font-weight:900;cursor:pointer;transition:all .15s}
+.ini-btn.sel{border-color:var(--g);background:var(--g3);color:var(--g2)}
+.lbtn{width:100%;padding:14px;border-radius:11px;background:var(--g);color:white;font-family:var(--fn);font-size:15px;font-weight:900;cursor:pointer;border:none;transition:opacity .2s}
+.lbtn:disabled{opacity:.4;cursor:default}
+label{font-size:11px;font-weight:800;color:var(--txtm);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.pw-inp{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:9px;color:var(--txt);font-family:var(--fn);font-size:15px;padding:12px;outline:none;margin-bottom:14px;font-weight:600}
+.pw-inp:focus{border-color:var(--g)}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:40px 20px;color:var(--txtm)}
+.empty-i{font-size:44px;margin-bottom:10px}
+.empty-t{font-size:15px;font-weight:700}
+
+/* ── BTN ── */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:11px;font-family:var(--fn);font-size:14px;font-weight:800;cursor:pointer;border:none;width:100%;transition:opacity .15s}
+.btn:active{opacity:.85}
+.btn-g{background:var(--g);color:white}
+.btn-o{background:transparent;border:1.5px solid var(--bdr2);color:var(--txt2)}
+.btn-b{background:var(--b);color:white}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--g);color:white;padding:9px 18px;border-radius:20px;font-size:13px;font-weight:800;opacity:0;transition:opacity .25s;z-index:999;white-space:nowrap;pointer-events:none}
+#toast.on{opacity:1}
+
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fu .22s ease forwards}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.pulse{animation:pulse 1.2s infinite}
-@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.fu{animation:fu .28s ease forwards}
+.pulse{animation:pulse 1s infinite}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="toast"></div>
 <script>
-// ──────────────────────────────────────────────
-// SAMPLE DATA
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────
+// DATA — sessions from real files
+// ─────────────────────────────────────────
 const SESSIONS = [
-  {id:'S001',codigo:'FAM-01',nombre:'El tesoro del agua',objetivo:'Familiarización con el medio acuático. Primer contacto lúdico y seguro con el agua, reduciendo el miedo y construyendo confianza desde la afectividad.',nivel:'Iniciación',edadMin:3,edadMax:4,duracion:30,grupoTarget:'Bebés',material:['Cubos y regaderas de colores x6','Churros de espuma x6','Aros de sumergir x4 (fondo)','Pelotas flotantes x4','Muñecos acuáticos x2'],
-  desarrollo:[
-    {fase:'Bienvenida',tiempo:5,desc:'Entrada progresiva por la escalera. Monitor en el agua recibe a cada niño. Se moja brazos y cara suavemente. Presentación del material.'},
-    {fase:'Juego libre',tiempo:8,desc:'Juego libre con cubos y regaderas. Los niños se mojan mutuamente. Monitor modela mojarse la cara sin miedo. Canciones y rimas del agua.'},
-    {fase:'El tesoro',tiempo:12,desc:'Aros en el fondo (zona ≤30cm). Los niños intentan recogerlos. Monitor asiste con flotación si es necesario. Progresión: desde el borde → hacia el centro. Celebrar cada logro.'},
-    {fase:'Cierre',tiempo:5,desc:'Flotación con churro en posición horizontal. Monitor sostiene a quienes no se sueltan. Espiraciones en el agua. "Concurso de burbujas" para salir.'}
-  ],
-  variantes:['Con familias presentes: los padres sostienen durante la actividad del tesoro','Progresión semana 2: añadir inmersión voluntaria en zona de 40cm','Adaptación miedo intenso: sustituir inmersión por tocar aro en superficie sin sumergir'],
-  indicadores:['El niño entra al agua sin llanto prolongado (≤1 min)','Se moja la cara voluntariamente al menos 1 vez','Participa en el juego del tesoro aunque sea desde el borde','Realiza al menos una espiración en el agua'],
-  obs:'La presión nunca es adecuada. Si un niño se niega a entrar, permanece en el borde con material. El objetivo es que quiera volver. La relación afectiva con el monitor es la clave de esta etapa. No forzar nunca la inmersión.'},
+{id:'S06-3',cod:'S06',nom:'Koloreak',nom_es:'Los colores',adina:'3 urte',inst:'Umeentzako igerilekua',pto:'Eskaileraren ondoan',
+ materiala:['Tobogan','8 baso','2 cubo','Koltxoneta (uretan pasatzeko)','Figura flotatzaileak'],
+ arranque:'Uretan material ezberdinak daude kolore eta forma ezberdinekin, ito egiten ari dira eta laguntzaile ausartek salbatu egin behar dituzte. Salbatutakoan, koloreen arabera sailkatuko ditugu.',
+ intencionada:'Koltxoneta txigortua umeentzako igerilekuan, tobogarekin lotuta. Lehenik lau hanketan igaroko gara, eta gero modua aldatuz: atzez aurrera, oinez... Esku batean basoa hartuta igarotzen saiatuko gara eta tobogaren atzetik dauden kuboak bete. Ura isurtzen bada atzera egin behar da.',
+ reflexion:'Gure instalazioak eta materialak ezagutzen jarraitzen dugu. Bete ditugun kuboekin buru gainetik dutxa emango diogu elkarri.',
+ irudiak:'[Igerilekua — Kuboak — Tobogana — Koltxoneta]'},
 
-  {id:'S002',codigo:'FAM-03',nombre:'Globos y cohetes',objetivo:'Iniciación a la flotación autónoma, el empuje y el deslizamiento horizontal. Introducción al salto al agua de forma lúdica.',nivel:'Iniciación',edadMin:4,edadMax:5,duracion:35,grupoTarget:'Iniciación A',material:['Churros x8','Tabla flotación x4','Globos con agua x8 (sorpresa)','Fideos colores x4'],
-  desarrollo:[
-    {fase:'Entrada y calentamiento',tiempo:5,desc:'Entrada libre. Juego con globos en superficie: mantenerlos en el aire sobre el agua. Carrera de globos entre dos paredes.'},
-    {fase:'Posición globo',tiempo:10,desc:'Tumbados en el agua con churro bajo axilas (posición globo). Monitor demuestra extensión del cuerpo, cara en el agua, espiración. Se trabaja mantener posición 5-10 segundos.'},
-    {fase:'Cohetes',tiempo:12,desc:'Empuje desde pared: posición fetal → extensión completa → deslizamiento. Énfasis en: cuerpo recto, orejas entre brazos, cara en el agua. Progresión: con tabla → sin tabla → con patada al final.'},
-    {fase:'Saltos',tiempo:5,desc:'Saltos desde el borde: primero sentados, luego de pie. Monitor en el agua. Solo para quien quiera. Celebrar a todos.'},
-    {fase:'Burbujas',tiempo:3,desc:'Concurso de burbujas en el borde. ¿Quién hace más? ¿Quién aguanta más? Cuenta de 1 a 5.'}
-  ],
-  variantes:['Sin flotadores: retirar churro para los más avanzados en la posición globo','Cohete profundo: deslizamiento hacia fondo en zona de 60cm','Carrera de cohetes: distancia máxima de deslizamiento sin patada'],
-  indicadores:['Mantiene posición globo horizontal >5 seg con churro','Realiza al menos 2 cohetes con extensión completa','Sumerge la cara durante el deslizamiento','Participa en los saltos (aunque sea sentado)'],
-  obs:'El cohete (deslizamiento en extensión) es el fundamento de todos los estilos. Corregir siempre la posición del cuerpo antes de añadir patada. Los globos con agua crean efecto sorpresa muy motivador para la edad. No forzar la cara en agua: es un proceso progresivo.'},
+{id:'S14-3',cod:'S14',nom:'Elikagaiak: Pastel erraldoia',nom_es:'Alimentos: Tarta gigante',adina:'3 urte',inst:'Umeentzako eta jolas-igerilekua',pto:'2. eskailera ondoan',
+ materiala:['8 taula urdin','Koloretako blokeak','Koltxoneta bat'],
+ arranque:'Igerileku txikian taularekin jolasean ibiliko gara: ipurdi azpian, eskuetan, tripan, oinpean... Esperimentatuz.',
+ intencionada:'Irregularrean: koloretako blokeak banan-banan alde batetik bestera eramanez, ea nolako pastel handi eta dotorea egiteko gai garen denon artean.',
+ reflexion:'Pastel erraldoia nola egin dugun gogoetatu.'},
 
-  {id:'S003',codigo:'NAT-02',nombre:'El tren de los peces',objetivo:'Desarrollo de la propulsión de piernas en crol. Coordinación básica brazos-piernas con énfasis en técnica de patada correcta.',nivel:'Nivel 1',edadMin:6,edadMax:8,duracion:45,grupoTarget:'Progresión A',material:['Tablas flotación x8','Aletas x8 (opcional, 1 de cada 3 sesiones)','Churros x4 (ref. lateral)'],
-  desarrollo:[
-    {fase:'Calentamiento',tiempo:8,desc:'El tren: fila de niños agarrados por hombros, el primero guía con cambios de dirección. 2 min. Luego 2 largos nado libre con tabla (exploración).'},
-    {fase:'Técnica de piernas',tiempo:15,desc:'Con tabla: patada de crol. Énfasis: tobillo relajado (cola de pez), movimiento desde la cadera, piernas sin separar excesivamente. 4 series de 25m. Correcciones individuales. Metáfora: "el pie es un abanico".'},
-    {fase:'Coordinación',tiempo:15,desc:'Introducción brazada: "1 brazo + 6 patadas". Práctica en grupos pequeños. Monitor acompaña en el agua corrigiendo posición de cabeza. Progresión: contar en voz alta las patadas.'},
-    {fase:'Carrera de relevos',tiempo:5,desc:'Equipos de 3-4: carrera de relevos 12.5m con tabla. Énfasis en entrada correcta al agua en el relevo. Ambiente de juego.'},
-    {fase:'Cierre técnico',tiempo:2,desc:'Borde: ¿qué nota ha aprendido hoy? Nombrar el músculo que más ha trabajado (cuádriceps, glúteo).'}
-  ],
-  variantes:['Con aletas: 1 sesión de 3, para sentir el movimiento de cadera. Nunca abusar','Patada vertical: en zona profunda con churro, para trabajar fuerza y tobillo','Tabla en espalda: para avanzados, patada de espalda con tabla sobre el pecho'],
-  indicadores:['Mantiene patada correcta durante 25m sin parar','Tobillo relajado visible (no bicicleta)','Coordina al menos 3 ciclos brazada-patada','Completa los 4 largos de patada sin ayuda'],
-  obs:'La patada tipo bicicleta (rodilla muy flexionada) es el error más común. Usar metáfora de "abanico de cola de pez" para el tobillo. No corregir todo a la vez: priorizar primero la cadera, luego el tobillo. La filmación con móvil es muy útil para mostrar al alumno su propia técnica.'},
+{id:'S18-3',cod:'S18',nom:'ABC',nom_es:'El abecedario',adina:'3 urte',inst:'Umeentzako / Jolas-igerilekua',pto:'Eskaileraren ondoan',
+ materiala:['Letra flotatzaileak','Koltxoneta (umeentzako igerilekuan)','Txurroak','AEIOU txantiloia'],
+ arranque:'Koltxoneta eskailera batean oinarrituta. Eseri gara igerilekuaren ertzean eta ikasleei letren kanpoko zati ematen dizkiegu koltxonetara itsasteko, banan-banan. Gero barnealdeko zatiak ematen dizkiegu eta txertatzeko laguntzen diegu.',
+ intencionada:'Jolas-igerilekura joaten gara eta txurro bat ematen diegu. Lehenengo eskailatik bigarrenera mugituz letra bat eramaten dute. Horman AEIOU txantiloia dago eta denon artean beteko dugu.',
+ reflexion:'Hizkiak ezagutzen lagundu diegu.'},
 
-  {id:'S004',codigo:'NAT-07',nombre:'Respiración rítmica en crol',objetivo:'Automatización de la respiración lateral en crol. Rotación correcta de cabeza y cuerpo. Espiración continua bajo el agua.',nivel:'Nivel 2',edadMin:8,edadMax:11,duracion:50,grupoTarget:'Avanzados A',material:['Sin material principal','Tablas x4 (calentamiento)','Pull-buoy x4','Churros x2 (referencia lateral opcional)'],
-  desarrollo:[
-    {fase:'Calentamiento',tiempo:10,desc:'200m libre ritmo suave. 4×25m patada con tabla. Ejercicio 6-3-6: 6 patadas lateral, 3 brazadas, 6 patadas lateral (control posición cuerpo).'},
-    {fase:'Técnica respiración',tiempo:20,desc:'Demo en el borde: posición de cabeza lateral (oído pegado al agua, boca justa fuera). Series 4×25m respirando cada 3 brazadas. Monitor corrige elevación excesiva de cabeza. Pull-buoy para aislar la respiración del movimiento de piernas.'},
-    {fase:'Aplicación',tiempo:15,desc:'4×50m crol técnico. V1: respirar solo en la pared. V2: respirar cada 3. Objetivos: mantener rotación de hombro, no levantar la cabeza (el agua debe partir la cara por la mitad), espiración continua en inmersión.'},
-    {fase:'Autoevaluación',tiempo:5,desc:'Cada alumno dice en qué mejoró hoy y qué le cuesta más. 100m suave enfriamiento. Feedback del monitor.'}
-  ],
-  variantes:['Respiración bilateral: alternar lado cada 3 brazadas (derecha-izquierda-derecha)','Un brazo extendido al frente, respirar siempre al lado del brazo que nada','Con referencia visual: palo vertical en agua para guiar la rotación'],
-  indicadores:['La oreja permanece en contacto con el agua durante la inspiración','No hay interrupción de la patada al respirar','Completa 50m sin parar con respiración cada 3','Espiración completa bajo el agua antes de girar'],
-  obs:'El error más común es levantar la cabeza (efecto "tomar el sol"). El agua debe partir la cara por la mitad durante la inspiración. Filmación lateral con móvil muy útil para que el alumno vea su propia posición. Trabajar primero la espiración completa antes de corregir la posición.'},
+{id:'S18-4',cod:'S18',nom:'Urtaroak',nom_es:'Las estaciones del año — Otoño',adina:'4 urte',inst:'Umeentzako + jolas-igerilekua',pto:'Tapizaren ondoan, uretik kanpo',
+ materiala:['2 tapiz handi','2 fantasma (zuhaitzaren enbor)','Kolore hostoak plastifikatuta','Pasarela','Aro txikiak','Cubo bat','Zirkuitoa: pasarela, tapiz, aro erdi-flotatzaile, taulak, txurro luzea'],
+ arranque:'Umeentzako igerilekuan "Calabín calavera" jolasean.',
+ intencionada:`"Udazkeneko zuhaitza": Bi tapiz handiekin, fantasma batekin eta koloretako hosto-kubo batekin bi zuhaitz sortuko ditugu. Udazkena heldu da: hostoak zuhaitzatik kendu eta kubora eramango ditugu (eskailera gainean). Banan-banan, gero binaka, forma aldatuz.\n\n"Hego aldera joaten gara": Txori bihurtuta bidaia egin behar dugu. Zirkuituaren bidez paradisuraldera: 1) Lasterka hegaka 2) Irla batera iritsi 3) Hodaietatik pasa (aroa) 4) Mendiak biratu (taulak zigzag) 5) Azken salto (zuloaren barruan). 2 buelta: lehenengoa nahi bezala; bigarrenean haize handia dago — estazio bakoitzean birada bat eman behar da.\n\n"Jaten eta eguzkitan atseden": Igerileku irregularrean (paradisua). Aro-janaria batu eta ondo jan ostean uretan lo egiten saiatuko gara.`,
+ reflexion:'Urtaroak ezagutzen al dituzte? Nola moldatu dira bikoteka? Nola egin dute zirkuituan?'},
 
-  {id:'S005',codigo:'ESP-03',nombre:'Espalda: posición y patada',objetivo:'Establecer la posición correcta del cuerpo en espalda. Patada eficiente con énfasis en cadera alta y tobillo flexible.',nivel:'Nivel 2',edadMin:9,edadMax:12,duracion:50,grupoTarget:'Avanzados B',material:['Churros x4','Tablas flotación x4','Noodles x4'],
-  desarrollo:[
-    {fase:'Calentamiento',tiempo:8,desc:'150m libre. 50m espalda libre. Movilidad de hombros en el borde: círculos, cruces, estiramiento pectoral.'},
-    {fase:'Posición del cuerpo',tiempo:15,desc:'Posición estrella de espalda en zona poco profunda. Monitor apoya la nuca. Énfasis: caderas arriba, vista al techo, orejas en el agua, cuerpo perfectamente horizontal. Progresión: apoyado → churro bajo rodillas → libre.'},
-    {fase:'Patada de espalda',tiempo:18,desc:'Con tabla sobre el pecho: 6×25m patada de espalda. Correcciones: rodilla NO sale del agua, tobillo flexible, el pie "empuja" agua hacia arriba. Variante: tabla con brazos extendidos detrás de la cabeza.'},
-    {fase:'Integración',tiempo:7,desc:'2×50m espalda completo. Énfasis en mantener cadera alta durante toda la longitud. Feedback individual.'},
-    {fase:'Cierre',tiempo:2,desc:'¿Qué es lo más difícil de la espalda? Respuestas del grupo. El monitor relaciona con las banderas de espalda.'}
-  ],
-  variantes:['Posición banana: exagerar la postura arqueada para entender el opuesto correcto','Patada de fuerza en el borde: sentado en el borde, trabajar la patada fuera del agua','Espalda + crol: 25m espalda + 25m crol, transferencia técnica de posición de cuerpo'],
-  indicadores:['Las caderas permanecen en superficie durante 25m completos','La rodilla no sale del agua durante la patada','Completa 50m de espalda sin tocar el fondo','La vista permanece al techo durante toda la longitud'],
-  obs:'La espalda genera inseguridad en muchos alumnos por no ver hacia dónde van. Las banderas de espalda son fundamentales para la orientación. Enseñar a contar brazadas desde la bandera antes de trabajar el giro de vuelta. El error principal es hundir las caderas: el noodle bajo los glúteos ayuda a sentir la posición correcta.'}
+{id:'S23-4',cod:'S23',nom:'Nire ipuinak igerilekuan',nom_es:'Cuentos en la piscina — La liebre y la tortuga',adina:'4 urte',inst:'Jolas-igerilekua',pto:'1. eskaileran, uretik kanpo',
+ materiala:['2 tapiz handi','Erbi eta dortoka irudiak plastifikatuta','Txurroak','4 pull-boy'],
+ arranque:'Tapizean erbi eta dortokaren irudiak itsatsita. Beste tapiza ertzean. Animali horien mugimenduak imitatzen ditugu: erbiak salto egiten eta dortoka lau hanketan pixkanaka. Horrela sartuko dira uretan animaliak imitatuz.',
+ intencionada:`Ipuina kontatzen dugu (laburki): Erbia beti barre egiten zuen dortokari, astia zelako. Erbia eta dortokak lasterketa bat egin zuten. Erbia lasterka atera zen... [ipuin osoa kontatuz jarduera garatzen da]\n\nTxurroarekin eta erbiaren irudiarekin, bere mugimenduak imitatzen ditugu. Salto egin!\n\n4 pull-boy-ekin dortokaren urratsak imitatzen ditugu: ibilaldi bakoitzeko urrats bat eman dezakegu.\n\nAzkenean... dortokak irabazi du!`,
+ reflexion:'Zergatik irabazi du dortokak? Zein da jarrera eta aktitud egokia? Ezberdintasuna ikusten al dute?'},
+
+{id:'S35-4',cod:'S35',nom:'Animaleen puzzleak',nom_es:'Los puzzles de los animales',adina:'4 urte',inst:'Jolas-igerilekua',pto:'Irregularrean, umeentzako igerilekuaren ondoan',
+ materiala:['Balea, krokodilo, txakur puzzleak','Tapiza','Txurroak','Aroak','Tobogana'],
+ arranque:'Jolas-igerilekuaren zati sakonean ez den tokian aro batzuk botako ditugu eta joan beharko dute hartzera. Gero "izarra" egiten lagunduko diegu.',
+ intencionada:`Tobogana erdiko eskailera ondoan kokatuta. Puzzle pieza bat ematen diegu eta igerilekuaren beste muturreraino igeri egingo dute eta umeentzako igerilekuaren horman puzzle osatu behar dute.\n\nAnimaliak osatzean, imitatzera animatuko ditugu:\n— Nola igeri egiten dute txakurrek? Besoek eta hankek azkar mugitu!\n— Krokodiloak uretan ibiltzen dira, ahoa ezkutatuta eta begiak kanpoan. Krokodiloak bezala sartzen al gara uretan?\n— Baleek ura botzen dute buru gainetik. Hartzen al dugu ura ahotik eta botatzen?\n— Beste animaliak imitatzen jarraitzen dugu...`,
+ reflexion:'Zer beste animali imita dezakegu? Foka, marrazoa, igela?'},
+
+{id:'S13-5',cod:'S13',nom:'Espantagailua nire igerilekuan',nom_es:'Un espantapájaros en mi piscina',adina:'5 urte',inst:'Nata 2',pto:'Kanpoko tapiza',
+ materiala:['6 fantasma (1/2 ikasle)','20 pull-boy ikasle bakoitzeko','6 aquagym gerriko','6 txurro luze','Estazio marrazkiak (1/ikasle)','10 txurro'],
+ arranque:'"ALDATZEN DIZUT" jolasa: Bikoteka uretan sartzen gara fantasmarekin. Irakaslearen seinalearen arabera bikotea aldatu behar dugu. 5 aldaketa egingo ditugu eta ezin da konpainero bera errepikatu.',
+ intencionada:`Estazioetan banatutako materiala: UDAZKENA-gerrikoak / UDA-txurroak / NEGUA-pull-boyak / UDABERRIA-fantasmak\n\n"FANTASMARI JANTZIKO DIOGU": Estazioei buruzko azalpena laburra, marrazkiekin. Estazio bakoitzean materiala nahasita egongo da uretan — banan-banan atera eta motiboka ordenatu tapizean.\n\nOndoren BINAKA fantasma jantzi eta uraren bidez eraman:\n— Igerilekua biratu eta fantasmari jarri.\n— Bide berdina uraren barruan, ezer erori gabe.\n— Fantasma biluztu eta materiala bere tokian utzi.`,
+ reflexion:'Nata 2-n autonomia aldaketarako. Urtaroak. Materialarekin autonomia. Talde-lana.'},
+
+{id:'S18-5',cod:'S18',nom:'Inurriak',nom_es:'Las hormigas',adina:'5 urte',inst:'Nata 2',pto:'Erdiko eskaileran',
+ materiala:['1 tapiz','10 txurro (tamaina ezberdinak)','10 pull-boy','10 taula','10 aro urperatzaile'],
+ arranque:`Inurriei buruz hitz egiten dugu: avispetatik eboluzionatu zuten. 6 hanka, antenak dituzte. 22.000 mota daude. Taldeka bizi dira kueba txikietan. Ez daude Antartidan. 3 mota: Erregina, Arrak/Erleandrak, Langileak. Beti taldeka lan egiten dute, fitxan antolaturik. Oso indartsuak dira — beren pisuaren 50 aldiz gehiago eraman dezakete.`,
+ intencionada:`"Inurriak gara": Bi talde egingo ditugu. Errenkadan mugituko gara bata bestearen atzetik. Inurri erregina/erlea lehena izango da eta nola mugitu erabakiko du (erregina aldatuz joango gara).\n\n"Inurriak bezala lan egiten dugu": Materiala nahasita igerilekuaren beste muturrean dago. Batera bestera eraman behar dugu gure kueba eraikitzeko:\n— Lehenengo bidaia: Bakoitzak gauza bakarra.\n— Binaka: zer eramaten erabakitzen dugu.\n— Hirukoak, laurdanak...\n— Tapiza azkena eramaten da: inurri erregina beste guztiak arrastatuta (koordinatu behar gara).\n\nAro lastarrekin zirkuitua: hainbat ibilbide proposatu eta "inurriek arazoak modu ezberdinetan konpondu ditzakete".`,
+ reflexion:''},
+
+{id:'S25-5',cod:'S25',nom:'Osasuna eta elikagaiak',nom_es:'La salud y los alimentos',adina:'5 urte',inst:'Jolas-igerilekua + Nata 2',pto:'Kanpoko tapiza ("mahaia")',
+ materiala:['1 tapiz handi','10 taula txiki (platerak)','10 pull-boy (bigarren plater)','10 baso','10 muñeko flotatzaile (janaria)','10 pika urdin (cubiertos)'],
+ arranque:'"Stop" jolasa: Denok norabide ezberdinetan korrika eta "stop" esaten dugunean: izarra, lurrera esertu, makila egin, volteo...'),
+ intencionada:`Azalpena: Tapiza "mahaia" da. Uretan mahai bat prestatzeko behar dena dago: platerak (taula urdina), basoak eta botilak, janaria (figura flotatzaileak), cubiertoak (pika urdina), pull-boyak (bigarren plater).\n\n"Nire menú gustukoena": Uretan salto egin eta monitoreak esandako ordenean materiala atera. Salto bakoitzean gauza bakarra. Dena kanpoan dagoenean, bakoitzak bere mahaia prestatu eta gustuko menua aukeratu.`,
+ reflexion:'Gustatu al zaie? Gauza berriak eta osasuntsuak probatzen saiatuko al dira elikadura hobetzeko?'},
+
+{id:'S18-67',cod:'S18',nom:'112 – SOS Deiak',nom_es:'112 – Llamadas de emergencia',adina:'6-7 urte',inst:'Nata 2',pto:'Graderien ondoan eserita',
+ materiala:['12 taula handi','12 pull-boy','12 palo urdin','6 alfombra (ohol bezala)'],
+ arranque:'112 zenbakia Europako larrialdietan. Ezagutzen al dute? 1 luzera palo urdinarekin, 1 pull-boyarekin, 2 taularekin. Ikasle bakoitzari 1 palo, 1 pull eta 1 taula geratzen zaio.',
+ intencionada:`Bikoteka lanbidea aukeratu behar dute larrialdiekin lotuta (mediku, polizia, suhiltzaile, bainuzain...). Bikote bakoitzak alfombra bat (ohol), palo urdina (telefonoa), pull-boy (botikina) eta taula (erreskate) izango ditu.\n\nLanbidea edozein dela, erreskatea uretan egin behar da: 112ra deitzen diete eta non dauden eta zer gertatzen den esaten diete (2. eskailera ondoan itxarotzen). Igeri joaten dira bilatzen, igeri itzultzen laguntzen diete eta ohalaren gainean jartzen dituzte. Ebaluazioa egiten dute eta botikina erabiltzen badute erabiltzen dute.\n\nBikotean rola aldatu.`,
+ reflexion:'112 ezagutzen al dute? Inoiz deitu al dute? Larrialdi bat izan al dute?'},
+
+{id:'S21-67',cod:'S21',nom:'Koloreen eztanda: argazkia kopiatu',nom_es:'Explosión de colores: reproducir la foto',adina:'6-7 urte',inst:'Nata 2',pto:'Kristalaren eskailera ondoan',
+ materiala:['Pasarela erdian','Baso urdina x5, horia x6, arrosa x6, berdea x6, laranja x2, morea x3','Txapa urperatzaileak: horia x2, urdina x3, laranja x2, morea x1, berdea x3, gorria x1','8 taula txiki','Pull-boy: 2 urdin, 1 berde, 1 hori','3 argazki (estruktura exactua)'],
+ arranque:'"GORRIA" jolasa: Bordillan jarrita, monitoreak kolore gorria duen zerbait esaten duenean uretan "bomba" egiten dugu; beste kolore bat bada "buruz". Adibideak: tomatea-bomba, platanoa-buruaz, marrubi, txanogorritxo, letxuga, odola, sagarra, limoi...'),
+ intencionada:`Materiala zehatz-mehatz prestatu behar da. Jarduera: argazkia materialarekin kopiatu behar da, kolore eta posizio berean.\n\nLehenik basoak pasarelan jarri. Azalpena: argazkian agertzen dena estruktura berean kopiatu behar dute, argazkian dagoen materialarekin.\n\nBordillatik salto eta igeri egin monitoreak esandako moduan, pasarelako materiala bana-bana hartu eta bilketa puntuan estruktura kopiatu.\n\nGarrantzitsua: Pasarelan argazkiko materiala bakarrik egongo da. 5 urtekoekin pasarela partekatzen dugu: gu basoekin hasi eta haiek txapekin; bigarren argazkia taulak+pull-boyak; hirugarrena txapak.`,
+ reflexion:''},
+
+{id:'S31-67',cod:'S31',nom:'Zentzumenekin: Matematika akuatikoa',nom_es:'Jugando con los sentidos: Matemáticas acuáticas',adina:'6-7 urte',inst:'Nata 2',pto:'Graderien ondoan eserita',
+ materiala:['Matematika orria','Zenbakidun txapa biribil flotatzaileak'],
+ arranque:'Igerilekuaren erdiko eskailera ondoan. Zenbakidun txapa biribil guztiak uretan botatzen dituzte (kontu eginez ez pasatzeko beste kalerako). Eskatzen dugu salto egin eta gure eremuaren beste aldera igeri egin dezatela.',
+ intencionada:`Ikasleei matematika-orria aukeratzeko ematen diegu (animalia marrazki batekin, bereizteagatik). Bakoitzak bere orria horman jartzen du.\n\nOrria bete behar dute: txaparengana mugitu, bat hartu hondotik eta itzuli jartzeko. Bi aurpegi ditu orriak; batzuk laguntza beharko dute eragiketa egiteko edo txapa hartzeko. Monitoreri edo lagun bati laguntza eskatu.\n\n(Baldintza: par/impara bada edo x baino handiagoa/txikiagoa bada modu batean igeri egin)\n\nBukatzean orria zuzendu eta lagunari laguntzeko eskatzen diegu. Guztiak bukatzean, txapak jaso eta ordenatu behar dituzte zenbakien arabera.`,
+ reflexion:''}
 ];
 
-// Today = 2026-04-15 (Wednesday)
-// Week: Mon Apr13, Tue Apr14, Wed Apr15, Thu Apr16, Fri Apr17
+// ─── CALENDAR ENTRIES (sample week) ───
+const TODAY = '2026-04-15';
+function isoDate(d,offset=0){const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+offset);return x.toISOString().split('T')[0]}
+
 const ENTRIES = [
-  // MON Apr 13
-  {id:'E01',sessionId:'S001',grupo:'Bebés A',fecha:'2026-04-13',hora:'10:00',monitorId:'MI'},
-  {id:'E02',sessionId:'S002',grupo:'Iniciación A',fecha:'2026-04-13',hora:'10:45',monitorId:'JB'},
-  {id:'E03',sessionId:'S003',grupo:'Progresión A',fecha:'2026-04-13',hora:'11:30',monitorId:'AG'},
-  // TUE Apr 14
-  {id:'E04',sessionId:'S001',grupo:'Bebés B',fecha:'2026-04-14',hora:'10:00',monitorId:'NL'},
-  {id:'E05',sessionId:'S004',grupo:'Avanzados A',fecha:'2026-04-14',hora:'10:45',monitorId:'MI'},
-  {id:'E06',sessionId:'S005',grupo:'Avanzados B',fecha:'2026-04-14',hora:'11:30',monitorId:'JB'},
-  // WED Apr 15 — HOY
-  {id:'E07',sessionId:'S002',grupo:'Iniciación B',fecha:'2026-04-15',hora:'10:00',monitorId:'MI'},
-  {id:'E08',sessionId:'S003',grupo:'Progresión A',fecha:'2026-04-15',hora:'10:45',monitorId:'AG'},
-  {id:'E09',sessionId:'S004',grupo:'Avanzados A',fecha:'2026-04-15',hora:'17:00',monitorId:'NL'},
-  // THU Apr 16
-  {id:'E10',sessionId:'S002',grupo:'Iniciación A',fecha:'2026-04-16',hora:'10:00',monitorId:'JB'},
-  {id:'E11',sessionId:'S005',grupo:'Avanzados B',fecha:'2026-04-16',hora:'10:45',monitorId:'MI'},
-  {id:'E12',sessionId:'S003',grupo:'Progresión B',fecha:'2026-04-16',hora:'17:00',monitorId:'AG'},
-  // FRI Apr 17
-  {id:'E13',sessionId:'S001',grupo:'Bebés A',fecha:'2026-04-17',hora:'10:00',monitorId:'NL'},
-  {id:'E14',sessionId:'S004',grupo:'Avanzados A',fecha:'2026-04-17',hora:'10:45',monitorId:'MI'},
+  // MON 13
+  {id:'e01',sid:'S06-3',grupo:'3 urte L-X',hora:'17:00',data:isoDate(TODAY,-2),mon:'MI'},
+  {id:'e02',sid:'S18-4',grupo:'4 urte L-X',hora:'17:40',data:isoDate(TODAY,-2),mon:'JB'},
+  {id:'e03',sid:'S18-67',grupo:'6-7 urte L-X',hora:'18:20',data:isoDate(TODAY,-2),mon:'AG'},
+  // TUE 14
+  {id:'e04',sid:'S14-3',grupo:'3 urte M-J',hora:'17:00',data:isoDate(TODAY,-1),mon:'MI'},
+  {id:'e05',sid:'S23-4',grupo:'4 urte M-J',hora:'17:40',data:isoDate(TODAY,-1),mon:'JB'},
+  {id:'e06',sid:'S21-67',grupo:'6-7 urte M-J',hora:'18:20',data:isoDate(TODAY,-1),mon:'NL'},
+  // WED 15 — GAUR
+  {id:'e07',sid:'S18-3',grupo:'3 urte L-X',hora:'17:00',data:TODAY,mon:'MI'},
+  {id:'e08',sid:'S35-4',grupo:'4 urte L-X',hora:'17:40',data:TODAY,mon:'JB'},
+  {id:'e09',sid:'S13-5',grupo:'5 urte L-X',hora:'18:20',data:TODAY,mon:'AG'},
+  {id:'e10',sid:'S31-67',grupo:'6-7 urte L-X',hora:'19:00',data:TODAY,mon:'NL'},
+  // THU 16
+  {id:'e11',sid:'S06-3',grupo:'3 urte M-J',hora:'17:00',data:isoDate(TODAY,1),mon:'MI'},
+  {id:'e12',sid:'S18-4',grupo:'4 urte M-J',hora:'17:40',data:isoDate(TODAY,1),mon:'JB'},
+  {id:'e13',sid:'S18-5',grupo:'5 urte M-J',hora:'18:20',data:isoDate(TODAY,1),mon:'AG'},
+  // FRI 17
+  {id:'e14',sid:'S14-3',grupo:'3 urte V',hora:'17:00',data:isoDate(TODAY,2),mon:'NL'},
+  {id:'e15',sid:'S25-5',grupo:'5 urte V',hora:'17:40',data:isoDate(TODAY,2),mon:'MI'},
+  {id:'e16',sid:'S21-67',grupo:'6-7 urte V',hora:'18:20',data:isoDate(TODAY,2),mon:'JB'},
+  // SAT 18
+  {id:'e17',sid:'S06-3',grupo:'3 urte S',hora:'09:20',data:isoDate(TODAY,3),mon:'AG'},
+  {id:'e18',sid:'S35-4',grupo:'4 urte S',hora:'10:00',data:isoDate(TODAY,3),mon:'NL'},
 ];
 
+const MONITORS = ['MI','JB','AG','NL','ES','LB','AN'];
 const SAMPLE_IDEAS = [
-  {id:'I001',monitorId:'MI',sessionId:'S001',texto:'Usar canciones específicas de agua (tipo "La lluvia"). He notado que los niños que vienen con canciones en casa se adaptan antes. Propongo crear una playlist para las sesiones de bebés.',estado:'pendiente',fecha:'2026-04-13',origen:'monitor'},
-  {id:'I002',monitorId:'AG',sessionId:'S003',texto:'Los churros de referencia lateral para la respiración no son suficientemente visibles. Propongo usar churros de colores o con marcas de color para que el niño los localice de un vistazo.',estado:'probar',fecha:'2026-04-13',origen:'monitor'},
-  {id:'I003',monitorId:'JB',sessionId:'S004',texto:'En la sesión de respiración rítmica, grabar con el móvil 5 segundos de cada alumno y mostrárselo en el borde ha funcionado MUY bien. Los niños entienden en 10 segundos lo que en 5 minutos explicando no queda claro.',estado:'aprobada',fecha:'2026-04-10',origen:'monitor'},
+  {id:'i01',mon:'JB',sid:'S18-67',txt:'Erabili argazkiak bideo laburrekin hobeto azaltzeko 112 zenbakiaren erabilera. Ikasleentzat askoz ere bisualagoa da.',est:'pendiente',data:'2026-04-13'},
+  {id:'i02',mon:'MI',sid:'S35-4',txt:'Puzzle pieza handiagotan banatu talde txikietan — batzuek zailtasunak dituzte distantzia luzea igeri egitean pieza eutsiz.',est:'probar',data:'2026-04-14'},
+  {id:'i03',mon:'AG',sid:'S31-67',txt:'Filmaketak: 10 segundoko bideo laburrak egin ikasleei euren teknika erakusteko. Ulertu dute momentuan! Oso ondo funtzionatu du.',est:'aprobada',data:'2026-04-10'},
 ];
 
-const MONITORS = ['MI','JB','AG','NL','ES','LB'];
+// ─────────────────────────────────────────
+// STATE & STORAGE
+// ─────────────────────────────────────────
+const S = {view:'login',role:null,user:null,selEid:null,selSid:null,selDay:TODAY,libFilter:'all',ideaFilter:'all',chat:[],_role:null,_ini:null};
 
-// ──────────────────────────────────────────────
-// STATE
-// ──────────────────────────────────────────────
-const S = {
-  view:'login',role:null,user:null,
-  selSession:null,selEntry:null,selDay:null,
-  evalData:{},chatHistory:[],
-  libFilter:'all',ideasFilter:'all',
-  _role:null,_ini:null
-};
-
-// ──────────────────────────────────────────────
-// DB
-// ──────────────────────────────────────────────
 const DB = {
-  g(k,d=[]){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},
-  s(k,v){localStorage.setItem(k,JSON.stringify(v))},
-  sessions(){return this.g('ne_sessions',SESSIONS)},
-  entries(){return this.g('ne_entries',ENTRIES)},
-  evals(){return this.g('ne_evals',[])},
-  ideas(){return this.g('ne_ideas',SAMPLE_IDEAS)},
-  saveEval(ev){const arr=this.evals();const i=arr.findIndex(e=>e.id===ev.id);if(i>=0)arr[i]=ev;else arr.push(ev);this.s('ne_evals',arr)},
-  saveIdea(idea){const arr=this.ideas();arr.push(idea);this.s('ne_ideas',arr)},
-  saveSession(sess){const arr=this.sessions();const i=arr.findIndex(s=>s.id===sess.id);if(i>=0)arr[i]=sess;else arr.push(sess);this.s('ne_sessions',arr)},
-  apiKey(){return localStorage.getItem('ne_key')||''},
-  setKey(k){localStorage.setItem('ne_key',k)},
-  updateIdeaStatus(id,st){const arr=this.ideas();const i=arr.findIndex(x=>x.id===id);if(i>=0){arr[i].estado=st;this.s('ne_ideas',arr)}}
+  g(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},
+  s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}},
+  sessions(){return SESSIONS},
+  entries(){return this.g('ne3_entries',ENTRIES)},
+  evals(){return this.g('ne3_evals',[])},
+  ideas(){return this.g('ne3_ideas',SAMPLE_IDEAS)},
+  getEval(eid){return this.evals().find(e=>e.eid===eid)||null},
+  setEval(ev){const a=this.evals();const i=a.findIndex(e=>e.eid===ev.eid);if(i>=0)a[i]=ev;else a.push(ev);this.s('ne3_evals',a)},
+  addIdea(idea){const a=this.ideas();a.push(idea);this.s('ne3_ideas',a)},
+  setIdeaStatus(id,st){const a=this.ideas();const i=a.findIndex(x=>x.id===id);if(i>=0){a[i].est=st;this.s('ne3_ideas',a)}},
+  apiKey(){return localStorage.getItem('ne3_key')||''}
 };
 
-function initData(){if(!localStorage.getItem('ne_init')){DB.s('ne_sessions',SESSIONS);DB.s('ne_entries',ENTRIES);DB.s('ne_ideas',SAMPLE_IDEAS);localStorage.setItem('ne_init','1')}}
-
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────
 // UTILS
-// ──────────────────────────────────────────────
-function today(){return new Date().toISOString().split('T')[0]}
-function fmt(ds){const d=new Date(ds+'T12:00:00');return d.toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'})}
-function dayN(ds){return new Date(ds+'T12:00:00').toLocaleDateString('es-ES',{weekday:'short'}).toUpperCase().replace('.','')}
+// ─────────────────────────────────────────
+function go(v,p={}){Object.assign(S,p);S.view=v;render()}
+function goBack(){const m={session:'home',calendar:'home',library:'home',ideas:'home',assistant:'home',reports:'home'};go(m[S.view]||'home')}
+
+function weekOf(anchor){const d=new Date(anchor+'T12:00:00'),dw=d.getDay(),diff=dw===0?-6:1-dw,mon=new Date(d);mon.setDate(d.getDate()+diff);
+  return Array.from({length:6},(_,i)=>{const x=new Date(mon);x.setDate(mon.getDate()+i);return x.toISOString().split('T')[0]})}
+function dayLabel(ds){return new Date(ds+'T12:00:00').toLocaleDateString('eu-ES',{weekday:'short'}).toUpperCase().replace('.','').slice(0,2)}
 function dayNum(ds){return new Date(ds+'T12:00:00').getDate()}
-function weekDays(anchor){const d=new Date(anchor+'T12:00:00');const dw=d.getDay();const diff=dw===0?-6:1-dw;const mon=new Date(d);mon.setDate(d.getDate()+diff);return Array.from({length:5},(_,i)=>{const x=new Date(mon);x.setDate(mon.getDate()+i);return x.toISOString().split('T')[0]})}
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function fmtDate(ds){const d=new Date(ds+'T12:00:00');return d.toLocaleDateString('eu-ES',{weekday:'long',day:'numeric',month:'long'})}
 
-// ──────────────────────────────────────────────
-// NAV
-// ──────────────────────────────────────────────
-function go(view,params={}){Object.assign(S,params);S.view=view;render()}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
+function showSave(){const el=document.getElementById('as-lbl');if(el){el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}}
 
-// ──────────────────────────────────────────────
+function myEntries(day){
+  return DB.entries().filter(e=>e.data===day&&(S.role==='admin'||e.mon===S.user));
+}
+
+function evalPct(){
+  const all=DB.entries();const evs=DB.evals();
+  const mine=all.filter(e=>S.role==='admin'||e.mon===S.user);
+  const done=mine.filter(e=>evs.find(v=>v.eid===e.id));
+  return mine.length>0?Math.round(done.length/mine.length*100):0;
+}
+
+// ─────────────────────────────────────────
+// RENDER ROUTER
+// ─────────────────────────────────────────
+function render(){
+  document.getElementById('app').innerHTML = ({
+    login:vLogin, home:vHome, session:vSession, calendar:vCalendar,
+    library:vLibrary, ideas:vIdeas, assistant:vAssistant, reports:vReports
+  }[S.view]||vHome)();
+  attachEvents();
+  const cb=document.getElementById('chat-box');if(cb)cb.scrollTop=cb.scrollHeight;
+}
+
+// ─────────────────────────────────────────
+// SHARED UI
+// ─────────────────────────────────────────
+function hdr(title,back=true){
+  return`<div class="hdr">
+    ${back?`<button class="hdr-back" id="back-btn">←</button>`:
+    `<div class="logo"><div class="logo-sq"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2C5.6 2 2 5.6 2 10s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 10.4c-2.7 0-5-1.4-6.4-3.5.6-1.1 3.1-1.9 6.4-1.9s5.8.8 6.4 1.9C14.9 14 12.7 15.4 10 15.4z" fill="#007032"/></svg></div>
+    <div class="logo-dk"><span class="logo-d">DURANGO</span><span class="logo-k">Kirolak</span></div></div>`}
+    <div class="hdr-t">${back?title:''}</div>
+    ${S.user?`<div class="avatar">${S.user.slice(0,2)}</div>`:''}
+  </div>`;
+}
+
+function nav(active){
+  const items=S.role==='admin'
+    ?[{id:'home',i:'🏠',l:'Gaur'},{id:'calendar',i:'📅',l:'Egutegia'},{id:'library',i:'📚',l:'Liburutegia'},{id:'ideas',i:'💡',l:'Ideiak'},{id:'reports',i:'📊',l:'Txostenak'}]
+    :[{id:'home',i:'🏠',l:'Gaur'},{id:'calendar',i:'📅',l:'Egutegia'},{id:'library',i:'📚',l:'Liburutegia'},{id:'ideas',i:'💡',l:'Ideiak'},{id:'assistant',i:'🤖',l:'Laguntzailea'}];
+  return`<div class="nav">${items.map(it=>`<button class="nv${active===it.id?' on':''}" data-nav="${it.id}"><span class="nv-i">${it.i}</span>${it.l}</button>`).join('')}</div>`;
+}
+
+function sessionCard(en,ss,clickFn){
+  const ev=DB.getEval(en.id);
+  return`<div class="scard ${ev?'ev':'pend'}" data-click="${clickFn}">
+    <div class="scard-hdr">
+      <div class="scard-hora">${en.hora}</div>
+      <div class="scard-info">
+        <div class="scard-nom">${ss.nom}</div>
+        <div class="scard-sub">${en.grupo} · ${ss.inst}</div>
+      </div>
+      <div class="scard-st ${ev?'st-ev':'st-pend'}">${ev?'✓ Eginda':'Zain'}</div>
+    </div>
+    <div class="scard-tags">
+      <span class="tag tw">${ss.cod}</span>
+      <span class="tag tg">${ss.adina}</span>
+      ${S.role==='admin'?`<span class="tag tb">👤 ${en.mon}`:''}
+    </div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────
+// VIEW: LOGIN
+// ─────────────────────────────────────────
+function vLogin(){return`
+<div class="lwrap fu">
+  <div class="lcard">
+    <div class="llogo"><svg viewBox="0 0 28 28" fill="none" width="28" height="28"><path d="M14 3C8 3 3 8 3 14s5 11 11 11 11-5 11-11S20 3 14 3zm0 4.5c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.3-3 3-3zm0 14.5c-3.7 0-7-1.9-9-4.7.9-1.7 5-2.8 9-2.8s8.1 1.1 9 2.8C21 20.1 17.7 22 14 22z" fill="#007032"/></svg></div>
+    <div class="ltop">
+      <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:var(--g);margin-bottom:4px">DURANGO <span style="color:var(--gl)">Kirolak</span></div>
+      <div class="lname">NatEdu</div>
+      <div class="lsub">Natazio Hezitzailearen Laguntza</div>
+    </div>
+    <div class="g2" style="gap:8px;margin-bottom:16px">
+      <button class="rbtn" id="role-mon"><span class="rbtn-i">🏊</span>Monitore</button>
+      <button class="rbtn" id="role-adm" style="border-color:var(--b)"><span class="rbtn-i">⚙️</span><span style="color:var(--b2)">Admin</span></button>
+    </div>
+    <div id="ini-wrap" style="display:none">
+      <label>Zure inizialak</label>
+      <div class="ini-grid">${MONITORS.map(m=>`<button class="ini-btn" data-ini="${m}">${m}</button>`).join('')}</div>
+    </div>
+    <div id="pw-wrap" style="display:none">
+      <label>Pasahitza</label>
+      <input class="pw-inp" type="password" id="pw" placeholder="••••••">
+    </div>
+    <button class="lbtn" id="login-btn" disabled>Sartu →</button>
+  </div>
+</div>`}
+
+// ─────────────────────────────────────────
+// VIEW: HOME
+// ─────────────────────────────────────────
+function vHome(){
+  const today=TODAY;
+  const entries=myEntries(today).sort((a,b)=>a.hora.localeCompare(b.hora));
+  const sessions=DB.sessions();
+  const wk=weekOf(today);
+  const allEntries=DB.entries();
+  const wkMine=allEntries.filter(e=>wk.includes(e.data)&&(S.role==='admin'||e.mon===S.user));
+  const wkEv=wkMine.filter(e=>DB.getEval(e.id));
+  const h=new Date().getHours();
+  const agur=h<13?'Egun on':'Arratsalde on';
+  return`
+${nav('home')}
+${hdr('',false)}
+<div class="main fu">
+  <div style="font-size:13px;font-weight:700;color:var(--txtm);text-transform:capitalize;margin-bottom:12px">${fmtDate(today)}</div>
+  <div class="g3" style="margin-bottom:20px">
+    <div class="mc"><div class="mv">${entries.length}</div><div class="ml">Gaur</div></div>
+    <div class="mc"><div class="mv">${wkMine.length}</div><div class="ml">Astean</div></div>
+    <div class="mc"><div class="mv" style="color:var(--gl)">${wkEv.length}</div><div class="ml">Baloratuta</div></div>
+  </div>
+  <div class="sh">Gaurko saioak${entries.length?`<span class="tag tg">${entries.length} saio</span>`:''}</div>
+  ${entries.length===0
+    ?`<div class="empty"><div class="empty-i">🌊</div><div class="empty-t">Gaur ez dago saiorik</div><div style="font-size:13px;margin-top:6px;color:var(--txtm)">Begiratu asteko egutegian</div></div>`
+    :entries.map(en=>{const ss=sessions.find(s=>s.id===en.sid);if(!ss)return'';
+      return sessionCard(en,ss,`go('session',{selEid:'${en.id}',selSid:'${ss.id}'})`);
+    }).join('')}
+</div>`}
+
+// ─────────────────────────────────────────
+// VIEW: SESSION DETAIL + INLINE EVAL
+// ─────────────────────────────────────────
+function vSession(){
+  const entries=DB.entries();
+  const en=entries.find(e=>e.id===S.selEid);
+  const ss=DB.sessions().find(s=>s.id===S.selSid);
+  if(!ss)return`<div class="main"><div class="empty">Saioa ez da aurkitu</div></div>`;
+  const ev=en?DB.getEval(en.id):null;
+
+  const CRITS=[
+    {k:'zailtasuna',l:'Zailtasuna'},
+    {k:'iraupena',l:'Iraupena'},
+    {k:'parte',l:'Parte-hartzea'},
+    {k:'maila',l:'Mailaren egokitasuna'},
+    {k:'materiala',l:'Materiala'},
+    {k:'ikaskuntza',l:'Ikaskuntza'},
+  ];
+  const SCALE=[{v:-2,l:'−2'},{v:-1,l:'−1'},{v:0,l:'0'},{v:1,l:'+1'},{v:2,l:'+2'}];
+
+  function scaleRow(k){
+    const cur=ev?ev[k]:undefined;
+    return`<div class="scale">
+      ${SCALE.map(sc=>{
+        let cls='';
+        if(cur===sc.v){cls=sc.v<0?'sel-n2 '+(sc.v===-1?'sel-n1':''):sc.v===0?'sel-0':sc.v===1?'sel-p1':'sel-p2'}
+        return`<button class="sb ${cls}" data-crit="${k}" data-val="${sc.v}">${sc.l}</button>`;
+      }).join('')}
+    </div>`;
+  }
+
+  const globalStar=ev?ev.global:0;
+
+  return`
+${hdr(ss.nom,true)}
+<div class="main fu">
+  <div class="sec-hdr">
+    <div class="sec-cod">${ss.cod} · ${ss.adina}</div>
+    <div class="sec-nom">${ss.nom}</div>
+    ${ss.nom_es?`<div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.6);margin-bottom:8px">${ss.nom_es}</div>`:''}
+    <div class="sec-meta">
+      <span class="sec-mtag">🏊 ${ss.inst}</span>
+      ${en?`<span class="sec-mtag">⏰ ${en.hora}</span><span class="sec-mtag">👥 ${en.grupo}</span>`:''}
+    </div>
+  </div>
+
+  <div class="pto">📍 <span><strong>Bilera puntua:</strong> ${ss.pto}</span></div>
+
+  <div class="blk">
+    <div class="blk-title">🎽 Materiala</div>
+    <div class="card" style="padding:10px 14px">
+      ${ss.materiala.map(m=>`<div class="mat-item"><div class="mat-dot"></div><span>${m}</span></div>`).join('')}
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-title">📋 Saioaren garapena</div>
+    <div class="act act-arr"><div class="act-lbl">⚡ Hasierako jarduera</div><div class="act-txt">${ss.arranque}</div></div>
+    <div class="act act-int"><div class="act-lbl">🎯 Jarduera nagusia</div><div class="act-txt">${ss.intencionada.replace(/\n/g,'<br>')}</div></div>
+    ${ss.reflexion?`<div class="act act-ref"><div class="act-lbl">💬 Hausnarketa</div><div class="act-txt">${ss.reflexion}</div></div>`:''}
+  </div>
+
+  ${en?`
+  <div class="eval-section" id="eval-section">
+    <div class="eval-hdr">
+      <div class="eval-hdr-t">⭐ Balorazioa</div>
+      <div class="eval-hdr-st${ev?' done':''}">
+        ${ev?'✓ Gordeta':'Oraindik ez'}
+      </div>
+    </div>
+    <div class="eval-body">
+      ${CRITS.map(c=>`
+      <div class="crit">
+        <div class="crit-lbl">${c.l}</div>
+        ${scaleRow(c.k)}
+      </div>`).join('')}
+
+      <div style="height:1px;background:var(--bdr);margin:16px 0"></div>
+
+      <div class="crit">
+        <div class="crit-lbl">Balorazio orokorra</div>
+        <div class="stars-row">
+          ${[1,2,3,4,5].map(n=>`<span class="star${globalStar>=n?' on':''}" data-star="${n}">★</span>`).join('')}
+        </div>
+      </div>
+
+      <div style="height:1px;background:var(--bdr);margin:16px 0"></div>
+
+      <div style="margin-bottom:12px">
+        <div class="crit-lbl" style="margin-bottom:6px">📝 Oharrak</div>
+        <textarea class="cmt" id="cmt-ohar" rows="3" placeholder="Saioaren nondik norakoa, taldea, behaketak...">${ev?ev.ohar||'':''}</textarea>
+      </div>
+
+      <div>
+        <div class="crit-lbl" style="margin-bottom:6px;color:var(--gl2)">💡 Ideia bat</div>
+        <textarea class="cmt" id="cmt-idea" rows="2" placeholder="Proposamena, aldaketa, hobekuntza... (Ideiak zerrendara joango da)" style="border-color:var(--gl3)"></textarea>
+      </div>
+
+      <div class="autosave" id="as-lbl">✓ Automatikoki gorde da</div>
+    </div>
+  </div>`:''}
+
+  ${!en?`<div class="card" style="text-align:center;margin-top:16px;color:var(--txtm);font-size:13px;font-weight:700">
+    Liburutegiko saioa — egutegiko esleipanik gabe
+  </div>`:''}
+</div>`}
+
+// ─────────────────────────────────────────
+// VIEW: CALENDAR
+// ─────────────────────────────────────────
+function vCalendar(){
+  if(!S.selDay)S.selDay=TODAY;
+  const days=weekOf(S.selDay);
+  const entries=DB.entries();
+  const sessions=DB.sessions();
+  const dayEntries=myEntries(S.selDay).sort((a,b)=>a.hora.localeCompare(b.hora));
+  return`
+${nav('calendar')}
+${hdr('',false)}
+<div class="main fu">
+  <div class="wk">
+    ${days.map(d=>{
+      const cnt=entries.filter(e=>e.data===d&&(S.role==='admin'||e.mon===S.user)).length;
+      return`<div class="wd${d===TODAY?' today':''}${d===S.selDay?' sel':''}" data-day="${d}">
+        <div class="wd-n">${dayLabel(d)}</div>
+        <div class="wd-d">${dayNum(d)}</div>
+        ${cnt>0?`<div class="wd-dot"></div>`:`<div style="height:5px"></div>`}
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="sh">${fmtDate(S.selDay)}<span class="tag tg">${dayEntries.length} saio</span></div>
+  ${dayEntries.length===0
+    ?`<div class="empty" style="padding:28px 16px"><div class="empty-i">📅</div><div class="empty-t">Saiorik ez</div></div>`
+    :dayEntries.map(en=>{const ss=sessions.find(s=>s.id===en.sid);if(!ss)return'';
+      return sessionCard(en,ss,`go('session',{selEid:'${en.id}',selSid:'${ss.id}'})`);
+    }).join('')}
+</div>`}
+
+// ─────────────────────────────────────────
+// VIEW: LIBRARY
+// ─────────────────────────────────────────
+function vLibrary(){
+  const ages=['all','3 urte','4 urte','5 urte','6-7 urte'];
+  const ss=S.libFilter==='all'?DB.sessions():DB.sessions().filter(s=>s.adina===S.libFilter);
+  return`
+${nav('library')}
+${hdr('',false)}
+<div class="main fu">
+  <div class="sh">Saio-fitxategiak</div>
+  <div class="chips">
+    ${ages.map(a=>`<button class="chip${S.libFilter===a?' on':''}" data-lf="${a}">${a==='all'?'Denak':a}</button>`).join('')}
+  </div>
+  <div class="sh">Saioak<span class="tag tg">${ss.length}</span></div>
+  ${ss.map(s=>`<div class="scard pend" data-click="go('session',{selEid:null,selSid:'${s.id}'})">
+    <div class="scard-hdr">
+      <div class="scard-hora" style="font-size:16px;min-width:auto;padding-top:4px;color:var(--b)">${s.cod}</div>
+      <div class="scard-info">
+        <div class="scard-nom">${s.nom}</div>
+        <div class="scard-sub">${s.inst}</div>
+      </div>
+    </div>
+    <div class="scard-tags">
+      <span class="tag tg">${s.adina}</span>
+      <span class="tag tw">${s.materiala.length} material</span>
+    </div>
+  </div>`).join('')}
+</div>`}
+
+// ─────────────────────────────────────────
+// VIEW: IDEAS
+// ─────────────────────────────────────────
+function vIdeas(){
+  const states=['all','pendiente','probar','aprobada','descartada'];
+  const stl={pendiente:'⏳ Zain',probar:'🔬 Probatu',aprobada:'✅ Onartua',descartada:'✗ Baztertua'};
+  const stc={pendiente:'tb',probar:'tgl',aprobada:'tg',descartada:'tw'};
+  const ideas=S.ideaFilter==='all'?DB.ideas():DB.ideas().filter(i=>i.est===S.ideaFilter);
+  return`
+${nav('ideas')}
+${hdr('',false)}
+<div class="main fu">
+  <div class="sh">Ideia berriak</div>
+  <div class="card">
+    <textarea class="cmt" id="new-idea" rows="3" placeholder="Proposamena, aldaketa, hobekuntza..."></textarea>
+    <button class="btn btn-g" id="add-idea-btn" style="margin-top:8px">+ Ideia gehitu</button>
+  </div>
+  <div class="chips" style="margin-top:8px">
+    ${states.map(st=>`<button class="chip${S.ideaFilter===st?' on':''}" data-if="${st}">${st==='all'?'Denak':stl[st]}</button>`).join('')}
+  </div>
+  <div class="sh">Ideiak<span class="tag tg">${ideas.length}</span></div>
+  ${ideas.length===0
+    ?`<div class="empty"><div class="empty-i">💡</div><div class="empty-t">Ideia ez dago egoera honetan</div></div>`
+    :[...ideas].reverse().map(idea=>`<div class="ic">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <span class="tag ${stc[idea.est]}">${stl[idea.est]}</span>
+        ${S.role==='admin'?`<select class="ic-sel" data-idea-id="${idea.id}">
+          ${states.filter(s=>s!=='all').map(st=>`<option value="${st}"${idea.est===st?' selected':''}>${stl[st]}</option>`).join('')}
+        </select>`:''}
+      </div>
+      <div class="ic-txt">${idea.txt}</div>
+      <div class="ic-ft"><div class="ic-meta">${idea.mon} · ${idea.data}</div></div>
+    </div>`).join('')}
+</div>`}
+
+// ─────────────────────────────────────────
+// VIEW: ASSISTANT
+// ─────────────────────────────────────────
+function vAssistant(){
+  const hasKey=!!DB.apiKey();
+  return`
+${nav('assistant')}
+${hdr('',false)}
+<div class="main fu">
+  <div class="card" style="margin-bottom:12px;border-color:var(--bdr2)">
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <span style="font-size:28px">🤖</span>
+      <div>
+        <div style="font-size:15px;font-weight:800;margin-bottom:3px;color:var(--txt)">Natazio Hezitzaileko Laguntzailea</div>
+        <div style="font-size:13px;font-weight:600;color:var(--txt2)">Aldakizunak, metodologia, taldeen kudeaketa edo zailtasun teknikoak. Galdetu nahi duzuna.</div>
+        ${!hasKey?`<div style="font-size:12px;font-weight:700;color:var(--warn);margin-top:6px">⚠️ API Key gabe. <button id="go-key-btn" style="background:none;border:none;color:var(--g);cursor:pointer;font-family:var(--fn);font-size:12px;font-weight:800">Konfiguratu →</button></div>`:''}
+      </div>
+    </div>
+  </div>
+  <div class="chips">
+    <button class="chip" data-qp="3-4 urteko haurrekin ura beldurrarekin flotazioa lantzeko 3 ariketa proposatu">💧 Beldurra/flotazioa</button>
+    <button class="chip" data-qp="Crol-eko arnas-hartzea hobetzeko ariketa progresiboak proposatu 8-9 urteko ikasleentzat">🌊 Arnasketa</button>
+    <button class="chip" data-qp="Maila ezberdineko talde batean nola lan egin: batzuk 1. mailan eta beste batzuk 2. mailan">👥 Maila mistoa</button>
+    <button class="chip" data-qp="Bero-hartzea ludikoa eta dinamikoa egiteko 5 ideia 6-7 urteko taldeentzat">⚡ Bero-hartzea</button>
+  </div>
+  <div class="card" style="padding:12px">
+    <div class="chatbox" id="chat-box">
+      ${S.chat.length===0
+        ?`<div class="msg msg-a">Kaixo! Natazio hezitzaileko laguntzailea naiz. Saioetarako aldakizunak, teknika, metodologia edo taldeen kudeaketa... Zer behar duzu?</div>`
+        :S.chat.map(m=>`<div class="msg msg-${m.r==='user'?'u':'a'}">${m.t.replace(/\n/g,'<br>')}</div>`).join('')}
+    </div>
+    <div class="cin">
+      <input type="text" id="chat-in" placeholder="Idatzi zure galdera...">
+      <button class="csend" id="chat-send">➤</button>
+    </div>
+  </div>
+  ${S.chat.length?`<button class="btn btn-o" id="clear-chat" style="margin-top:8px">🗑 Garbitu elkarrizketa</button>`:''}
+</div>`}
+
+// ─────────────────────────────────────────
+// VIEW: REPORTS
+// ─────────────────────────────────────────
+function vReports(){
+  const evals=DB.evals(),entries=DB.entries(),sessions=DB.sessions();
+  if(!evals.length)return`${nav('reports')}${hdr('',false)}<div class="main fu"><div class="empty"><div class="empty-i">📊</div><div class="empty-t">Oraindik baloraziorik ez</div><div style="font-size:13px;color:var(--txtm);margin-top:6px">Monitoreak balorazioak egin ondoren agertuko dira</div></div></div>`;
+  const wg=evals.filter(e=>e.global);
+  const avg=wg.length?(wg.reduce((a,e)=>a+(e.global||0),0)/wg.length).toFixed(1):'—';
+  const crits=['zailtasuna','iraupena','parte','maila','materiala','ikaskuntza'];
+  const critL=['Zailtasuna','Iraupena','Parte-hartzea','Mailaren egok.','Materiala','Ikaskuntza'];
+  return`
+${nav('reports')}
+${hdr('',false)}
+<div class="main fu">
+  <div class="sh">Laburpena</div>
+  <div class="g3" style="margin-bottom:16px">
+    <div class="mc"><div class="mv">${evals.length}</div><div class="ml">Baloratuta</div></div>
+    <div class="mc"><div class="mv">${avg}</div><div class="ml">Batez beste ★</div></div>
+    <div class="mc"><div class="mv">${entries.length}</div><div class="ml">Saio guztira</div></div>
+  </div>
+  <div class="sh">Irizpideak</div>
+  <div class="card">
+    ${crits.map((c,i)=>{
+      const vs=evals.filter(e=>e[c]!==undefined).map(e=>e[c]);
+      const av=vs.length?(vs.reduce((a,b)=>a+b,0)/vs.length):0;
+      const col=av>=1?'var(--gl)':av>=0?'var(--b)':'var(--red)';
+      return`<div class="bw"><div class="bl"><span>${critL[i]}</span><b>${av.toFixed(1)}</b></div>
+      <div class="bt"><div class="bf" style="width:${(av+2)/4*100}%;background:${col}"></div></div></div>`;
+    }).join('')}
+  </div>
+  <div class="sh">Monitoreka</div>
+  <div class="card">
+    ${MONITORS.map(m=>{
+      const me=evals.filter(e=>e.mon===m);if(!me.length)return'';
+      const mg=me.filter(e=>e.global);
+      const mav=mg.length?(mg.reduce((a,e)=>a+e.global,0)/mg.length).toFixed(1):'—';
+      return`<div class="mat-item">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--g2);flex-shrink:0">${m}</div>
+        <div style="flex:1"><div style="font-weight:800;font-size:14px">${m}</div><div style="font-size:12px;color:var(--txtm)">${me.length} balorazioak</div></div>
+        <div style="color:var(--warn);font-weight:900">★ ${mav}</div>
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="sh">Azken iruzkinak</div>
+  <div class="card">
+    ${evals.filter(e=>e.ohar).slice(-4).map(ev=>{
+      const en=entries.find(e=>e.id===ev.eid),ss=sessions.find(s=>s.id===ev.sid);
+      if(!ss||!en)return'';
+      return`<div style="padding:9px 0;border-bottom:1px solid var(--bdr)">
+        <div style="font-size:11px;color:var(--txtm);margin-bottom:3px;font-weight:700">${ev.mon} · ${ss.nom} · ${en.data}</div>
+        <div style="font-size:13px;font-weight:600;color:var(--txt)">${ev.ohar}</div>
+      </div>`;
+    }).join('')||'<div style="font-size:13px;color:var(--txtm)">Oraindik iruzkinik ez</div>'}
+  </div>
+  <button class="btn btn-o" id="export-btn" style="margin-top:8px">📄 Txostena esportatu (.txt)</button>
+</div>`}
+
+// ─────────────────────────────────────────
+// EVAL ACTIONS
+// ─────────────────────────────────────────
+function getCurEval(){
+  const en=DB.entries().find(e=>e.id===S.selEid);if(!en)return null;
+  const ss=DB.sessions().find(s=>s.id===S.selSid);if(!ss)return null;
+  const existing=DB.getEval(en.id)||{};
+  return{...existing,eid:en.id,sid:ss.id,mon:S.user,data:TODAY};
+}
+
+function saveCrit(k,v){
+  const ev=getCurEval();if(!ev)return;
+  ev[k]=v;DB.setEval(ev);showSave();
+  // Update button styles without full render
+  document.querySelectorAll(`[data-crit="${k}"]`).forEach(btn=>{
+    btn.className='sb';
+    if(parseInt(btn.dataset.val)===v){
+      const n=v;btn.className='sb '+(n<0?'sel-n'+(n===-1?1:2):n===0?'sel-0':'sel-p'+(n===1?1:2));
+    }
+  });
+  const hst=document.querySelector('.eval-hdr-st');if(hst){hst.textContent='✓ Gordeta';hst.classList.add('done');}
+}
+
+function saveStar(n){
+  const ev=getCurEval();if(!ev)return;
+  ev.global=n;DB.setEval(ev);showSave();
+  document.querySelectorAll('.star').forEach((st,i)=>{st.classList.toggle('on',i<n);});
+  const hst=document.querySelector('.eval-hdr-st');if(hst){hst.textContent='✓ Gordeta';hst.classList.add('done');}
+}
+
+function saveComment(k,val){
+  const ev=getCurEval();if(!ev)return;
+  ev[k]=val;DB.setEval(ev);showSave();
+  const hst=document.querySelector('.eval-hdr-st');if(hst){hst.textContent='✓ Gordeta';hst.classList.add('done');}
+}
+
+function saveIdeaFromEval(txt){
+  if(!txt.trim())return;
+  DB.addIdea({id:'i'+Date.now(),mon:S.user,sid:S.selSid,txt:txt.trim(),est:'pendiente',data:TODAY});
+  toast('Ideia gordeta ✓');
+}
+
+// ─────────────────────────────────────────
 // CLAUDE API
-// ──────────────────────────────────────────────
-const SYS=`Eres un experto en natación educativa con 20 años de experiencia como coordinador de escuelas de natación y pedagogo acuático. Dominas metodología de enseñanza de natación para niños de 3 a 14 años, progresiones técnicas, gestión de grupos, psicomotricidad acuática y adaptación al medio. Respondes siempre en español, de forma directa y práctica, como entre compañeros expertos. Cuando propongas variantes o mejoras, sé específico: nombra el ejercicio, cómo ejecutarlo, qué observar. Propón siempre entre 2 y 4 mejoras/variantes concretas. Usa un tono profesional y cercano.`;
+// ─────────────────────────────────────────
+const SYS_PROMPT=`Natazio hezitzaileko aditua zara, 20 urte baino gehiagoko esperientziarekin. Metodologia akuatikoan, haur eta nerabeekin (3-14 urte) lan egiten duzun irakaslea zara. Ikasleen garapen motorea, propiotzepzioa akuatikoa, segurtasuna eta ikaskuntza ludikoa ezagutzen dituzu. Erantzunak zuzenak eta praktikoak dira, monitore baten artean bezala. Aldaketak edo hobekuntzak proposatzen dituenean, zehatza izan eta adibide espezifikoak eman. Euskaraz edo gaztelaniaz erantzun, galdetzen duen hizkuntzaren arabera.`;
 
 async function askClaude(msgs){
   const k=DB.apiKey();
-  if(!k)return'⚠️ API Key no configurada. Ve a Configuración (icono ⚙️ en el header).';
+  if(!k)return'API Key gabe. Konfiguratu mesedez.';
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYS,messages:msgs})
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYS_PROMPT,messages:msgs})
     });
     const d=await r.json();
-    if(d.error)return`Error API: ${d.error.message}`;
+    if(d.error)return`Errore: ${d.error.message}`;
     return d.content[0].text;
-  }catch(e){return`Error de conexión: ${e.message}`}
+  }catch(e){return`Konexio errorea: ${e.message}`}
 }
 
-// ──────────────────────────────────────────────
-// RENDER
-// ──────────────────────────────────────────────
-function render(){
-  const app=document.getElementById('app');
-  switch(S.view){
-    case'login':app.innerHTML=vLogin();break;
-    case'apikey':app.innerHTML=vApiKey();break;
-    case'home':app.innerHTML=vHome();break;
-    case'session':app.innerHTML=vSession();break;
-    case'eval':app.innerHTML=vEval();break;
-    case'calendar':app.innerHTML=vCalendar();break;
-    case'library':app.innerHTML=vLibrary();break;
-    case'ideas':app.innerHTML=vIdeas();break;
-    case'reports':app.innerHTML=vReports();break;
-    case'assistant':app.innerHTML=vAssistant();break;
-    default:app.innerHTML=vHome();
-  }
-  attachEvt();
-  const cm=document.getElementById('chat-msgs');
-  if(cm)cm.scrollTop=cm.scrollHeight;
-}
-
-// ──────────────────────────────────────────────
-// SHARED UI
-// ──────────────────────────────────────────────
-function hdr(title,back=true){
-  return`<div class="hdr">${back?`<button class="hdr-back" onclick="goBack()">←</button>`:''}<div class="hdr-title">${title}</div><span class="badge ${S.role==='admin'?'badge-a':'badge-m'}">${S.user}</span>${!back&&S.role?`<button class="hdr-back" onclick="go('apikey')" title="Configurar API Key">🔑</button>`:''}</div>`;
-}
-
-function nav(active){
-  const items=[
-    {id:'home',ico:'🏠',lbl:'Hoy'},
-    {id:'calendar',ico:'📅',lbl:'Semana'},
-    {id:'library',ico:'📚',lbl:'Biblioteca'},
-    {id:'ideas',ico:'💡',lbl:'Ideas'},
-    {id:S.role==='admin'?'reports':'assistant',ico:S.role==='admin'?'📊':'🤖',lbl:S.role==='admin'?'Informes':'Asistente'}
-  ];
-  return`<div class="nav">${items.map(i=>`<button class="nv ${active===i.id?'on':''}" onclick="go('${i.id}')"><span class="nv-ico">${i.ico}</span><span>${i.lbl}</span></button>`).join('')}</div>`;
-}
-
-function goBack(){
-  const map={session:'home',eval:'session',apikey:S.role?'home':'login'};
-  go(map[S.view]||'home',{selEntry:S.selEntry,selSession:S.selSession});
-}
-
-// ──────────────────────────────────────────────
-// VIEW: LOGIN
-// ──────────────────────────────────────────────
-function vLogin(){return`
-<div class="lwrap fu">
-  <div class="llogo">🏊</div>
-  <div class="ltitle">NatEdu</div>
-  <div class="lsub">App para Monitores de<br>Natación Educativa</div>
-  <div style="width:100%;max-width:360px;">
-    <div class="card">
-      <div class="sl" style="margin-bottom:14px;">¿Cómo accedes?</div>
-      <div class="g2" style="margin-bottom:16px;">
-        <button class="btn btn-s role-btn" data-role="monitor" style="flex-direction:column;gap:8px;padding:20px;border-radius:14px;">
-          <span style="font-size:36px;">🏊‍♂️</span><span>Monitor</span>
-        </button>
-        <button class="btn btn-s role-btn" data-role="admin" style="flex-direction:column;gap:8px;padding:20px;border-radius:14px;border:1px solid rgba(168,85,247,.3);">
-          <span style="font-size:36px;">⚙️</span><span style="color:#c084fc">Admin</span>
-        </button>
-      </div>
-      <div id="ini-wrap" style="display:none">
-        <label>Tus iniciales</label>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
-          ${MONITORS.map(m=>`<button class="sbtn ini-btn" data-ini="${m}" style="flex:0 0 auto;min-width:48px;">${m}</button>`).join('')}
-        </div>
-      </div>
-      <div id="pw-wrap" style="display:none">
-        <label>Contraseña admin</label>
-        <input type="password" id="apw" placeholder="••••••••">
-      </div>
-      <button class="btn btn-p" id="login-btn" style="opacity:.4;pointer-events:none">Entrar →</button>
-    </div>
-    <p style="text-align:center;font-size:12px;color:var(--txtm);margin-top:12px">NatEdu v1.0 MVP</p>
-  </div>
-</div>`}
-
-// ──────────────────────────────────────────────
-// VIEW: API KEY
-// ──────────────────────────────────────────────
-function vApiKey(){return`
-<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px" class="fu">
-  <div style="width:100%;max-width:360px;">
-    <div style="text-align:center;margin-bottom:32px;">
-      <div style="font-size:48px;margin-bottom:12px;">🔑</div>
-      <div style="font-size:22px;font-weight:700;margin-bottom:8px;">API Key</div>
-      <div style="font-size:14px;color:var(--txtm);">Introduce tu clave de Anthropic para activar el asistente de natación educativa.</div>
-    </div>
-    <div class="card">
-      <label>Anthropic API Key</label>
-      <input type="password" id="aki" placeholder="sk-ant-api03-..." value="${DB.apiKey()}">
-      <button class="btn btn-p" id="savek-btn">💾 Guardar</button>
-    </div>
-    <button class="btn btn-o" id="skipk-btn" style="margin-top:10px">Continuar sin IA</button>
-  </div>
-</div>`}
-
-// ──────────────────────────────────────────────
-// VIEW: HOME
-// ──────────────────────────────────────────────
-function vHome(){
-  const td=today();
-  const all=DB.entries();
-  const mine=all.filter(e=>e.fecha===td&&(S.role==='admin'||e.monitorId===S.user));
-  const sessions=DB.sessions();
-  const evals=DB.evals();
-  const wd=weekDays(td);
-  const wk=all.filter(e=>wd.includes(e.fecha)&&(S.role==='admin'||e.monitorId===S.user));
-  const wkEv=evals.filter(e=>wk.some(w=>w.id===e.entryId));
-  const d=new Date(td+'T12:00:00');
-  const dl=d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
-  const h=new Date().getHours();
-  const gr=h<13?'Buenos días':h<20?'Buenas tardes':'Buenas noches';
-  return`
-${nav('home')}
-${hdr(`${gr}, ${S.user}`,false)}
-<div class="main fu">
-  <div style="margin-bottom:18px"><div style="font-size:13px;color:var(--txtm);text-transform:capitalize">${dl}</div></div>
-  <div class="g3" style="margin-bottom:20px">
-    <div class="mc"><div class="mv">${mine.length}</div><div class="ml">Hoy</div></div>
-    <div class="mc"><div class="mv">${wk.length}</div><div class="ml">Semana</div></div>
-    <div class="mc"><div class="mv" style="color:var(--green)">${wkEv.length}</div><div class="ml">Evaluadas</div></div>
-  </div>
-  <div class="sh"><span class="sl">Sesiones de hoy</span>${mine.length>0?`<span class="tag tn">${mine.length} clases</span>`:''}</div>
-  ${mine.length===0?`<div class="empty"><div class="eico">🌊</div><div class="etxt">No hay sesiones para hoy</div><div style="font-size:13px;color:var(--txtm);margin-top:6px">Consulta el calendario semanal</div></div>`
-  :mine.sort((a,b)=>a.hora.localeCompare(b.hora)).map(en=>{
-    const ss=sessions.find(s=>s.id===en.sessionId);if(!ss)return'';
-    const ev=evals.some(e=>e.entryId===en.id);
-    return`<div class="sc ${ev?'ok':'pend'}" onclick="go('session',{selEntry:'${en.id}',selSession:'${ss.id}'})">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-        <div class="stime">${en.hora}</div>
-        <div>${ev?`<span class="tag tg">✓ Evaluada</span>`:`<span class="tag tam">Pendiente</span>`}</div>
-      </div>
-      <div class="stitle">${ss.nombre}</div>
-      <div class="ssub">${en.grupo} · ${ss.duracion} min · ${ss.nivel}</div>
-      <div class="smeta" style="margin-top:8px;margin-bottom:0">
-        <span class="tag tc">${ss.codigo}</span>
-        <span class="tag te">${ss.edadMin}-${ss.edadMax} años</span>
-        ${S.role==='admin'?`<span class="tag tn">👤 ${en.monitorId}</span>`:''}
-      </div>
-    </div>`;
-  }).join('')}
-  <div class="sh" style="margin-top:24px"><span class="sl">Accesos rápidos</span></div>
-  <div class="g2">
-    ${S.role==='admin'
-      ?`<button class="btn btn-s" onclick="go('library')" style="flex-direction:column;gap:6px;padding:20px;border-radius:14px"><span style="font-size:30px">📚</span><span>Biblioteca</span></button>
-         <button class="btn btn-s" onclick="go('reports')" style="flex-direction:column;gap:6px;padding:20px;border-radius:14px"><span style="font-size:30px">📊</span><span>Informes</span></button>`
-      :`<button class="btn btn-s" onclick="go('assistant')" style="flex-direction:column;gap:6px;padding:20px;border-radius:14px"><span style="font-size:30px">🤖</span><span>Asistente IA</span></button>
-         <button class="btn btn-s" onclick="go('ideas')" style="flex-direction:column;gap:6px;padding:20px;border-radius:14px"><span style="font-size:30px">💡</span><span>Mis ideas</span></button>`}
-  </div>
-</div>`}
-
-// ──────────────────────────────────────────────
-// VIEW: SESSION DETAIL
-// ──────────────────────────────────────────────
-function vSession(){
-  const entries=DB.entries();const sessions=DB.sessions();const evals=DB.evals();
-  const en=entries.find(e=>e.id===S.selEntry);
-  const ss=sessions.find(s=>s.id===S.selSession);
-  if(!ss)return'<div class="main"><div class="empty">Sesión no encontrada</div></div>';
-  const ev=en?evals.some(e=>e.entryId===en.id):false;
-  return`
-${hdr(ss.nombre,true)}
-<div class="main fu">
-  <div class="smeta" style="margin-bottom:12px">
-    <span class="tag tc">${ss.codigo}</span>
-    <span class="tag tn">${ss.nivel}</span>
-    <span class="tag te">${ss.edadMin}-${ss.edadMax} años</span>
-    <span class="tag tam">${ss.duracion} min</span>
-  </div>
-  ${en?`<div class="card card-hi" style="margin-bottom:16px">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div><div style="font-size:22px;font-weight:700;color:var(--accent)">${en.hora}</div>
-      <div style="font-size:13px;color:var(--txtm)">${en.grupo} · ${fmt(en.fecha)}</div></div>
-      ${ev?`<span class="tag tg" style="font-size:13px;padding:6px 14px">✓ Evaluada</span>`:`<span class="tag tam" style="font-size:13px;padding:6px 14px">Pendiente</span>`}
-    </div>
-  </div>`:''}
-  
-  <div class="card" style="border-left:3px solid var(--teal)">
-    <div class="sl" style="margin-bottom:8px">🎯 Objetivo pedagógico</div>
-    <div style="font-size:14px;color:var(--txt1);line-height:1.6">${ss.objetivo}</div>
-  </div>
-  
-  <div class="sh"><span class="sl">🎽 Material necesario</span></div>
-  <div class="card">${ss.material.map(m=>`<div class="mi"><div class="mdot"></div>${m}</div>`).join('')}</div>
-  
-  <div class="sh"><span class="sl">📋 Desarrollo de la sesión</span></div>
-  ${ss.desarrollo.map((f,i)=>`<div class="phase">
-    <div class="ph"><span class="pn">${i+1}. ${f.fase}</span><span class="pt">⏱ ${f.tiempo} min</span></div>
-    <div class="pd">${f.desc}</div>
-  </div>`).join('')}
-  
-  <div class="sh"><span class="sl">🔄 Variantes</span></div>
-  <div class="card">${ss.variantes.map((v,i)=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr);${i===ss.variantes.length-1?'border-bottom:none':''}">
-    <span style="color:var(--accent);font-weight:700;font-size:13px;flex-shrink:0">${i+1}</span>
-    <span style="font-size:13px;color:var(--txt1);line-height:1.5">${v}</span>
-  </div>`).join('')}</div>
-  
-  <div class="sh"><span class="sl">✅ Indicadores de éxito</span></div>
-  <div class="card">${ss.indicadores.map(ind=>`<div class="mi">
-    <span style="color:var(--green);font-size:14px">◯</span>
-    <span style="font-size:13px">${ind}</span>
-  </div>`).join('')}</div>
-  
-  <div class="sh"><span class="sl">📝 Notas pedagógicas</span></div>
-  <div class="card" style="border-left:3px solid var(--purple)">
-    <div style="font-size:13px;color:var(--txt1);line-height:1.6">${ss.obs}</div>
-  </div>
-  
-  ${en?`<div class="sep"></div>
-  <button class="btn ${ev?'btn-o':'btn-p'}" onclick="go('eval',{selEntry:'${en.id}',selSession:'${ss.id}'})">${ev?'✏️ Ver / editar evaluación':'⭐ Evaluar esta sesión'}</button>
-  <button class="btn btn-s" onclick="go('assistant')" style="margin-top:10px">🤖 Consultar asistente IA</button>`
-  :`<div class="sep"></div><div style="text-align:center;font-size:13px;color:var(--txtm)">Sesión de biblioteca — sin asignación de calendario activa</div>`}
-</div>`}
-
-// ──────────────────────────────────────────────
-// VIEW: EVALUATION
-// ──────────────────────────────────────────────
-function vEval(){
-  const en=DB.entries().find(e=>e.id===S.selEntry);
-  const ss=DB.sessions().find(s=>s.id===S.selSession);
-  if(!ss||!en)return'<div class="main"><div class="empty">Error: sesión no encontrada</div></div>';
-  const existing=DB.evals().find(e=>e.entryId===en.id)||{};
-  const ev={...existing,...(S.evalData[en.id]||{})};
-  const g=ev.global||0;
-
-  function sr(key,lbl){
-    const v=ev[key]||0;
-    return`<div class="ind">
-      <div class="indl">${lbl}</div>
-      <div class="srow">
-        ${[1,2,3,4,5].map(n=>`<button class="sbtn ${v===n?`v${n}`:''}" onclick="setScore('${en.id}','${key}',${n})">${n}</button>`).join('')}
-      </div>
-    </div>`;
-  }
-
-  return`
-${hdr('Evaluar sesión',true)}
-<div class="main fu">
-  <div class="card card-hi" style="margin-bottom:20px">
-    <div style="font-size:13px;color:var(--txtm)">${fmt(en.fecha)} · ${en.hora}</div>
-    <div style="font-size:17px;font-weight:600;margin:4px 0 2px">${ss.nombre}</div>
-    <div style="font-size:13px;color:var(--txtm)">${en.grupo}</div>
-  </div>
-  
-  <div class="sh"><span class="sl">⭐ Valoración global</span></div>
-  <div class="card" style="text-align:center">
-    <div class="stars">
-      ${[1,2,3,4,5].map(n=>`<span class="star ${g>=n?'on':''}" onclick="setScore('${en.id}','global',${n})">★</span>`).join('')}
-    </div>
-    <div style="font-size:13px;color:var(--txtm);margin-top:-4px">
-      ${g===0?'Toca para valorar':['','Muy a mejorar','A mejorar','Regular','Bien','Muy bien'][g]}
-    </div>
-  </div>
-  
-  <div class="sh"><span class="sl">📊 Criterios (1–5)</span></div>
-  <div class="card">
-    ${sr('nivelAdecuado','🎯 Nivel adecuado al grupo')}
-    ${sr('tiempo','⏱ Tiempo bien ajustado')}
-    ${sr('participacion','🙋 Participación del grupo')}
-    ${sr('dificultad','📈 Dificultad adecuada')}
-    ${sr('material','🎽 Material adecuado')}
-  </div>
-  
-  <div class="sh"><span class="sl">💬 Comentarios</span></div>
-  <div class="card">
-    <label>¿Qué ha funcionado bien?</label>
-    <textarea id="ef1" placeholder="Ejercicios, momentos o dinámicas que han funcionado...">${ev.queFunciono||''}</textarea>
-    <label>¿Qué mejorar?</label>
-    <textarea id="ef2" placeholder="Qué cambiarías para la próxima vez...">${ev.queMejorar||''}</textarea>
-    <label>Observaciones del grupo</label>
-    <textarea id="ef3" placeholder="Evolución, dificultades, notas individuales...">${ev.observaciones||''}</textarea>
-  </div>
-  
-  <div class="sh"><span class="sl">💡 Idea de mejora</span></div>
-  <div class="card">
-    <label>Propuesta o variante</label>
-    <textarea id="ef4" placeholder="Idea nueva, variante, propuesta de mejora... (se guardará en Bandeja de Ideas)">${ev.ideas||''}</textarea>
-  </div>
-  
-  <button class="btn btn-p" onclick="saveEval('${en.id}','${ss.id}')">💾 Guardar evaluación</button>
-  ${g?`<div class="sep"></div><button class="btn btn-s" onclick="go('assistant')" style="margin-top:4px">🤖 Pedir sugerencias IA sobre esta sesión</button>`:``}
-</div>`}
-
-// ──────────────────────────────────────────────
-// VIEW: CALENDAR
-// ──────────────────────────────────────────────
-function vCalendar(){
-  const td=today();
-  if(!S.selDay)S.selDay=td;
-  const wd=weekDays(S.selDay);
-  const all=DB.entries();const sessions=DB.sessions();const evals=DB.evals();
-  const dayEn=all.filter(e=>e.fecha===S.selDay&&(S.role==='admin'||e.monitorId===S.user));
-  return`
-${nav('calendar')}
-${hdr('Calendario',false)}
-<div class="main fu">
-  <div class="wk">
-    ${wd.map(day=>{
-      const cnt=all.filter(e=>e.fecha===day&&(S.role==='admin'||e.monitorId===S.user)).length;
-      return`<div class="wd ${day===td?'today':''} ${day===S.selDay?'sel':''}" onclick="selDay('${day}')">
-        <div class="wdn">${dayN(day)}</div>
-        <div class="wdnum">${dayNum(day)}</div>
-        ${cnt>0?`<div class="wdot"></div><div class="wdcnt">${cnt}</div>`:`<div class="wdcnt">—</div>`}
-      </div>`;
-    }).join('')}
-  </div>
-  <div class="sh">
-    <span class="sl">${fmt(S.selDay)}</span>
-    <span class="tag tn">${dayEn.length} sesiones</span>
-  </div>
-  ${dayEn.length===0
-    ?`<div class="empty" style="padding:32px 16px"><div class="eico">📅</div><div class="etxt">Sin sesiones</div></div>`
-    :dayEn.sort((a,b)=>a.hora.localeCompare(b.hora)).map(en=>{
-      const ss=sessions.find(s=>s.id===en.sessionId);if(!ss)return'';
-      const ev=evals.some(e=>e.entryId===en.id);
-      return`<div class="sc ${ev?'ok':'pend'}" onclick="go('session',{selEntry:'${en.id}',selSession:'${ss.id}'})">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-          <div class="stime">${en.hora}</div>
-          ${ev?`<span class="tag tg">✓</span>`:`<span class="tag tam">Pendiente</span>`}
-        </div>
-        <div class="stitle">${ss.nombre}</div>
-        <div class="ssub">${en.grupo} · ${ss.duracion} min</div>
-        <div class="smeta" style="margin-top:6px;margin-bottom:0">
-          <span class="tag tc">${ss.codigo}</span>
-          <span class="tag te">${ss.edadMin}-${ss.edadMax} años</span>
-          ${S.role==='admin'?`<span class="tag tn">👤 ${en.monitorId}</span>`:''}
-        </div>
-      </div>`;
-    }).join('')}
-</div>`}
-
-// ──────────────────────────────────────────────
-// VIEW: LIBRARY
-// ──────────────────────────────────────────────
-function vLibrary(){
-  const sessions=DB.sessions();
-  const levels=['all','Iniciación','Nivel 1','Nivel 2','Nivel 3'];
-  const filtered=S.libFilter==='all'?sessions:sessions.filter(s=>s.nivel===S.libFilter);
-  return`
-${nav('library')}
-${hdr('Biblioteca',false)}
-<div class="main fu">
-  <div class="chips">
-    ${levels.map(l=>`<button class="chip ${S.libFilter===l?'on':''}" onclick="setLF('${l}')">${l==='all'?'Todas':l}</button>`).join('')}
-  </div>
-  <div class="sh">
-    <span class="sl">Fichas de sesión</span>
-    <span class="tag tn">${filtered.length} sesiones</span>
-  </div>
-  ${filtered.map(ss=>`<div class="sc" onclick="go('session',{selEntry:null,selSession:'${ss.id}'})">
-    <div class="smeta" style="margin-bottom:8px">
-      <span class="tag tc">${ss.codigo}</span>
-      <span class="tag tn">${ss.nivel}</span>
-      <span class="tag te">${ss.edadMin}-${ss.edadMax} años</span>
-    </div>
-    <div class="stitle">${ss.nombre}</div>
-    <div class="ssub">${ss.duracion} min · ${ss.material.length} materiales · ${ss.desarrollo.length} fases</div>
-  </div>`).join('')}
-  ${S.role==='admin'?`<div class="sep"></div><button class="btn btn-p" onclick="toast('Nueva sesión — próximamente')">+ Nueva sesión</button>`:``}
-</div>`}
-
-// ──────────────────────────────────────────────
-// VIEW: IDEAS
-// ──────────────────────────────────────────────
-function vIdeas(){
-  const ideas=DB.ideas();
-  const states=['all','pendiente','probar','aprobada','descartada'];
-  const filtered=S.ideasFilter==='all'?ideas:ideas.filter(i=>i.estado===S.ideasFilter);
-  const stl={pendiente:'⏳ Pendiente',probar:'🔬 A probar',aprobada:'✅ Aprobada',descartada:'✗ Descartada'};
-  const stc={pendiente:'tam',probar:'tn',aprobada:'tg',descartada:'tr'};
-  return`
-${nav('ideas')}
-${hdr('Bandeja de ideas',false)}
-<div class="main fu">
-  <div class="chips">
-    ${states.map(st=>`<button class="chip ${S.ideasFilter===st?'on':''}" onclick="setIF('${st}')">${st==='all'?'Todas':stl[st]}</button>`).join('')}
-  </div>
-  <div class="card" style="margin-bottom:16px">
-    <div class="sl" style="margin-bottom:10px">💡 Nueva idea</div>
-    <textarea id="ni-txt" placeholder="Describe tu idea, variante, propuesta de mejora..."></textarea>
-    <button class="btn btn-p" onclick="addIdea()">Añadir idea</button>
-  </div>
-  <div class="sh">
-    <span class="sl">Ideas</span>
-    <span class="tag tn">${filtered.length}</span>
-  </div>
-  ${filtered.length===0
-    ?`<div class="empty"><div class="eico">💡</div><div class="etxt">Sin ideas en este estado</div></div>`
-    :[...filtered].reverse().map(idea=>`<div class="ic">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-        <div>
-          <span class="tag ${stc[idea.estado]}">${stl[idea.estado]}</span>
-          ${idea.origen==='ia'?`<span class="tag tp" style="margin-left:6px">🤖 IA</span>`:''}
-        </div>
-        ${S.role==='admin'?`<select onchange="updateIS('${idea.id}',this.value)" style="width:auto;margin:0;padding:4px 8px;font-size:12px;border-radius:6px">
-          ${states.filter(s=>s!=='all').map(st=>`<option value="${st}" ${idea.estado===st?'selected':''}>${stl[st]}</option>`).join('')}
-        </select>`:''}
-      </div>
-      <div class="ic-txt">${idea.texto}</div>
-      <div class="ic-meta">${idea.monitorId} · ${fmt(idea.fecha)}</div>
-    </div>`).join('')}
-</div>`}
-
-// ──────────────────────────────────────────────
-// VIEW: REPORTS
-// ──────────────────────────────────────────────
-function vReports(){
-  const evals=DB.evals();const sessions=DB.sessions();const entries=DB.entries();
-  if(evals.length===0)return`${nav('reports')}${hdr('Informes',false)}<div class="main fu"><div class="empty"><div class="eico">📊</div><div class="etxt">Aún no hay evaluaciones registradas</div><div style="font-size:13px;color:var(--txtm);margin-top:8px">Los monitores deben evaluar sus sesiones primero</div></div></div>`;
-  
-  const withGlobal=evals.filter(e=>e.global);
-  const avg=withGlobal.length>0?(withGlobal.reduce((a,e)=>a+e.global,0)/withGlobal.length).toFixed(1):'—';
-  const crits=['nivelAdecuado','tiempo','participacion','dificultad','material'];
-  const critL=['Nivel adecuado','Tiempo','Participación','Dificultad','Material'];
-  
-  const ssStats={};
-  evals.forEach(ev=>{
-    const en=entries.find(e=>e.id===ev.entryId);if(!en)return;
-    const sid=en.sessionId;
-    if(!ssStats[sid])ssStats[sid]={cnt:0,tot:0};
-    if(ev.global){ssStats[sid].cnt++;ssStats[sid].tot+=ev.global;}
-  });
-  const top=Object.entries(ssStats)
-    .map(([id,s])=>({id,avg:s.cnt>0?(s.tot/s.cnt).toFixed(1):0,cnt:s.cnt}))
-    .sort((a,b)=>b.avg-a.avg).slice(0,5);
-
-  return`
-${nav('reports')}
-${hdr('Informes',false)}
-<div class="main fu">
-  <div class="sh"><span class="sl">Resumen</span></div>
-  <div class="g3" style="margin-bottom:20px">
-    <div class="mc"><div class="mv">${evals.length}</div><div class="ml">Evaluadas</div></div>
-    <div class="mc"><div class="mv">${avg}</div><div class="ml">Media ★</div></div>
-    <div class="mc"><div class="mv">${entries.length}</div><div class="ml">Total clases</div></div>
-  </div>
-  
-  <div class="sh"><span class="sl">Media por criterio</span></div>
-  <div class="card">
-    ${crits.map((c,i)=>{
-      const vals=evals.filter(e=>e[c]).map(e=>e[c]);
-      const av=vals.length>0?(vals.reduce((a,b)=>a+b,0)/vals.length):0;
-      const col=av>=4?'var(--green)':av>=3?'var(--amber)':'var(--red)';
-      return`<div class="bwrap">
-        <div class="blabel"><span>${critL[i]}</span><span>${av.toFixed(1)}/5</span></div>
-        <div class="btrack"><div class="bfill" style="width:${av/5*100}%;background:${col}"></div></div>
-      </div>`;
-    }).join('')}
-  </div>
-  
-  <div class="sh"><span class="sl">Mejor valoradas</span></div>
-  ${top.map((ts,i)=>{
-    const ss=sessions.find(s=>s.id===ts.id);if(!ss)return'';
-    return`<div class="sc" style="cursor:default">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-size:12px;color:var(--txtm)">#${i+1} · ${ts.cnt} eval.</div>
-          <div class="stitle">${ss.nombre}</div>
-          <div class="ssub">${ss.codigo} · ${ss.nivel}</div>
-        </div>
-        <div style="text-align:right;font-size:26px;font-weight:700;color:var(--amber)">★${ts.avg}</div>
-      </div>
-    </div>`;
-  }).join('')}
-  
-  <div class="sh"><span class="sl">Por monitor</span></div>
-  <div class="card">
-    ${MONITORS.map(m=>{
-      const me=evals.filter(e=>e.monitorId===m);
-      if(me.length===0)return'';
-      const ma=me.filter(e=>e.global);
-      const mav=ma.length>0?(ma.reduce((a,e)=>a+e.global,0)/ma.length).toFixed(1):'—';
-      return`<div class="mi">
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--bg-surf);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:var(--accent);flex-shrink:0">${m}</div>
-        <div style="flex:1"><div style="font-size:14px;font-weight:600">${m}</div>
-        <div style="font-size:12px;color:var(--txtm)">${me.length} evaluaciones · media ${mav}</div></div>
-        <div style="color:var(--amber);font-weight:700">★ ${mav}</div>
-      </div>`;
-    }).join('')}
-  </div>
-  
-  <div class="sh"><span class="sl">Comentarios recientes</span></div>
-  <div class="card">
-    ${evals.filter(e=>e.queFunciono||e.queMejorar).slice(-3).map(ev=>{
-      const en=entries.find(e=>e.id===ev.entryId);
-      const ss=sessions.find(s=>s.id===ev.sessionId);
-      if(!ss||!en)return'';
-      return`<div style="padding:10px 0;border-bottom:1px solid var(--bdr)">
-        <div style="font-size:11px;color:var(--txtm);margin-bottom:4px">${ev.monitorId} · ${ss.nombre} · ${fmt(ev.fecha)}</div>
-        ${ev.queFunciono?`<div style="font-size:13px;color:var(--green);margin-bottom:3px">✓ ${ev.queFunciono}</div>`:''}
-        ${ev.queMejorar?`<div style="font-size:13px;color:var(--amber)">△ ${ev.queMejorar}</div>`:''}
-      </div>`;
-    }).join('') || '<div style="font-size:13px;color:var(--txtm)">Sin comentarios aún</div>'}
-  </div>
-  
-  <div class="sep"></div>
-  <button class="btn btn-o" onclick="exportRpt()">📄 Exportar informe .txt</button>
-</div>`}
-
-// ──────────────────────────────────────────────
-// VIEW: ASSISTANT
-// ──────────────────────────────────────────────
-function vAssistant(){
-  const msgs=S.chatHistory;
-  const hasKey=!!DB.apiKey();
-  return`
-${nav('assistant')}
-${hdr('Asistente IA',false)}
-<div class="main fu">
-  <div class="card" style="margin-bottom:14px;border-color:var(--bdrS)">
-    <div style="display:flex;gap:10px;align-items:flex-start">
-      <span style="font-size:26px">🤖</span>
-      <div>
-        <div style="font-size:15px;font-weight:600;margin-bottom:4px">Experto en Natación Educativa</div>
-        <div style="font-size:13px;color:var(--txtm)">Consulta variantes, progresiones técnicas, gestión de grupos, materiales o cualquier duda pedagógica.</div>
-        ${!hasKey?`<div style="font-size:12px;color:var(--amber);margin-top:6px">⚠️ Sin API Key — <button onclick="go('apikey')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-family:var(--font);font-size:12px">Configurar →</button></div>`:''}
-      </div>
-    </div>
-  </div>
-  
-  <div class="chips">
-    <button class="chip" onclick="qp('Propón 3 variantes para trabajar la flotación con niños de 4-5 años que tienen miedo al agua')">💡 Flotación con miedo</button>
-    <button class="chip" onclick="qp('Dame 4 ejercicios en progresión para enseñar la respiración lateral en crol a niños de 8-9 años')">🌊 Respiración crol</button>
-    <button class="chip" onclick="qp('Ideas para hacer más motivador y dinámico el calentamiento acuático con grupos de 6-8 años')">🔥 Calentamiento lúdico</button>
-    <button class="chip" onclick="qp('¿Cómo gestiono un grupo con niveles muy diferentes — algunos en Nivel 1 y otros en Nivel 2?')">👥 Grupos mixtos</button>
-    <button class="chip" onclick="qp('¿Cómo progreso la enseñanza de espalda con niños que tienen mucho miedo a ir de espaldas?')">🏊 Espalda con miedo</button>
-  </div>
-  
-  <div class="card" style="padding:12px">
-    <div class="chat-box" id="chat-msgs">
-      ${msgs.length===0
-        ?`<div class="msg msg-a">¡Hola! Soy tu asistente de natación educativa. Puedo ayudarte con variantes de sesiones, estrategias pedagógicas, progresiones técnicas, gestión de grupos... ¿En qué puedo ayudarte hoy?</div>`
-        :msgs.map(m=>`<div class="msg msg-${m.role==='user'?'u':'a'}">${m.content.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`).join('')}
-    </div>
-    <div class="cinrow">
-      <input type="text" id="chat-in" placeholder="Escribe tu consulta..." onkeydown="if(event.key==='Enter')sendMsg()">
-      <button class="csend" onclick="sendMsg()">➤</button>
-    </div>
-  </div>
-  ${msgs.length>0?`<button class="btn btn-o btn-sm" onclick="clearChat()" style="margin-top:10px;color:var(--red)">🗑️ Limpiar conversación</button>`:''}
-</div>`}
-
-// ──────────────────────────────────────────────
-// ACTIONS
-// ──────────────────────────────────────────────
-function selDay(d){S.selDay=d;render()}
-function setLF(f){S.libFilter=f;render()}
-function setIF(f){S.ideasFilter=f;render()}
-
-function setScore(entryId,key,val){
-  if(!S.evalData[entryId]){
-    const ex=DB.evals().find(e=>e.entryId===entryId)||{};
-    S.evalData[entryId]={...ex};
-  }
-  S.evalData[entryId][key]=val;
-  render();
-}
-
-function saveEval(entryId,sessionId){
-  const ev=S.evalData[entryId]||{};
-  const existing=DB.evals().find(e=>e.entryId===entryId)||{};
-  const final={...existing,...ev};
-  final.id=final.id||('ev_'+Date.now());
-  final.entryId=entryId;final.sessionId=sessionId;final.monitorId=S.user;
-  final.fecha=today();
-  final.queFunciono=document.getElementById('ef1')?.value||'';
-  final.queMejorar=document.getElementById('ef2')?.value||'';
-  final.observaciones=document.getElementById('ef3')?.value||'';
-  final.ideas=document.getElementById('ef4')?.value||'';
-  if(final.ideas.trim()){
-    DB.saveIdea({id:'I'+Date.now(),monitorId:S.user,sessionId,texto:final.ideas.trim(),estado:'pendiente',fecha:today(),origen:'monitor'});
-  }
-  DB.saveEval(final);
-  S.evalData[entryId]=final;
-  toast('Evaluación guardada ✓');
-  setTimeout(()=>go('session',{selEntry:entryId,selSession:sessionId}),600);
-}
-
-function addIdea(){
-  const t=document.getElementById('ni-txt')?.value?.trim();
-  if(!t){toast('Escribe alguna idea primero');return}
-  DB.saveIdea({id:'I'+Date.now(),monitorId:S.user,sessionId:null,texto:t,estado:'pendiente',fecha:today(),origen:'monitor'});
-  toast('Idea guardada ✓');render();
-}
-
-function updateIS(id,st){DB.updateIdeaStatus(id,st);toast('Estado actualizado')}
-
-async function sendMsg(){
-  const inp=document.getElementById('chat-in');
-  if(!inp)return;
+async function sendChat(){
+  const inp=document.getElementById('chat-in');if(!inp)return;
   const txt=inp.value.trim();if(!txt)return;
   inp.value='';
-  S.chatHistory.push({role:'user',content:txt});
-  const box=document.getElementById('chat-msgs');
-  if(box){box.innerHTML+=`<div class="msg msg-l pulse" id="lmsg">Pensando...</div>`;box.scrollTop=box.scrollHeight}
-  const resp=await askClaude(S.chatHistory.map(m=>({role:m.role,content:m.content})));
-  S.chatHistory.push({role:'assistant',content:resp});
+  S.chat.push({r:'user',t:txt});
+  const box=document.getElementById('chat-box');
+  if(box){const ld=document.createElement('div');ld.className='msg msg-a pulse';ld.id='loading-msg';ld.textContent='Pentsatzen...';box.appendChild(ld);box.scrollTop=box.scrollHeight;}
+  const resp=await askClaude(S.chat.map(m=>({role:m.r==='user'?'user':'assistant',content:m.t})));
+  S.chat.push({r:'assistant',t:resp});
   render();
 }
 
-function qp(txt){
-  S.chatHistory=[];
-  const inp=document.getElementById('chat-in');
-  if(inp){inp.value=txt;sendMsg()}else{S.chatHistory.push({role:'user',content:txt});render();setTimeout(async()=>{const resp=await askClaude([{role:'user',content:txt}]);S.chatHistory.push({role:'assistant',content:resp});render();},100)}
-}
-
-function clearChat(){S.chatHistory=[];render()}
-
-function exportRpt(){
-  const evals=DB.evals();const sessions=DB.sessions();const entries=DB.entries();
-  let r=`INFORME EVALUACIONES — NATACIÓN EDUCATIVA\n`;
-  r+=`Generado: ${new Date().toLocaleDateString('es-ES')}\n`;
-  r+=`Total evaluaciones: ${evals.length}\n`;
-  const wg=evals.filter(e=>e.global);
-  if(wg.length>0)r+=`Media global: ${(wg.reduce((a,e)=>a+e.global,0)/wg.length).toFixed(1)}/5\n`;
-  r+=`\n${'─'.repeat(50)}\nEVALUACIONES\n${'─'.repeat(50)}\n`;
+// ─────────────────────────────────────────
+// EXPORT
+// ─────────────────────────────────────────
+function exportReport(){
+  const evals=DB.evals(),entries=DB.entries(),sessions=DB.sessions();
+  let r=`NATEDU — BALORAZIOEN TXOSTENA\nSortze data: ${TODAY}\nBalorazioak: ${evals.length}\n\n${'─'.repeat(50)}\n`;
   evals.forEach(ev=>{
-    const en=entries.find(e=>e.id===ev.entryId);
-    const ss=sessions.find(s=>s.id===ev.sessionId);
-    if(!ss||!en)return;
-    r+=`\n[${ev.fecha}] ${ss.nombre} (${ev.monitorId})\n`;
-    r+=`Valoración global: ${ev.global||'—'}/5\n`;
-    if(ev.queFunciono)r+=`✓ Funcionó: ${ev.queFunciono}\n`;
-    if(ev.queMejorar)r+=`△ Mejorar: ${ev.queMejorar}\n`;
-    if(ev.observaciones)r+=`📝 ${ev.observaciones}\n`;
+    const en=entries.find(e=>e.id===ev.eid),ss=sessions.find(s=>s.id===ev.sid);if(!ss||!en)return;
+    r+=`\n[${ev.data}] ${ss.nom} (${ev.mon}) — ${en.grupo}\n`;
+    r+=`Balorazio orokorra: ${ev.global||'—'}/5\n`;
+    if(ev.zailtasuna!==undefined)r+=`Zailtasuna: ${ev.zailtasuna>0?'+':''}${ev.zailtasuna}\n`;
+    if(ev.ohar)r+=`Oharrak: ${ev.ohar}\n`;
   });
   const blob=new Blob([r],{type:'text/plain;charset=utf-8'});
   const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download=`informe_natedu_${today()}.txt`;a.click();
-  URL.revokeObjectURL(url);
-  toast('Informe exportado ✓');
+  const a=document.createElement('a');a.href=url;a.download=`natedu_txostena_${TODAY}.txt`;a.click();
+  URL.revokeObjectURL(url);toast('Txostena esportatu da ✓');
 }
 
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────
 // EVENT ATTACHMENT
-// ──────────────────────────────────────────────
-function attachEvt(){
-  // Role buttons
-  document.querySelectorAll('.role-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      S._role=btn.dataset.role;
-      document.querySelectorAll('.role-btn').forEach(b=>{b.style.opacity='.55';b.style.borderColor=''});
-      btn.style.opacity='1';
-      btn.style.borderColor=S._role==='admin'?'rgba(168,85,247,.6)':'var(--accent)';
-      document.getElementById('ini-wrap').style.display=S._role==='monitor'?'block':'none';
-      document.getElementById('pw-wrap').style.display=S._role==='admin'?'block':'none';
-      checkReady();
-    });
+// ─────────────────────────────────────────
+function attachEvents(){
+  // NAV
+  document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.nav)));
+  // BACK
+  const bb=document.getElementById('back-btn');if(bb)bb.addEventListener('click',goBack);
+  // ROLE BUTTONS
+  const rm=document.getElementById('role-mon');const ra=document.getElementById('role-adm');
+  if(rm)rm.addEventListener('click',()=>{S._role='monitor';rm.classList.add('sel');if(ra)ra.classList.remove('sel');document.getElementById('ini-wrap').style.display='block';document.getElementById('pw-wrap').style.display='none';chkLogin()});
+  if(ra)ra.addEventListener('click',()=>{S._role='admin';ra.classList.add('sel');if(rm)rm.classList.remove('sel');document.getElementById('ini-wrap').style.display='none';document.getElementById('pw-wrap').style.display='block';chkLogin()});
+  // INI BUTTONS
+  document.querySelectorAll('.ini-btn').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.ini-btn').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');S._ini=b.dataset.ini;chkLogin();
+  }));
+  const pw=document.getElementById('pw');if(pw)pw.addEventListener('input',chkLogin);
+  // LOGIN
+  const lb=document.getElementById('login-btn');if(lb)lb.addEventListener('click',()=>{
+    if(S._role==='admin'){if(pw.value!=='admin123'){toast('Pasahitz okerra');return}S.role='admin';S.user='ADMIN';}
+    else{S.role='monitor';S.user=S._ini;}go('home');
   });
-
-  document.querySelectorAll('.ini-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      document.querySelectorAll('.ini-btn').forEach(b=>b.classList.remove('v5'));
-      btn.classList.add('v5');S._ini=btn.dataset.ini;checkReady();
-    });
+  // SESSION CLICK
+  document.querySelectorAll('[data-click]').forEach(el=>el.addEventListener('click',()=>{eval(el.dataset.click)}));
+  // CALENDAR DAYS
+  document.querySelectorAll('[data-day]').forEach(el=>el.addEventListener('click',()=>{S.selDay=el.dataset.day;render()}));
+  // LIB FILTER
+  document.querySelectorAll('[data-lf]').forEach(el=>el.addEventListener('click',()=>{S.libFilter=el.dataset.lf;render()}));
+  // IDEA FILTER
+  document.querySelectorAll('[data-if]').forEach(el=>el.addEventListener('click',()=>{S.ideaFilter=el.dataset.if;render()}));
+  // EVAL CRITS
+  document.querySelectorAll('[data-crit]').forEach(btn=>btn.addEventListener('click',()=>saveCrit(btn.dataset.crit,parseInt(btn.dataset.val))));
+  // STARS
+  document.querySelectorAll('[data-star]').forEach(st=>st.addEventListener('click',()=>saveStar(parseInt(st.dataset.star))));
+  // COMMENTS — auto-save on blur
+  const oh=document.getElementById('cmt-ohar');if(oh)oh.addEventListener('blur',()=>saveComment('ohar',oh.value));
+  const ih=document.getElementById('cmt-idea');if(ih)ih.addEventListener('blur',()=>saveIdeaFromEval(ih.value));
+  // IDEAS
+  const aib=document.getElementById('add-idea-btn');if(aib)aib.addEventListener('click',()=>{
+    const t=document.getElementById('new-idea')?.value?.trim();
+    if(!t){toast('Idazki zerbait lehenik');return}
+    DB.addIdea({id:'i'+Date.now(),mon:S.user,sid:null,txt:t,est:'pendiente',data:TODAY});
+    toast('Ideia gordeta ✓');render();
   });
-
-  const pw=document.getElementById('apw');
-  if(pw)pw.addEventListener('input',checkReady);
-
-  const lb=document.getElementById('login-btn');
-  if(lb)lb.addEventListener('click',()=>{
-    if(S._role==='admin'){
-      if(document.getElementById('apw').value!=='admin123'){toast('Contraseña incorrecta');return}
-      S.role='admin';S.user='ADMIN';
-    }else{S.role='monitor';S.user=S._ini}
-    go('home');
-  });
-
-  const sk=document.getElementById('savek-btn');
-  if(sk)sk.addEventListener('click',()=>{const k=document.getElementById('aki').value.trim();DB.setKey(k);toast('API Key guardada ✓');setTimeout(()=>go('home'),600)});
-  const skp=document.getElementById('skipk-btn');
-  if(skp)skp.addEventListener('click',()=>go('home'));
+  // IDEA STATUS
+  document.querySelectorAll('[data-idea-id]').forEach(sel=>sel.addEventListener('change',()=>DB.setIdeaStatus(sel.dataset.ideaId,sel.value)));
+  // CHAT
+  const cs=document.getElementById('chat-send');if(cs)cs.addEventListener('click',sendChat);
+  const ci=document.getElementById('chat-in');if(ci)ci.addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});
+  document.querySelectorAll('[data-qp]').forEach(b=>b.addEventListener('click',()=>{
+    S.chat=[];S.chat.push({r:'user',t:b.dataset.qp});render();
+    setTimeout(async()=>{const resp=await askClaude([{role:'user',content:b.dataset.qp}]);S.chat.push({r:'assistant',t:resp});render();},100);
+  }));
+  const clc=document.getElementById('clear-chat');if(clc)clc.addEventListener('click',()=>{S.chat=[];render()});
+  const gkb=document.getElementById('go-key-btn');if(gkb)gkb.addEventListener('click',()=>{const k=prompt('Sartu Anthropic API Key:');if(k){localStorage.setItem('ne3_key',k);toast('API Key gordeta ✓');render();}});
+  // EXPORT
+  const ex=document.getElementById('export-btn');if(ex)ex.addEventListener('click',exportReport);
 }
 
-function checkReady(){
+function chkLogin(){
   const lb=document.getElementById('login-btn');if(!lb)return;
-  const ok=S._role==='admin'?(document.getElementById('apw')?.value?.length>=4):(S._ini!==null);
-  lb.style.opacity=ok?'1':'.4';lb.style.pointerEvents=ok?'auto':'none';
+  const ok=S._role==='admin'?(document.getElementById('pw')?.value?.length>=4):(S._ini!==null);
+  lb.disabled=!ok;
 }
 
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────
 // BOOT
-// ──────────────────────────────────────────────
-initData();
+// ─────────────────────────────────────────
 render();
 </script>
 </body>
