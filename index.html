@@ -628,9 +628,17 @@ function goBack(){
 
 function weekOf(anchor){const d=new Date(anchor+'T12:00:00'),dw=d.getDay(),diff=dw===0?-6:1-dw,mon=new Date(d);mon.setDate(d.getDate()+diff);
   return Array.from({length:6},(_,i)=>{const x=new Date(mon);x.setDate(mon.getDate()+i);return x.toISOString().split('T')[0]})}
-function dayLabel(ds){return new Date(ds+'T12:00:00').toLocaleDateString('eu-ES',{weekday:'short'}).toUpperCase().replace('.','').slice(0,2)}
+
+// Euskera date labels — no dependemos del locale del navegador
+const EU_MONTHS=['urtarrila','otsaila','martxoa','apirila','maiatza','ekaina','uztaila','abuztua','iraila','urria','azaroa','abendua'];
+const EU_MONTHS_CAP=['Urtarrila','Otsaila','Martxoa','Apirila','Maiatza','Ekaina','Uztaila','Abuztua','Iraila','Urria','Azaroa','Abendua'];
+const EU_DAYS=['igandea','astelehena','asteartea','asteazkena','osteguna','ostirala','larunbata'];
+const EU_DAYS_SHORT=['IG','AL','AR','AZ','OG','OR','LA'];
+
+function dayLabel(ds){const d=new Date(ds+'T12:00:00');return EU_DAYS_SHORT[d.getDay()]}
 function dayNum(ds){return new Date(ds+'T12:00:00').getDate()}
-function fmtDate(ds){const d=new Date(ds+'T12:00:00');return d.toLocaleDateString('eu-ES',{weekday:'long',day:'numeric',month:'long'})}
+function fmtDate(ds){const d=new Date(ds+'T12:00:00');return`${EU_DAYS[d.getDay()]}, ${d.getDate()} ${EU_MONTHS[d.getMonth()]}`}
+function fmtMonth(ds){const d=new Date(ds+'T12:00:00');return`${EU_MONTHS_CAP[d.getMonth()]} ${d.getFullYear()}`}
 
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
 function showSave(){const el=document.getElementById('as-lbl');if(el){el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}}
@@ -713,7 +721,7 @@ function sessionCard(en,ss,clickFn){
         <div class="scard-nom">${ss.nom}</div>
         <div class="scard-sub">${en.grupo} · ${ss.inst}</div>
       </div>
-      <div class="scard-st ${ev?'st-ev':'st-pend'}">${ev?'✓ Eginda':'Zain'}</div>
+      <div class="scard-st ${ev?'st-ev':'st-pend'}">${ev?'✓ Baloratuta':'◉ Egiteko'}</div>
     </div>
     <div class="scard-tags">
       <span class="tag tw">${ss.cod}</span>
@@ -734,10 +742,10 @@ function vLogin(){return`
     </div>
     <div class="ltop">
       <div class="lname">NatEdu</div>
-      <div class="lsub">Natazio Hezitzailearen Laguntza</div>
+      <div class="lsub">Igeriketa Hezitzailearen Laguntza</div>
     </div>
     <div class="g2" style="gap:8px;margin-bottom:16px">
-      <button class="rbtn" id="role-mon"><span class="rbtn-i">🏊</span>Monitore</button>
+      <button class="rbtn" id="role-mon"><span class="rbtn-i">🏊</span>Begiralea</button>
       <button class="rbtn" id="role-adm" style="border-color:var(--b)"><span class="rbtn-i">⚙️</span><span style="color:var(--b2)">Admin</span></button>
     </div>
     <div id="ini-wrap" style="display:none">
@@ -886,7 +894,7 @@ function sessionBody(){
   ${en&&S.role==='admin'&&ev?`
   <div class="eval-section">
     <div class="eval-hdr">
-      <div class="eval-hdr-t">⭐ Monitorearen balorazioa</div>
+      <div class="eval-hdr-t">⭐ Begiralearen balorazioa</div>
       <div class="eval-hdr-st done">✓ Jasoa · ${ev.mon}</div>
     </div>
     <div class="eval-body">
@@ -910,7 +918,7 @@ function sessionBody(){
   </div>`:''}
 
   ${en&&S.role==='admin'&&!ev?`<div class="card" style="text-align:center;margin-top:16px;color:var(--txtm);font-size:13px;font-weight:700">
-    Oraindik ${en.mon} monitoreak ez du balorazioa egin
+    Oraindik ${en.mon} begiraleak ez du balorazioa egin
   </div>`:''}
 
   ${!en?`<div class="card" style="text-align:center;margin-top:16px;color:var(--txtm);font-size:13px;font-weight:700">
@@ -1037,10 +1045,26 @@ ${hdr('',false)}
   <div class="card" style="margin-bottom:12px;border-color:var(--bdr2)">
     <div style="display:flex;gap:10px;align-items:flex-start">
       <span style="font-size:28px">🤖</span>
-      <div>
-        <div style="font-size:15px;font-weight:800;margin-bottom:3px;color:var(--txt)">Natazio Hezitzaileko Laguntzailea</div>
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:800;margin-bottom:3px;color:var(--txt)">Igeriketa Hezitzaileko Laguntzailea</div>
         <div style="font-size:13px;font-weight:600;color:var(--txt2)">Aldakizunak, metodologia, taldeen kudeaketa edo zailtasun teknikoak. Galdetu nahi duzuna.</div>
-        ${!hasKey?`<div style="font-size:12px;font-weight:700;color:var(--warn);margin-top:6px">⚠️ API Key gabe. <button id="go-key-btn" style="background:none;border:none;color:var(--g);cursor:pointer;font-family:var(--fn);font-size:12px;font-weight:800">Konfiguratu →</button></div>`:''}
+        ${!hasKey?`
+        <div style="margin-top:10px;padding:12px;background:#fef8e8;border-left:3px solid var(--warn);border-radius:6px;font-size:12px;color:var(--txt2);font-weight:600;line-height:1.55">
+          <div style="font-weight:900;color:var(--txt);margin-bottom:6px">⚠️ API Key behar da</div>
+          Laguntzailea AI bat da (Anthropic-en Claude), erantzunak sortzeko sarbide-gako bat behar du.
+          <details style="margin-top:8px">
+            <summary style="cursor:pointer;font-weight:800;color:var(--g2)">📖 Nola lortu? (pausoak)</summary>
+            <ol style="margin:8px 0 0 18px;padding:0;line-height:1.7">
+              <li>Sartu: <a href="https://console.anthropic.com" target="_blank" style="color:var(--b);font-weight:800">console.anthropic.com</a></li>
+              <li>Settings → Billing → <b>Add credits</b> (10€ nahikoa)</li>
+              <li>Ezkerreko menuan <b>API Keys</b> → <b>Create Key</b></li>
+              <li>Jarri izena: "NatEdu-Durango"</li>
+              <li><b>Kopiatu berehala</b> (hasten da <code style="background:white;padding:1px 5px;border-radius:3px">sk-ant-...</code>) — behin bakarrik ikusiko duzu</li>
+              <li>Itzuli hona eta sakatu Konfiguratu ↓</li>
+            </ol>
+          </details>
+          <div style="margin-top:10px"><button id="go-key-btn" style="background:var(--g);border:none;color:white;cursor:pointer;font-family:var(--fn);font-size:13px;font-weight:800;padding:9px 16px;border-radius:7px">🔑 Konfiguratu API Key</button></div>
+        </div>`:`<div style="margin-top:6px;font-size:11px;font-weight:700;color:var(--gl2)">✓ API Key konfiguratua</div>`}
       </div>
     </div>
   </div>
@@ -1053,7 +1077,7 @@ ${hdr('',false)}
   <div class="card" style="padding:12px">
     <div class="chatbox" id="chat-box">
       ${S.chat.length===0
-        ?`<div class="msg msg-a">Kaixo! Natazio hezitzaileko laguntzailea naiz. Saioetarako aldakizunak, teknika, metodologia edo taldeen kudeaketa... Zer behar duzu?</div>`
+        ?`<div class="msg msg-a">Kaixo! Igeriketa hezitzaileko laguntzailea naiz. Saioetarako aldakizunak, teknika, metodologia edo taldeen kudeaketa... Zer behar duzu?</div>`
         :S.chat.map(m=>`<div class="msg msg-${m.r==='user'?'u':'a'}">${m.t.replace(/\n/g,'<br>')}</div>`).join('')}
     </div>
     <div class="cin">
@@ -1069,7 +1093,7 @@ ${hdr('',false)}
 // ─────────────────────────────────────────
 function vReports(){
   const evals=DB.evals(),entries=DB.entries(),sessions=DB.sessions();
-  if(!evals.length)return`${nav('reports')}${hdr('',false)}<div class="main fu"><div class="empty"><div class="empty-i">📊</div><div class="empty-t">Oraindik baloraziorik ez</div><div style="font-size:13px;color:var(--txtm);margin-top:6px">Monitoreak balorazioak egin ondoren agertuko dira</div></div></div>`;
+  if(!evals.length)return`${nav('reports')}${hdr('',false)}<div class="main fu"><div class="empty"><div class="empty-i">📊</div><div class="empty-t">Oraindik baloraziorik ez</div><div style="font-size:13px;color:var(--txtm);margin-top:6px">Begiraleak balorazioak egin ondoren agertuko dira</div></div></div>`;
   const wg=evals.filter(e=>e.global);
   const avg=wg.length?(wg.reduce((a,e)=>a+(e.global||0),0)/wg.length).toFixed(1):'—';
   const crits=['zailtasuna','iraupena','parte','maila','materiala','ikaskuntza'];
@@ -1094,7 +1118,7 @@ ${hdr('',false)}
       <div class="bt"><div class="bf" style="width:${(av+2)/4*100}%;background:${col}"></div></div></div>`;
     }).join('')}
   </div>
-  <div class="sh">Monitoreka</div>
+  <div class="sh">Begiraleka</div>
   <div class="card">
     ${MONITORS.map(m=>{
       const me=evals.filter(e=>e.mon===m);if(!me.length)return'';
@@ -1131,7 +1155,7 @@ function aShell(viewFn){
     {id:'planning',i:'🗓️',l:'Planninga'},
     {id:'calendar',i:'📅',l:'Egutegia'},
     {id:'library',i:'📚',l:'Saio-bilduma'},
-    {id:'monitors',i:'👥',l:'Monitoreak'},
+    {id:'monitors',i:'👥',l:'Begiraleak'},
     {id:'ideas',i:'💡',l:'Ideiak'},
     {id:'reports',i:'📈',l:'Txostenak'},
   ];
@@ -1211,7 +1235,7 @@ function aHome(){
 
     <div class="acol2">
       <div class="apanel">
-        <div class="apanel-hdr"><div class="apanel-t">📅 Gaurko saioak · Monitoreka</div><button class="apanel-act" data-nav="planning">Ikusi denak →</button></div>
+        <div class="apanel-hdr"><div class="apanel-t">📅 Gaurko saioak · Begiraleka</div><button class="apanel-act" data-nav="planning">Ikusi denak →</button></div>
         <div class="apanel-body">
           ${todayEntries.length===0?`<div class="empty" style="padding:20px"><div class="empty-t">Gaur ez dago saiorik antolatuta</div></div>`:
             todayEntries.sort((a,b)=>a.hora.localeCompare(b.hora)).map(en=>{
@@ -1221,7 +1245,7 @@ function aHome(){
                 <div class="alist-av">${en.mon}</div>
                 <div class="alist-body">
                   <div class="alist-top"><b>${en.hora}</b> · ${ss.nom}</div>
-                  <div class="alist-sub">${en.grupo} · ${ss.inst}${ev?` · <span style="color:var(--gl2);font-weight:800">✓ baloratuta</span>`:` · <span style="color:var(--b)">zain</span>`}</div>
+                  <div class="alist-sub">${en.grupo} · ${ss.inst}${ev?` · <span style="color:var(--gl2);font-weight:800">✓ baloratuta</span>`:` · <span style="color:var(--b)">◉ egiteko</span>`}</div>
                 </div>
                 ${ev&&ev.global?`<div class="alist-star">★ ${ev.global}</div>`:''}
               </div>`;
@@ -1330,7 +1354,7 @@ function aPlanning(){
       </table>
 
       <div style="margin-top:16px;display:flex;gap:16px;align-items:center;font-size:12px;color:var(--txtm);font-weight:700">
-        <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:14px;background:var(--g3);border-left:3px solid var(--g);border-radius:3px"></span>Zain</div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:14px;background:var(--g3);border-left:3px solid var(--g);border-radius:3px"></span>Egiteko</div>
         <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:14px;background:var(--gl3);border-left:3px solid var(--gl);border-radius:3px"></span>Baloratuta</div>
         <div style="margin-left:auto">Guztira aste honetan: <b style="color:var(--txt)">${entries.filter(e=>days.includes(e.data)).length} saio</b></div>
       </div>
@@ -1349,10 +1373,10 @@ function aPlanning(){
   for(let i=0;i<42;i++){const c=new Date(gridStart);c.setDate(gridStart.getDate()+i);cells.push(c.toISOString().split('T')[0]);if(cells.length>=35&&c>=monthEnd)break;}
   const prevMonth=new Date(d.getFullYear(),d.getMonth()-1,15).toISOString().split('T')[0];
   const nextMonth=new Date(d.getFullYear(),d.getMonth()+1,15).toISOString().split('T')[0];
-  const monthName=d.toLocaleDateString('eu-ES',{month:'long',year:'numeric'});
+  const monthName=fmtMonth(anchor);
   const monthEntries=entries.filter(e=>{const ed=new Date(e.data+'T12:00:00');return ed>=monthStart&&ed<=monthEnd});
 
-  return`${aTopbar('Planninga',monthName.charAt(0).toUpperCase()+monthName.slice(1),`
+  return`${aTopbar('Planninga',monthName,`
     <button class="atop-btn sec" data-day="${prevMonth}">← Aurrekoa</button>
     <button class="atop-btn sec" data-day="${TODAY}">📅 Gaur</button>
     <button class="atop-btn sec" data-day="${nextMonth}">Hurrengoa →</button>
@@ -1369,12 +1393,12 @@ function aPlanning(){
         const dayEntries=entries.filter(e=>e.data===cd).sort((a,b)=>a.hora.localeCompare(b.hora));
         const visibleChips=dayEntries.slice(0,3);
         const more=dayEntries.length-visibleChips.length;
-        return`<div class="mo-d ${inMonth?'':'other'} ${isToday?'today':''}" data-day="${cd}" style="cursor:pointer">
+        return`<div class="mo-d ${inMonth?'':'other'} ${isToday?'today':''}" data-click="go('calendar',{selDay:'${cd}'})" style="cursor:pointer">
           <div class="mo-d-n">${cdate.getDate()}</div>
           ${visibleChips.map(en=>{
             const ss=sessions.find(s=>s.id===en.sid);if(!ss)return'';
             const ev=DB.getEval(en.id);
-            return`<div class="mo-chip ${ev?'':'pend'}" title="${en.hora} · ${ss.nom} · ${en.mon}">${en.hora.slice(0,5)} ${en.mon}</div>`;
+            return`<div class="mo-chip ${ev?'':'pend'}" data-click="go('session',{selEid:'${en.id}',selSid:'${ss.id}'})" title="${en.hora} · ${ss.nom} · ${en.mon}">${en.hora.slice(0,5)} ${en.mon}</div>`;
           }).join('')}
           ${more>0?`<div class="mo-more">+${more} gehiago</div>`:''}
         </div>`;
@@ -1424,7 +1448,7 @@ function aCalendar(){
       <div class="apanel-body">
         ${dayEntries.length===0?`<div class="empty" style="padding:30px"><div class="empty-i">📅</div><div class="empty-t">Egun honetan saiorik ez</div></div>`:
           `<table class="dtbl"><thead><tr>
-            <th style="width:72px">ORDUA</th><th>SAIOA</th><th>TALDEA</th><th>INSTALAZIOA</th><th>MONITOREA</th><th style="width:120px">EGOERA</th>
+            <th style="width:72px">ORDUA</th><th>SAIOA</th><th>TALDEA</th><th>INSTALAZIOA</th><th>BEGIRALEA</th><th style="width:120px">EGOERA</th>
           </tr></thead><tbody>
           ${dayEntries.map(en=>{
             const ss=sessions.find(s=>s.id===en.sid);if(!ss)return'';
@@ -1435,7 +1459,7 @@ function aCalendar(){
               <td>${en.grupo}</td>
               <td style="font-size:12px;color:var(--txt2)">${ss.inst}</td>
               <td><span class="tag tb">👤 ${en.mon}</span></td>
-              <td>${ev?`<span class="tag tgl">✓ Baloratuta ${ev.global?`★${ev.global}`:''}</span>`:`<span class="tag tb">Zain</span>`}</td>
+              <td>${ev?`<span class="tag tgl">✓ Baloratuta ${ev.global?`★${ev.global}`:''}</span>`:`<span class="tag tb">◉ Egiteko</span>`}</td>
             </tr>`;
           }).join('')}
           </tbody></table>`}
@@ -1706,7 +1730,7 @@ function aMonitors(){
   const isPrev=from===prevSeason.from&&to===prevSeason.to;
   const isAll=!from&&!to;
 
-  return`${aTopbar('Monitoreak','Taldearen ikuspegia eta jarraipena','')}
+  return`${aTopbar('Begiraleak','Taldearen ikuspegia eta jarraipena','')}
   <div class="abody fu">
     <div class="apanel" style="margin-bottom:16px">
       <div class="apanel-body">
@@ -1739,7 +1763,7 @@ function aMonitors(){
             <div class="mon-av">${m}</div>
             <div>
               <div class="mon-nm">${m}</div>
-              <div class="mon-rol">Monitorea</div>
+              <div class="mon-rol">Begiralea</div>
             </div>
           </div>
           <div class="mon-stats">
@@ -1760,7 +1784,7 @@ function aIdeas(){
   const ideas=S.ideaFilter==='all'?DB.ideas():DB.ideas().filter(i=>i.est===S.ideaFilter);
   const sessions=DB.sessions();
 
-  return`${aTopbar('Ideiak',`Monitoreen proposamenak eta hobekuntzak · ${DB.ideas().length} ideia`)}
+  return`${aTopbar('Ideiak',`Begiraleen proposamenak eta hobekuntzak · ${DB.ideas().length} ideia`)}
   <div class="abody fu">
     <div class="afil">
       <div class="afil-lbl">EGOERA:</div>
@@ -1797,7 +1821,7 @@ function aIdeas(){
 function aReports(){
   const evals=DB.evals(),entries=DB.entries(),sessions=DB.sessions();
   if(!evals.length)return`${aTopbar('Txostenak','Balorazioen analisia','')}
-    <div class="abody fu"><div class="empty" style="padding:80px 40px"><div class="empty-i">📊</div><div class="empty-t">Oraindik baloraziorik ez</div><div style="margin-top:8px;color:var(--txtm);font-size:13px">Monitoreak balorazioak egin ondoren agertuko dira</div></div></div>`;
+    <div class="abody fu"><div class="empty" style="padding:80px 40px"><div class="empty-i">📊</div><div class="empty-t">Oraindik baloraziorik ez</div><div style="margin-top:8px;color:var(--txtm);font-size:13px">Begiraleak balorazioak egin ondoren agertuko dira</div></div></div>`;
 
   const wg=evals.filter(e=>e.global);
   const avg=wg.length?(wg.reduce((a,e)=>a+(e.global||0),0)/wg.length).toFixed(1):'—';
@@ -1816,7 +1840,7 @@ function aReports(){
       <div class="akpi g"><span class="akpi-ic">✓</span><div class="akpi-lbl">Balorazioak</div><div class="akpi-v">${evals.length}</div><div class="akpi-sub">${entries.length} saiotik</div></div>
       <div class="akpi w"><span class="akpi-ic">⭐</span><div class="akpi-lbl">Batez besteko</div><div class="akpi-v">${avg}</div><div class="akpi-sub">5 izarreko eskalatik</div></div>
       <div class="akpi b"><span class="akpi-ic">📊</span><div class="akpi-lbl">Kobertura</div><div class="akpi-v">${Math.round(evals.length/entries.length*100)}%</div><div class="akpi-sub">saioen artetik</div></div>
-      <div class="akpi gl"><span class="akpi-ic">👥</span><div class="akpi-lbl">Monitoreak</div><div class="akpi-v">${new Set(evals.map(e=>e.mon)).size}</div><div class="akpi-sub">parte-hartzaileak</div></div>
+      <div class="akpi gl"><span class="akpi-ic">👥</span><div class="akpi-lbl">Begiraleak</div><div class="akpi-v">${new Set(evals.map(e=>e.mon)).size}</div><div class="akpi-sub">parte-hartzaileak</div></div>
     </div>
 
     <div class="acol2">
@@ -1849,10 +1873,10 @@ function aReports(){
     </div>
 
     <div class="apanel" style="margin-top:16px">
-      <div class="apanel-hdr"><div class="apanel-t">👥 Monitoreak</div></div>
+      <div class="apanel-hdr"><div class="apanel-t">👥 Begiraleak</div></div>
       <div class="apanel-body" style="padding:0">
         <table class="dtbl">
-          <thead><tr><th>MONITOREA</th><th style="text-align:center">BALORAZIOAK</th><th style="text-align:center">SAIOAK</th><th style="text-align:center">★ MEDIA</th><th>IRUZKINAK</th></tr></thead>
+          <thead><tr><th>BEGIRALEA</th><th style="text-align:center">BALORAZIOAK</th><th style="text-align:center">SAIOAK</th><th style="text-align:center">★ MEDIA</th><th>IRUZKINAK</th></tr></thead>
           <tbody>
             ${MONITORS.map(m=>{
               const me=evals.filter(e=>e.mon===m);if(!me.length)return'';
@@ -1951,7 +1975,7 @@ function saveIdeaFromEval(txt){
 // ─────────────────────────────────────────
 // CLAUDE API
 // ─────────────────────────────────────────
-const SYS_PROMPT=`Natazio hezitzaileko aditua zara, 20 urte baino gehiagoko esperientziarekin. Metodologia akuatikoan, haur eta nerabeekin (3-14 urte) lan egiten duzun irakaslea zara. Ikasleen garapen motorea, propiotzepzioa akuatikoa, segurtasuna eta ikaskuntza ludikoa ezagutzen dituzu. Erantzunak zuzenak eta praktikoak dira, monitore baten artean bezala. Aldaketak edo hobekuntzak proposatzen dituenean, zehatza izan eta adibide espezifikoak eman. Euskaraz edo gaztelaniaz erantzun, galdetzen duen hizkuntzaren arabera.`;
+const SYS_PROMPT=`Igeriketa hezitzaileko aditua zara, 20 urte baino gehiagoko esperientziarekin. Metodologia akuatikoan, haur eta nerabeekin (3-14 urte) lan egiten duzun irakaslea zara. Ikasleen garapen motorea, propiozepzio akuatikoa, segurtasuna eta ikaskuntza ludikoa ezagutzen dituzu. Erantzunak zuzenak eta praktikoak dira, begirale baten artean bezala. Aldaketak edo hobekuntzak proposatzen dituenean, zehatza izan eta adibide espezifikoak eman. Euskaraz edo gaztelaniaz erantzun, galdetzen duen hizkuntzaren arabera. Oharra: "begirale" hitza erabili beti "monitore"ren ordez.`;
 
 async function askClaude(msgs){
   const k=DB.apiKey();
@@ -2072,8 +2096,8 @@ function attachEvents(){
     if(S._role==='admin'){if(pw.value!=='admin123'){toast('Pasahitz okerra');return}S.role='admin';S.user='ADMIN';}
     else{S.role='monitor';S.user=S._ini;}go('home');
   });
-  // SESSION CLICK
-  document.querySelectorAll('[data-click]').forEach(el=>el.addEventListener('click',()=>{eval(el.dataset.click)}));
+  // SESSION CLICK (stopPropagation para que chips anidados no disparen click del padre)
+  document.querySelectorAll('[data-click]').forEach(el=>el.addEventListener('click',(e)=>{e.stopPropagation();eval(el.dataset.click)}));
   // CALENDAR DAYS
   document.querySelectorAll('[data-day]').forEach(el=>el.addEventListener('click',()=>{S.selDay=el.dataset.day;render()}));
   // LIB FILTER
