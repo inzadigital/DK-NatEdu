@@ -2093,7 +2093,7 @@ function attachEvents(){
   const pw=document.getElementById('pw');if(pw)pw.addEventListener('input',chkLogin);
   // LOGIN
   const lb=document.getElementById('login-btn');if(lb)lb.addEventListener('click',()=>{
-    if(S._role==='admin'){if(pw.value!=='admin123'){toast('Pasahitz okerra');return}S.role='admin';S.user='ADMIN';}
+    if(S._role==='admin'){if(pw.value!=='LandakoLaura'){toast('Pasahitz okerra');return}S.role='admin';S.user='ADMIN';}
     else{S.role='monitor';S.user=S._ini;}go('home');
   });
   // SESSION CLICK (stopPropagation para que chips anidados no disparen click del padre)
