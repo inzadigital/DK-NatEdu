@@ -20,7 +20,11 @@
   --fn:'Nunito',system-ui,sans-serif
 }
 body{font-family:var(--fn);background:var(--bg);color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased}
-::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg);border-radius:5px}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:5px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--txtm)}
+html{scrollbar-width:thin;scrollbar-color:var(--bdr2) var(--bg)}
 
 /* ── HEADER ── */
 .hdr{position:sticky;top:0;z-index:200;background:var(--g);height:var(--hdr);display:flex;align-items:center;padding:0 14px;gap:10px;box-shadow:0 2px 10px rgba(0,112,50,.25)}
@@ -31,7 +35,7 @@ body{font-family:var(--fn);background:var(--bg);color:var(--txt);min-height:100v
 .logo-d{font-size:13px;font-weight:900;color:white;letter-spacing:1.5px;text-transform:uppercase}
 .logo-k{font-size:13px;font-weight:900;color:var(--gl)}
 .logo-sq{width:30px;height:30px;background:white;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.22);color:white;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.avatar{min-width:32px;padding:0 7px;height:32px;border-radius:16px;background:rgba(255,255,255,.22);color:white;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:.3px}
 
 /* ── NAV ── */
 .nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);background:var(--white);border-top:1.5px solid var(--bdr);display:flex;z-index:200}
@@ -711,70 +715,70 @@ const TODAY = '2026-04-15';
 function isoDate(d,offset=0){const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+offset);return x.toISOString().split('T')[0]}
 
 const ENTRIES = [
-{id:'e0001',sid:'S48-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-01',mon:'MI'},
-{id:'e0002',sid:'S48-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-01',mon:'JB'},
-{id:'e0003',sid:'S48-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-01',mon:'AG'},
-{id:'e0004',sid:'S48-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-01',mon:'NL'},
-{id:'e0005',sid:'S48-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-02',mon:'JB'},
-{id:'e0006',sid:'S48-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-02',mon:'AG'},
-{id:'e0007',sid:'S48-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-02',mon:'NL'},
-{id:'e0008',sid:'S48-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-02',mon:'ES'},
-{id:'e0009',sid:'S48-3_urte',grupo:'3 urte V',hora:'17:00',data:'2026-04-03',mon:'AG'},
-{id:'e0010',sid:'S48-4_urte',grupo:'4 urte V',hora:'17:40',data:'2026-04-03',mon:'NL'},
-{id:'e0011',sid:'S48-5_urte',grupo:'5 urte V',hora:'18:20',data:'2026-04-03',mon:'ES'},
-{id:'e0012',sid:'S48-67_urte',grupo:'6-7 urte V',hora:'19:00',data:'2026-04-03',mon:'LB'},
-{id:'e0013',sid:'S49-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-13',mon:'LB'},
-{id:'e0014',sid:'S49-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-13',mon:'AN'},
-{id:'e0015',sid:'S49-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-13',mon:'MI'},
-{id:'e0016',sid:'S49-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-13',mon:'JB'},
-{id:'e0017',sid:'S49-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-14',mon:'AN'},
-{id:'e0018',sid:'S49-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-14',mon:'MI'},
-{id:'e0019',sid:'S49-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-14',mon:'JB'},
-{id:'e0020',sid:'S49-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-14',mon:'AG'},
-{id:'e0021',sid:'S50-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-15',mon:'MI'},
-{id:'e0022',sid:'S50-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-15',mon:'JB'},
-{id:'e0023',sid:'S50-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-15',mon:'AG'},
-{id:'e0024',sid:'S50-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-15',mon:'NL'},
-{id:'e0025',sid:'S50-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-16',mon:'JB'},
-{id:'e0026',sid:'S50-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-16',mon:'AG'},
-{id:'e0027',sid:'S50-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-16',mon:'NL'},
-{id:'e0028',sid:'S50-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-16',mon:'ES'},
-{id:'e0029',sid:'S50-3_urte',grupo:'3 urte V',hora:'17:00',data:'2026-04-17',mon:'AG'},
-{id:'e0030',sid:'S50-4_urte',grupo:'4 urte V',hora:'17:40',data:'2026-04-17',mon:'NL'},
-{id:'e0031',sid:'S50-5_urte',grupo:'5 urte V',hora:'18:20',data:'2026-04-17',mon:'ES'},
-{id:'e0032',sid:'S50-67_urte',grupo:'6-7 urte V',hora:'19:00',data:'2026-04-17',mon:'LB'},
-{id:'e0033',sid:'S51-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-20',mon:'LB'},
-{id:'e0034',sid:'S51-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-20',mon:'AN'},
-{id:'e0035',sid:'S51-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-20',mon:'MI'},
-{id:'e0036',sid:'S51-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-20',mon:'JB'},
-{id:'e0037',sid:'S51-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-21',mon:'AN'},
-{id:'e0038',sid:'S51-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-21',mon:'MI'},
-{id:'e0039',sid:'S51-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-21',mon:'JB'},
-{id:'e0040',sid:'S51-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-21',mon:'AG'},
-{id:'e0041',sid:'S52-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-22',mon:'MI'},
-{id:'e0042',sid:'S52-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-22',mon:'JB'},
-{id:'e0043',sid:'S52-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-22',mon:'AG'},
-{id:'e0044',sid:'S52-4_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-22',mon:'NL'},
-{id:'e0045',sid:'S52-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-23',mon:'JB'},
-{id:'e0046',sid:'S52-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-23',mon:'AG'},
-{id:'e0047',sid:'S52-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-23',mon:'NL'},
-{id:'e0048',sid:'S52-4_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-23',mon:'ES'},
-{id:'e0049',sid:'S52-3_urte',grupo:'3 urte V',hora:'17:00',data:'2026-04-24',mon:'AG'},
-{id:'e0050',sid:'S52-4_urte',grupo:'4 urte V',hora:'17:40',data:'2026-04-24',mon:'NL'},
-{id:'e0051',sid:'S52-5_urte',grupo:'5 urte V',hora:'18:20',data:'2026-04-24',mon:'ES'},
-{id:'e0052',sid:'S52-4_urte',grupo:'6-7 urte V',hora:'19:00',data:'2026-04-24',mon:'LB'},
-{id:'e0053',sid:'S53-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-27',mon:'LB'},
-{id:'e0054',sid:'S53-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-27',mon:'AN'},
-{id:'e0055',sid:'S53-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-27',mon:'MI'},
-{id:'e0056',sid:'S53-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-27',mon:'JB'},
-{id:'e0057',sid:'S53-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-28',mon:'AN'},
-{id:'e0058',sid:'S53-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-28',mon:'MI'},
-{id:'e0059',sid:'S53-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-28',mon:'JB'},
-{id:'e0060',sid:'S53-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-28',mon:'AG'},
-{id:'e0061',sid:'S54-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-29',mon:'MI'},
-{id:'e0062',sid:'S54-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-29',mon:'JB'},
-{id:'e0063',sid:'S54-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-29',mon:'AG'},
-{id:'e0064',sid:'S54-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-29',mon:'NL'}
+{id:'e0001',sid:'S48-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-01',mon:'DC'},
+{id:'e0002',sid:'S48-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-01',mon:'EG'},
+{id:'e0003',sid:'S48-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-01',mon:'II'},
+{id:'e0004',sid:'S48-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-01',mon:'JAS'},
+{id:'e0005',sid:'S48-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-02',mon:'EG'},
+{id:'e0006',sid:'S48-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-02',mon:'II'},
+{id:'e0007',sid:'S48-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-02',mon:'JAS'},
+{id:'e0008',sid:'S48-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-02',mon:'JB'},
+{id:'e0009',sid:'S48-3_urte',grupo:'3 urte V',hora:'17:00',data:'2026-04-03',mon:'II'},
+{id:'e0010',sid:'S48-4_urte',grupo:'4 urte V',hora:'17:40',data:'2026-04-03',mon:'JAS'},
+{id:'e0011',sid:'S48-5_urte',grupo:'5 urte V',hora:'18:20',data:'2026-04-03',mon:'JB'},
+{id:'e0012',sid:'S48-67_urte',grupo:'6-7 urte V',hora:'19:00',data:'2026-04-03',mon:'JRI'},
+{id:'e0013',sid:'S49-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-13',mon:'SB'},
+{id:'e0014',sid:'S49-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-13',mon:'UU'},
+{id:'e0015',sid:'S49-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-13',mon:'AA'},
+{id:'e0016',sid:'S49-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-13',mon:'AG'},
+{id:'e0017',sid:'S49-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-14',mon:'UU'},
+{id:'e0018',sid:'S49-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-14',mon:'AA'},
+{id:'e0019',sid:'S49-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-14',mon:'AG'},
+{id:'e0020',sid:'S49-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-14',mon:'DC'},
+{id:'e0021',sid:'S50-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-15',mon:'AA'},
+{id:'e0022',sid:'S50-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-15',mon:'AG'},
+{id:'e0023',sid:'S50-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-15',mon:'DC'},
+{id:'e0024',sid:'S50-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-15',mon:'EG'},
+{id:'e0025',sid:'S50-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-16',mon:'AG'},
+{id:'e0026',sid:'S50-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-16',mon:'DC'},
+{id:'e0027',sid:'S50-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-16',mon:'EG'},
+{id:'e0028',sid:'S50-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-16',mon:'II'},
+{id:'e0029',sid:'S50-3_urte',grupo:'3 urte V',hora:'17:00',data:'2026-04-17',mon:'DC'},
+{id:'e0030',sid:'S50-4_urte',grupo:'4 urte V',hora:'17:40',data:'2026-04-17',mon:'EG'},
+{id:'e0031',sid:'S50-5_urte',grupo:'5 urte V',hora:'18:20',data:'2026-04-17',mon:'II'},
+{id:'e0032',sid:'S50-67_urte',grupo:'6-7 urte V',hora:'19:00',data:'2026-04-17',mon:'JAS'},
+{id:'e0033',sid:'S51-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-20',mon:'JAS'},
+{id:'e0034',sid:'S51-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-20',mon:'JB'},
+{id:'e0035',sid:'S51-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-20',mon:'JRI'},
+{id:'e0036',sid:'S51-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-20',mon:'JZ'},
+{id:'e0037',sid:'S51-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-21',mon:'JB'},
+{id:'e0038',sid:'S51-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-21',mon:'JRI'},
+{id:'e0039',sid:'S51-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-21',mon:'JZ'},
+{id:'e0040',sid:'S51-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-21',mon:'LD'},
+{id:'e0041',sid:'S52-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-22',mon:'JRI'},
+{id:'e0042',sid:'S52-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-22',mon:'JZ'},
+{id:'e0043',sid:'S52-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-22',mon:'LD'},
+{id:'e0044',sid:'S52-5_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-22',mon:'LS'},
+{id:'e0045',sid:'S52-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-23',mon:'JZ'},
+{id:'e0046',sid:'S52-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-23',mon:'LD'},
+{id:'e0047',sid:'S52-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-23',mon:'LS'},
+{id:'e0048',sid:'S52-5_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-23',mon:'LU'},
+{id:'e0049',sid:'S52-3_urte',grupo:'3 urte V',hora:'17:00',data:'2026-04-24',mon:'LD'},
+{id:'e0050',sid:'S52-4_urte',grupo:'4 urte V',hora:'17:40',data:'2026-04-24',mon:'LS'},
+{id:'e0051',sid:'S52-5_urte',grupo:'5 urte V',hora:'18:20',data:'2026-04-24',mon:'LU'},
+{id:'e0052',sid:'S52-5_urte',grupo:'6-7 urte V',hora:'19:00',data:'2026-04-24',mon:'MI'},
+{id:'e0053',sid:'S53-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-27',mon:'MI'},
+{id:'e0054',sid:'S53-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-27',mon:'NL'},
+{id:'e0055',sid:'S53-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-27',mon:'SB'},
+{id:'e0056',sid:'S53-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-27',mon:'UU'},
+{id:'e0057',sid:'S53-3_urte',grupo:'3 urte M-J',hora:'17:00',data:'2026-04-28',mon:'NL'},
+{id:'e0058',sid:'S53-4_urte',grupo:'4 urte M-J',hora:'17:40',data:'2026-04-28',mon:'SB'},
+{id:'e0059',sid:'S53-5_urte',grupo:'5 urte M-J',hora:'18:20',data:'2026-04-28',mon:'UU'},
+{id:'e0060',sid:'S53-67_urte',grupo:'6-7 urte M-J',hora:'19:00',data:'2026-04-28',mon:'AA'},
+{id:'e0061',sid:'S54-3_urte',grupo:'3 urte L-X',hora:'17:00',data:'2026-04-29',mon:'SB'},
+{id:'e0062',sid:'S54-4_urte',grupo:'4 urte L-X',hora:'17:40',data:'2026-04-29',mon:'UU'},
+{id:'e0063',sid:'S54-5_urte',grupo:'5 urte L-X',hora:'18:20',data:'2026-04-29',mon:'AA'},
+{id:'e0064',sid:'S54-67_urte',grupo:'6-7 urte L-X',hora:'19:00',data:'2026-04-29',mon:'AG'}
 ];
 
 const PLANNING_TEMPORADA = [
@@ -846,7 +850,7 @@ const PLANNING_TEMPORADA = [
 {cod:'S66',date:'2026-06-10'}
 ];
 
-const MONITORS = ['MI','JB','AG','NL','ES','LB','AN'];
+const MONITORS = ['AA','AG','DC','EG','II','JAS','JB','JRI','JZ','LD','LS','LU','MI','NL','SB','UU'];
 const SAMPLE_IDEAS = [
   {id:'i01',mon:'JB',sid:'S18-67',txt:'Erabili argazkiak bideo laburrekin hobeto azaltzeko 112 zenbakiaren erabilera. Ikasleentzat askoz ere bisualagoa da.',est:'pendiente',data:'2026-04-13'},
   {id:'i02',mon:'MI',sid:'S35-4',txt:'Puzzle pieza handiagotan banatu talde txikietan — batzuek zailtasunak dituzte distantzia luzea igeri egitean pieza eutsiz.',est:'probar',data:'2026-04-14'},
@@ -957,6 +961,43 @@ function fmtMonth(ds){const d=new Date(ds+'T12:00:00');return`${EU_MONTHS_CAP[d.
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
 function showSave(){const el=document.getElementById('as-lbl');if(el){el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}}
 
+// Title case para nombres: "KOLOREAK" → "Koloreak", "ASTE SANTUKO OPORRAK" → "Aste santuko oporrak"
+// Mantiene el original si ya está en capitalización mixta (ej. "Nire ipuinak")
+// Preserva siglas conocidas (SOS, ABC, AEIOU, etc.)
+const PRESERVE_UPPER=new Set(['SOS','ABC','AEIOU','ABCD','OK','SP','FC','TV','DVD','USB','PDF','CD','ONG']);
+function titleCase(s){
+  if(!s||typeof s!=='string')return s;
+  const letters=s.replace(/[^A-Za-zÁÉÍÓÚÑÇÜáéíóúñçü]/g,'');
+  if(letters.length<3)return s;
+  const isAllCaps=letters===letters.toUpperCase();
+  if(!isAllCaps)return s;
+  return s.split(/(\s+|[-/.:;!?])/).map((part,i,arr)=>{
+    if(/^\s+$/.test(part)||/^[-/.:;!?]+$/.test(part))return part;
+    if(!part)return part;
+    if(PRESERVE_UPPER.has(part))return part;
+    // Primera palabra de la frase: primera letra mayús
+    const isFirst=i===0;
+    // Tras punto/coma/etc.: primera letra mayús también
+    let isAfterSentence=isFirst;
+    if(!isFirst){
+      for(let j=i-1;j>=0;j--){
+        const p=arr[j];
+        if(!p||/^\s+$/.test(p))continue;
+        if(/[.:;!?]/.test(p)){isAfterSentence=true;break}
+        break;
+      }
+    }
+    if(isAfterSentence)return part.charAt(0).toUpperCase()+part.slice(1).toLowerCase();
+    return part.toLowerCase();
+  }).join('');
+}
+
+// Aplica titleCase a los nombres de las sesiones al cargar (solo en memoria, no modifica datos originales)
+SESSIONS.forEach(s=>{
+  if(s.nom)s.nom=titleCase(s.nom);
+  if(s.nom_es)s.nom_es=titleCase(s.nom_es);
+});
+
 function myEntries(day){
   return DB.entries().filter(e=>e.data===day&&(S.role==='admin'||e.mon===S.user));
 }
@@ -1015,7 +1056,7 @@ function hdr(title,back=true){
     ${back?`<button class="hdr-back" id="back-btn">←</button>`:
     `<div class="logo"><img src="${LOGO_SM}" alt="Durango Kirolak" style="height:32px;width:auto;background:white;padding:3px 6px;border-radius:6px"></div>`}
     <div class="hdr-t">${back?title:''}</div>
-    ${S.user?`<div class="avatar">${S.user.slice(0,2)}</div>`:''}
+    ${S.user?`<div class="avatar">${S.user.slice(0,3)}</div>`:''}
   </div>`;
 }
 
@@ -1835,6 +1876,54 @@ function renderModal(){
       </div>
     </div>`;
   }
+  if(S.modal.type==='duplicates'){
+    const all=DB.sessions();
+    const groups={};
+    all.forEach(s=>{const k=s.cod+'|'+s.adina;if(!groups[k])groups[k]=[];groups[k].push(s);});
+    const dups=Object.values(groups).filter(g=>g.length>1);
+    return`<div class="modal-bg" id="modal-bg">
+      <div class="modal" onclick="event.stopPropagation()" style="max-width:920px">
+        <div class="modal-hdr">
+          <div class="modal-hdr-t">⚠️ Saio bikoiztuak konpondu</div>
+          <button class="modal-close" id="modal-close">✕</button>
+        </div>
+        <div class="modal-body">
+          <div style="font-size:13px;color:var(--txt2);font-weight:600;line-height:1.6;margin-bottom:16px;padding:12px 14px;background:var(--bg);border-radius:8px">
+            Kode eta adin bera duten saioak detektatu dira. Bakoitzaren kasuan, aukeratu zein bertsio mantendu nahi duzun. Aukera egin ondoren, besteak ezabatuko dira behin betiko.
+          </div>
+          ${dups.map((group,gi)=>{
+            return`<div style="border:1.5px solid var(--bdr2);border-radius:10px;padding:14px;margin-bottom:16px">
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--bdr)">
+                <span class="tag tg" style="font-size:12px">${group[0].cod}</span>
+                <span class="tag tw" style="font-size:12px">${group[0].adina}</span>
+                <span style="flex:1"></span>
+                <span style="font-size:11px;color:var(--txtm);font-weight:700">${group.length} bertsio</span>
+              </div>
+              ${group.map(s=>{
+                const matCount=s.materiala?s.materiala.length:0;
+                const textLen=(s.arranque||'').length+(s.intencionada||'').length+(s.reflexion||'').length;
+                return`<div style="border:1.5px solid var(--bdr);border-radius:8px;padding:12px;margin-bottom:8px;background:var(--white)">
+                  <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px">
+                    <div style="flex:1">
+                      <div style="font-weight:800;color:var(--txt);font-size:14px;margin-bottom:3px">${s.nom}</div>
+                      ${s.nom_es&&s.nom_es!==s.nom?`<div style="font-size:11px;color:var(--txtm);font-weight:600;margin-bottom:4px">${s.nom_es}</div>`:''}
+                      <div style="font-size:12px;color:var(--txt2);font-weight:600">
+                        ${s.inst?`📍 ${s.inst} · `:''}${matCount} material · ${textLen} karakter testu
+                      </div>
+                    </div>
+                    <button class="atop-btn pri" data-keep-sid="${s.id}" data-group-idx="${gi}" style="font-size:12px;padding:7px 12px">✓ Hau mantendu</button>
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="modal-ftr">
+          <button class="atop-btn sec" id="modal-cancel">Itxi (inolako aldaketarik egin gabe)</button>
+        </div>
+      </div>
+    </div>`;
+  }
   return'';
 }
 
@@ -1965,6 +2054,27 @@ function aLibrary(){
       <div class="afil-lbl">ADINA:</div>
       ${ages.map(a=>`<button class="chip${S.libFilter===a?' on':''}" data-lf="${a}">${a==='all'?'Denak':a}</button>`).join('')}
     </div>
+
+    ${(()=>{
+      // Detect duplicates (same cod + adina)
+      const all=DB.sessions();
+      const groups={};
+      all.forEach(s=>{const k=s.cod+'|'+s.adina;if(!groups[k])groups[k]=[];groups[k].push(s);});
+      const dups=Object.values(groups).filter(g=>g.length>1);
+      if(dups.length===0)return '';
+      const total=dups.reduce((a,g)=>a+g.length,0);
+      return`<div style="background:#fef8e8;border-left:4px solid var(--warn);border-radius:9px;padding:14px 16px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:250px">
+            <div style="font-weight:900;color:#8a5a00;margin-bottom:4px;font-size:14px">⚠️ ${dups.length} saio bikoiztu${dups.length>1?'ak':'a'} aurkitu d${dups.length>1?'ira':'a'}</div>
+            <div style="font-size:12px;color:var(--txt2);font-weight:600;line-height:1.5">
+              ${dups.map(g=>`<b>${g[0].cod} · ${g[0].adina}</b> ${g.length}x`).join(' · ')}
+            </div>
+          </div>
+          <button class="btn btn-o" id="dup-view-btn" style="max-width:180px;font-size:13px;padding:9px 14px;border-color:var(--warn);color:#8a5a00">🔍 Ikusi eta konpondu</button>
+        </div>
+      </div>`;
+    })()}
 
     <div class="apanel">
       <div class="apanel-body" style="padding:0">
@@ -2117,8 +2227,21 @@ function aIdeas(){
 // ─── ADMIN REPORTS ────────────────────────
 function aReports(){
   const evals=DB.evals(),entries=DB.entries(),sessions=DB.sessions();
+  const sistemaPanel=`
+    <div class="apanel" style="margin-top:16px">
+      <div class="apanel-hdr"><div class="apanel-t">⚙️ Sistema</div></div>
+      <div class="apanel-body">
+        <div style="font-size:13px;color:var(--txt2);font-weight:600;margin-bottom:10px;line-height:1.5">
+          Datu lokalak berrezartzen badituzu, zure nabigatzailean gordetako balorazioak, ideiak eta saioen edizioak ezabatuko dira. Bertsio berriaren planning eta saio berriak kargatuko dira.
+        </div>
+        <button class="btn btn-o" id="reset-local-btn" style="max-width:280px;border-color:var(--red);color:var(--red)">🔄 Berrezarri datu lokalak</button>
+      </div>
+    </div>`;
   if(!evals.length)return`${aTopbar('Txostenak','Balorazioen analisia','')}
-    <div class="abody fu"><div class="empty" style="padding:80px 40px"><div class="empty-i">📊</div><div class="empty-t">Oraindik baloraziorik ez</div><div style="margin-top:8px;color:var(--txtm);font-size:13px">Begiraleak balorazioak egin ondoren agertuko dira</div></div></div>`;
+    <div class="abody fu">
+      <div class="empty" style="padding:40px 40px"><div class="empty-i">📊</div><div class="empty-t">Oraindik baloraziorik ez</div><div style="margin-top:8px;color:var(--txtm);font-size:13px">Begiraleak balorazioak egin ondoren agertuko dira</div></div>
+      ${sistemaPanel}
+    </div>`;
 
   const wg=evals.filter(e=>e.global);
   const avg=wg.length?(wg.reduce((a,e)=>a+(e.global||0),0)/wg.length).toFixed(1):'—';
@@ -2204,6 +2327,16 @@ function aReports(){
             <div style="font-size:14px;font-weight:600;color:var(--txt);line-height:1.5">${ev.ohar}</div>
           </div>`;
         }).join('')||'<div style="font-size:13px;color:var(--txtm);padding:12px">Oraindik iruzkinik ez</div>'}
+      </div>
+    </div>
+
+    <div class="apanel" style="margin-top:16px">
+      <div class="apanel-hdr"><div class="apanel-t">⚙️ Sistema</div></div>
+      <div class="apanel-body">
+        <div style="font-size:13px;color:var(--txt2);font-weight:600;margin-bottom:10px;line-height:1.5">
+          Datu lokalak berrezartzen badituzu, zure nabigatzailean gordetako baloraziak, ideiak eta saioen edizioak ezabatuko dira. Bertsio berriaren planning eta saio berriak kargatuko dira.
+        </div>
+        <button class="btn btn-o" id="reset-local-btn" style="max-width:280px;border-color:var(--red);color:var(--red)">🔄 Berrezarri datu lokalak</button>
       </div>
     </div>
   </div>`;
@@ -2467,6 +2600,27 @@ function attachEvents(){
   // Edit / delete buttons
   document.querySelectorAll('[data-edit-sid]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openEditSession(b.dataset.editSid)}));
   document.querySelectorAll('[data-del-sid]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();confirmDeleteSession(b.dataset.delSid)}));
+  // Duplicates
+  const dvb=document.getElementById('dup-view-btn');if(dvb)dvb.addEventListener('click',()=>{S.modal={type:'duplicates'};render()});
+  document.querySelectorAll('[data-keep-sid]').forEach(b=>b.addEventListener('click',()=>{
+    const keepId=b.dataset.keepSid;
+    const all=DB.sessions();
+    const kept=all.find(s=>s.id===keepId);if(!kept)return;
+    // Find group (same cod+adina)
+    const toDelete=all.filter(s=>s.cod===kept.cod&&s.adina===kept.adina&&s.id!==keepId);
+    if(!toDelete.length){toast('Ez da besterik aurkitu');return}
+    if(confirm(`"${kept.nom}" mantenduko da eta beste ${toDelete.length} bertsio ezabatuko dira. Jarraitu?`)){
+      toDelete.forEach(s=>DB.deleteSession(s.id));
+      toast(`${toDelete.length} bertsio ezabatu dira ✓`);
+      // Comprobar si quedan más duplicados
+      const still=DB.sessions();
+      const groups={};
+      still.forEach(s=>{const k=s.cod+'|'+s.adina;if(!groups[k])groups[k]=[];groups[k].push(s);});
+      const stillDups=Object.values(groups).filter(g=>g.length>1);
+      if(stillDups.length===0){closeModal();}
+      else{render();}
+    }
+  }));
   // Modal controls
   const mc=document.getElementById('modal-close');if(mc)mc.addEventListener('click',closeModal);
   const mca=document.getElementById('modal-cancel');if(mca)mca.addEventListener('click',closeModal);
@@ -2536,6 +2690,13 @@ function attachEvents(){
   const clc=document.getElementById('clear-chat');if(clc)clc.addEventListener('click',()=>{S.chat=[];render()});
   // EXPORT
   const ex=document.getElementById('export-btn');if(ex)ex.addEventListener('click',exportReport);
+  const rst=document.getElementById('reset-local-btn');if(rst)rst.addEventListener('click',()=>{
+    if(confirm('Ziur zaude? Nabigatzaile honetan gordetako DATU GUZTIAK (balorazioak, ideiak, saioen edizioak) ezabatuko dira eta bertsioaren lehentasunezko datuak kargatuko dira.\n\nEkintza hau ezin da desegin.')){
+      ['ne3_entries','ne3_evals','ne3_ideas','ne3_sessions_overrides','ne3_monitors_override','ne3_seasons'].forEach(k=>localStorage.removeItem(k));
+      toast('Datu lokalak berrezarri dira ✓');
+      setTimeout(()=>location.reload(),800);
+    }
+  });
 }
 
 function chkLogin(){
