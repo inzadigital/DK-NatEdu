@@ -738,7 +738,9 @@ const SESSIONS = [
 ];
 
 // ─── CALENDAR ENTRIES (sample week) ───
-const TODAY = '2026-04-15';
+// TODAY siempre es la fecha actual del sistema (no hardcoded)
+function todayISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+const TODAY = todayISO();
 function isoDate(d,offset=0){const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+offset);return x.toISOString().split('T')[0]}
 
 const ENTRIES = [
@@ -3480,6 +3482,11 @@ const DB = {
     // Sync a Supabase (background, non-blocking)
     syncEvalToCloud(ev);
   },
+  deleteEval(eid){
+    const a=this.evals().filter(e=>e.eid!==eid);
+    this.s('ne3_evals',a);
+    syncDeleteEvalFromCloud(eid);
+  },
   addIdea(idea){
     const a=this.ideas();a.push(idea);this.s('ne3_ideas',a);
     syncIdeaToCloud(idea);
@@ -3516,6 +3523,14 @@ async function syncEvalToCloud(ev) {
   const r = await SB.upsert('evals', row, 'eid');
   if (r.error) { SB.setStatus('error', r.error.slice(0,60)); }
   else { SB.setStatus('idle'); }
+}
+
+async function syncDeleteEvalFromCloud(eid) {
+  if (!SB.online) return;
+  SB.setStatus('syncing');
+  const r = await SB.del('evals', `eid=eq.${encodeURIComponent(eid)}`);
+  if (r.error) SB.setStatus('error', r.error.slice(0,60));
+  else SB.setStatus('idle');
 }
 
 async function syncIdeaToCloud(idea) {
@@ -3982,6 +3997,16 @@ function sessionBody(){
       </div>
 
       <div class="autosave" id="as-lbl">✓ Automatikoki gorde da</div>
+
+      ${ev&&ev.mon===S.user?`
+      <div style="margin-top:18px;padding-top:16px;border-top:1px dashed var(--bdr)">
+        <div style="font-size:11px;font-weight:700;color:var(--txtm);margin-bottom:8px;line-height:1.5">
+          Akatsen bat egin baduzu eta hutsetik hasi nahi baduzu, ezabatu balorazioa.
+        </div>
+        <button class="btn btn-o" id="clear-eval-btn" style="border-color:#e53935;color:#e53935;max-width:280px;font-size:13px;padding:10px 16px">
+          🗑 Balorazioa garbitu
+        </button>
+      </div>`:''}
     </div>
   </div>`:''}
 
@@ -5419,6 +5444,15 @@ function attachEvents(){
   // COMMENTS — auto-save on blur
   const oh=document.getElementById('cmt-ohar');if(oh)oh.addEventListener('blur',()=>saveComment('ohar',oh.value));
   const ih=document.getElementById('cmt-idea');if(ih)ih.addEventListener('blur',()=>saveIdeaFromEval(ih.value));
+  // CLEAR EVAL — only visible to begirale on their own eval
+  const ceb=document.getElementById('clear-eval-btn');if(ceb)ceb.addEventListener('click',()=>{
+    if(confirm('Ziur zaude balorazioa garbitu nahi duzula?\n\nGalduko duzu egindako balorazio guztia (puntuak, izarrak eta oharrak) eta saioa berriz "Egiteko" egoeran geratuko da.\n\nEzin da desegin.')){
+      const en=DB.entries().find(e=>e.id===S.selEid);if(!en)return;
+      DB.deleteEval(en.id);
+      showBigSave('Garbitu da!','Saioa berriz egiteko egoeran',1600);
+      setTimeout(()=>render(),1700);
+    }
+  });
   // IDEAS
   const aib=document.getElementById('add-idea-btn');if(aib)aib.addEventListener('click',()=>{
     const t=document.getElementById('new-idea')?.value?.trim();
