@@ -151,6 +151,10 @@ html{scrollbar-width:thin;scrollbar-color:var(--bdr2) var(--bg)}
 
 /* ── CALENDAR ── */
 .wk{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:14px}
+.wk-nav-btn{padding:8px 11px;border-radius:9px;border:1.5px solid var(--bdr);background:var(--white);color:var(--txt2);font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;transition:all .15s;flex:0 0 auto;line-height:1}
+.wk-nav-btn:active{transform:scale(.96)}
+.wk-nav-btn.pri{background:var(--g);border-color:var(--g);color:white}
+.wk-nav-btn:disabled{opacity:.4;cursor:default}
 .wd{background:var(--white);border-radius:10px;border:1.5px solid var(--bdr);padding:9px 4px;text-align:center;cursor:pointer}
 .wd.today{border-color:var(--g);background:var(--g3)}
 .wd.sel{border-color:var(--b);background:var(--b3)}
@@ -4065,10 +4069,23 @@ function vCalendar(){
   const entries=DB.entries();
   const sessions=DB.sessions();
   const dayEntries=myEntries(S.selDay).sort((a,b)=>a.hora.localeCompare(b.hora));
+  // Calcular semana anterior y siguiente (lunes de cada una)
+  const prevWk=isoDate(days[0],-7);
+  const nextWk=isoDate(days[0],7);
+  // Mes/año visible: primer día de la semana
+  const firstD=new Date(days[0]+'T12:00:00');
+  const monthLbl=`${EU_MONTHS_CAP[firstD.getMonth()]} ${firstD.getFullYear()}`;
+  const isCurrentWeek=days.includes(TODAY);
   return`
 ${nav('calendar')}
 ${hdr('',false)}
 <div class="main fu">
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+    <button class="wk-nav-btn" data-wk-day="${prevWk}" aria-label="Aurreko astea">←</button>
+    <div style="flex:1;text-align:center;font-size:13px;font-weight:800;color:var(--txt2);text-transform:capitalize">${monthLbl}</div>
+    <button class="wk-nav-btn ${isCurrentWeek?'':'pri'}" data-wk-day="${TODAY}" ${isCurrentWeek?'disabled':''}>📍 Gaur</button>
+    <button class="wk-nav-btn" data-wk-day="${nextWk}" aria-label="Hurrengo astea">→</button>
+  </div>
   <div class="wk">
     ${days.map(d=>{
       const cnt=entries.filter(e=>e.data===d&&(S.role==='admin'||e.mon===S.user)).length;
@@ -5433,6 +5450,7 @@ function attachEvents(){
   document.querySelectorAll('[data-click]').forEach(el=>el.addEventListener('click',(e)=>{e.stopPropagation();eval(el.dataset.click)}));
   // CALENDAR DAYS
   document.querySelectorAll('[data-day]').forEach(el=>el.addEventListener('click',()=>{S.selDay=el.dataset.day;render()}));
+  document.querySelectorAll('[data-wk-day]').forEach(el=>el.addEventListener('click',()=>{S.selDay=el.dataset.wkDay;render()}));
   // LIB FILTER
   document.querySelectorAll('[data-lf]').forEach(el=>el.addEventListener('click',()=>{S.libFilter=el.dataset.lf;render()}));
   // IDEA FILTER
