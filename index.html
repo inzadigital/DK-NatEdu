@@ -36,6 +36,11 @@ html{scrollbar-width:thin;scrollbar-color:var(--bdr2) var(--bg)}
 .logo-k{font-size:13px;font-weight:900;color:var(--gl)}
 .logo-sq{width:30px;height:30px;background:white;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .avatar{min-width:32px;padding:0 7px;height:32px;border-radius:16px;background:rgba(255,255,255,.22);color:white;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:.3px}
+@media (max-width:380px){
+  .hdr{padding:0 10px;gap:6px}
+  #sync-indicator{padding:4px 7px !important;font-size:9px !important}
+  #sync-indicator .sync-dot{width:6px !important;height:6px !important}
+}
 
 /* ── NAV ── */
 .nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);background:var(--white);border-top:1.5px solid var(--bdr);display:flex;z-index:200}
@@ -127,6 +132,22 @@ html{scrollbar-width:thin;scrollbar-color:var(--bdr2) var(--bg)}
 .cmt:focus{border-color:var(--g)}
 .autosave{text-align:right;font-size:11px;font-weight:700;color:var(--gl2);margin-top:5px;height:16px;transition:opacity .3s;opacity:0}
 .autosave.show{opacity:1}
+
+/* AVISO GRANDE de guardado — visible y satisfactorio */
+.bigsave{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.6);background:linear-gradient(135deg,var(--g) 0%,var(--gl) 100%);color:white;padding:36px 56px;border-radius:24px;box-shadow:0 16px 60px rgba(0,112,50,.45),0 0 0 4px rgba(106,176,35,.25);z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s,transform .35s cubic-bezier(.34,1.56,.64,1);text-align:center;font-family:var(--fn);max-width:min(440px,86vw)}
+.bigsave.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+.bigsave-ic{font-size:64px;line-height:1;margin-bottom:14px;animation:bigsave-pop .5s cubic-bezier(.34,1.56,.64,1)}
+.bigsave-t{font-size:24px;font-weight:900;margin-bottom:6px;letter-spacing:.3px}
+.bigsave-d{font-size:14px;font-weight:600;opacity:.9;line-height:1.4}
+@keyframes bigsave-pop{0%{transform:scale(0) rotate(-30deg)}60%{transform:scale(1.15) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
+@media (max-width:480px){
+  .bigsave{padding:28px 36px}
+  .bigsave-ic{font-size:54px}
+  .bigsave-t{font-size:20px}
+  .bigsave-d{font-size:13px}
+}
+.bigsave-bg{position:fixed;inset:0;background:rgba(0,0,0,.15);z-index:9998;opacity:0;pointer-events:none;transition:opacity .25s}
+.bigsave-bg.show{opacity:1;pointer-events:auto}
 
 /* ── CALENDAR ── */
 .wk{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:14px}
@@ -419,6 +440,12 @@ label{font-size:11px;font-weight:800;color:var(--txtm);text-transform:uppercase;
 <body>
 <div id="app"></div>
 <div id="toast"></div>
+<div id="bigsave-bg" class="bigsave-bg"></div>
+<div id="bigsave" class="bigsave">
+  <div class="bigsave-ic">✓</div>
+  <div class="bigsave-t" id="bigsave-t">Gorde da!</div>
+  <div class="bigsave-d" id="bigsave-d">Hodeian sinkronizatzen...</div>
+</div>
 <script>
 // ═════════════════════════════════════════════
 // LOGO OFICIAL DURANGO KIROLAK (base64)
@@ -3359,10 +3386,10 @@ const SB = {
       el.dataset.status = s;
       const dot = el.querySelector('.sync-dot');
       const lbl = el.querySelector('.sync-lbl');
-      if (s === 'syncing') { dot.style.background = 'var(--warn)'; lbl.textContent = 'Sinkronizatzen…'; }
-      else if (s === 'error') { dot.style.background = 'var(--red)'; lbl.textContent = 'Errorea: ' + (err || ''); }
-      else if (s === 'offline') { dot.style.background = 'var(--txtm)'; lbl.textContent = 'Lineaz kanpo'; }
-      else { dot.style.background = 'var(--gl)'; lbl.textContent = 'Sinkronizatuta ✓'; }
+      if (s === 'syncing') { dot.style.background = 'var(--warn)'; lbl.textContent = 'Gordetzen...'; }
+      else if (s === 'error') { dot.style.background = 'var(--red)'; lbl.textContent = 'Errorea'; el.title = 'Errorea: ' + (err || ''); }
+      else if (s === 'offline') { dot.style.background = 'var(--txtm)'; lbl.textContent = 'Offline'; }
+      else { dot.style.background = 'var(--gl)'; lbl.textContent = 'Sinkronizatuta'; }
     }
   }
 };
@@ -3643,7 +3670,31 @@ function fmtDate(ds){const d=new Date(ds+'T12:00:00');return`${EU_DAYS[d.getDay(
 function fmtMonth(ds){const d=new Date(ds+'T12:00:00');return`${EU_MONTHS_CAP[d.getMonth()]} ${d.getFullYear()}`}
 
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
-function showSave(){const el=document.getElementById('as-lbl');if(el){el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}}
+function showSave(){
+  // Aviso pequeño tradicional (en formularios)
+  const el=document.getElementById('as-lbl');
+  if(el){el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
+  // Aviso GRANDE central
+  showBigSave('Gorde da!','Hodeian sinkronizatzen...');
+}
+
+let _bigSaveTimer=null;
+function showBigSave(titulo='Gorde da!',descripcion='Hodeian sinkronizatzen...',duracion=1600){
+  const big=document.getElementById('bigsave');
+  const bg=document.getElementById('bigsave-bg');
+  const t=document.getElementById('bigsave-t');
+  const d=document.getElementById('bigsave-d');
+  if(!big||!bg)return;
+  if(t)t.textContent=titulo;
+  if(d)d.textContent=descripcion;
+  big.classList.add('show');
+  bg.classList.add('show');
+  if(_bigSaveTimer)clearTimeout(_bigSaveTimer);
+  _bigSaveTimer=setTimeout(()=>{
+    big.classList.remove('show');
+    bg.classList.remove('show');
+  },duracion);
+}
 
 // Title case para nombres: "KOLOREAK" → "Koloreak", "ASTE SANTUKO OPORRAK" → "Aste santuko oporrak"
 // Mantiene el original si ya está en capitalización mixta (ej. "Nire ipuinak")
@@ -3740,9 +3791,9 @@ function hdr(title,back=true){
     ${back?`<button class="hdr-back" id="back-btn">←</button>`:
     `<div class="logo"><img src="${LOGO_SM}" alt="Durango Kirolak" style="height:32px;width:auto;background:white;padding:3px 6px;border-radius:6px"></div>`}
     <div class="hdr-t">${back?title:''}</div>
-    <div id="sync-indicator" style="display:flex;align-items:center;gap:5px;padding:0 6px;font-size:10px;color:rgba(255,255,255,.85);font-weight:700" title="Sinkronizazio egoera">
-      <span class="sync-dot" style="width:8px;height:8px;border-radius:50%;background:var(--gl);transition:background .2s"></span>
-      <span class="sync-lbl" style="display:none">Sinkronizatuta</span>
+    <div id="sync-indicator" style="display:flex;align-items:center;gap:5px;padding:5px 9px;font-size:10px;color:white;font-weight:800;background:rgba(255,255,255,.18);border-radius:12px" title="Sinkronizazio egoera">
+      <span class="sync-dot" style="width:7px;height:7px;border-radius:50%;background:var(--gl);transition:background .2s;box-shadow:0 0 0 2px rgba(255,255,255,.25)"></span>
+      <span class="sync-lbl">Sinkronizatuta</span>
     </div>
     ${S.user?`<div class="avatar">${S.user.slice(0,3)}</div>`:''}
   </div>`;
@@ -4926,9 +4977,9 @@ function aReports(){
       <div class="apanel-hdr"><div class="apanel-t">⚙️ Sistema</div></div>
       <div class="apanel-body">
         <div style="font-size:13px;color:var(--txt2);font-weight:600;margin-bottom:10px;line-height:1.5">
-          Datu lokalak berrezartzen badituzu, zure nabigatzailean gordetako balorazioak, ideiak eta saioen edizioak ezabatuko dira. Bertsio berriaren planning eta saio berriak kargatuko dira.
+          Datu freskoak ekartzen ditu hodeitik. Erabili ezazu beste gailu batean balorazio bat gehitu duzula uste baduzu eta hemen ez baduzu ikusten.
         </div>
-        <button class="btn btn-o" id="reset-local-btn" style="max-width:280px;border-color:var(--red);color:var(--red)">🔄 Berrezarri datu lokalak</button>
+        <button class="btn btn-o" id="reset-local-btn" style="max-width:280px;border-color:var(--g);color:var(--g)">🔄 Sinkronizatu berriz</button>
       </div>
     </div>`;
   if(!evals.length)return`${aTopbar('Txostenak','Balorazioen analisia','')}
@@ -5028,9 +5079,9 @@ function aReports(){
       <div class="apanel-hdr"><div class="apanel-t">⚙️ Sistema</div></div>
       <div class="apanel-body">
         <div style="font-size:13px;color:var(--txt2);font-weight:600;margin-bottom:10px;line-height:1.5">
-          Datu lokalak berrezartzen badituzu, zure nabigatzailean gordetako baloraziak, ideiak eta saioen edizioak ezabatuko dira. Bertsio berriaren planning eta saio berriak kargatuko dira.
+          Datu freskoak ekartzen ditu hodeitik. Erabili ezazu beste gailu batean balorazio bat gehitu duzula uste baduzu eta hemen ez baduzu ikusten.
         </div>
-        <button class="btn btn-o" id="reset-local-btn" style="max-width:280px;border-color:var(--red);color:var(--red)">🔄 Berrezarri datu lokalak</button>
+        <button class="btn btn-o" id="reset-local-btn" style="max-width:280px;border-color:var(--g);color:var(--g)">🔄 Sinkronizatu berriz</button>
       </div>
     </div>
   </div>`;
@@ -5093,7 +5144,7 @@ function saveComment(k,val){
 function saveIdeaFromEval(txt){
   if(!txt.trim())return;
   DB.addIdea({id:crypto.randomUUID(),mon:S.user,sid:S.selSid,txt:txt.trim(),est:'pendiente',data:TODAY});
-  toast('Ideia gordeta ✓');
+  showBigSave('Ideia gordeta!','Hodeian sinkronizatzen...');
 }
 
 // ─────────────────────────────────────────
@@ -5373,7 +5424,7 @@ function attachEvents(){
     const t=document.getElementById('new-idea')?.value?.trim();
     if(!t){toast('Idazki zerbait lehenik');return}
     DB.addIdea({id:crypto.randomUUID(),mon:S.user,sid:null,txt:t,est:'pendiente',data:TODAY});
-    toast('Ideia gordeta ✓');render();
+    showBigSave('Ideia gordeta!','Hodeian sinkronizatzen...');render();
   });
   // IDEA STATUS
   document.querySelectorAll('[data-idea-id]').forEach(sel=>sel.addEventListener('change',()=>DB.setIdeaStatus(sel.dataset.ideaId,sel.value)));
@@ -5387,11 +5438,14 @@ function attachEvents(){
   const clc=document.getElementById('clear-chat');if(clc)clc.addEventListener('click',()=>{S.chat=[];render()});
   // EXPORT
   const ex=document.getElementById('export-btn');if(ex)ex.addEventListener('click',exportReport);
-  const rst=document.getElementById('reset-local-btn');if(rst)rst.addEventListener('click',()=>{
-    if(confirm('Ziur zaude? Nabigatzaile honetan gordetako DATU GUZTIAK (balorazioak, ideiak, saioen edizioak) ezabatuko dira eta bertsioaren lehentasunezko datuak kargatuko dira.\n\nEkintza hau ezin da desegin.')){
-      ['ne3_entries','ne3_evals','ne3_ideas','ne3_sessions_overrides','ne3_monitors_override','ne3_seasons'].forEach(k=>localStorage.removeItem(k));
-      toast('Datu lokalak berrezarri dira ✓');
-      setTimeout(()=>location.reload(),800);
+  const rst=document.getElementById('reset-local-btn');if(rst)rst.addEventListener('click',async()=>{
+    showBigSave('Sinkronizatzen...','Hodeitik datu freskoak ekartzen',1200);
+    const ok=await syncFromCloud();
+    if(ok){
+      showBigSave('Eguneratuta!','Datu freskoak kargatuta',1500);
+      setTimeout(()=>render(),1600);
+    }else{
+      toast('Errorea sinkronizatzean');
     }
   });
 }
