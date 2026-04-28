@@ -152,6 +152,9 @@ html{scrollbar-width:thin;scrollbar-color:var(--bdr2) var(--bg)}
 /* ── CALENDAR ── */
 .wk{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:14px}
 .wk-nav-btn{padding:8px 11px;border-radius:9px;border:1.5px solid var(--bdr);background:var(--white);color:var(--txt2);font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;transition:all .15s;flex:0 0 auto;line-height:1}
+.vcal-tabs{display:flex;gap:6px;margin-bottom:12px;background:var(--bg);border:1.5px solid var(--bdr);border-radius:10px;padding:3px}
+.vcal-tab{flex:1;padding:9px 8px;border-radius:7px;background:transparent;border:none;color:var(--txtm);font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;transition:all .15s}
+.vcal-tab.on{background:var(--g);color:white;box-shadow:0 1px 3px rgba(0,112,50,.2)}
 .wk-nav-btn:active{transform:scale(.96)}
 .wk-nav-btn.pri{background:var(--g);border-color:var(--g);color:white}
 .wk-nav-btn:disabled{opacity:.4;cursor:default}
@@ -758,8 +761,9 @@ const SESSIONS = [
 // ─── CALENDAR ENTRIES (sample week) ───
 // TODAY siempre es la fecha actual del sistema (no hardcoded)
 function todayISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function dateToISO(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 const TODAY = todayISO();
-function isoDate(d,offset=0){const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+offset);return x.toISOString().split('T')[0]}
+function isoDate(d,offset=0){const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+offset);return dateToISO(x)}
 
 const ENTRIES = [
 {id:'e00001',sid:'S01-67_urte',cod:'2519/18NL-X2',grupo:'6-7 urte L-X',edad:'6-7 urte',hora:'17:40',data:'2025-09-15',mon:'JAS',pareja:['JAS','AG']},
@@ -3691,7 +3695,7 @@ function goBack(){
 }
 
 function weekOf(anchor){const d=new Date(anchor+'T12:00:00'),dw=d.getDay(),diff=dw===0?-6:1-dw,mon=new Date(d);mon.setDate(d.getDate()+diff);
-  return Array.from({length:6},(_,i)=>{const x=new Date(mon);x.setDate(mon.getDate()+i);return x.toISOString().split('T')[0]})}
+  return Array.from({length:6},(_,i)=>{const x=new Date(mon);x.setDate(mon.getDate()+i);return dateToISO(x)})}
 
 // Euskera date labels — no dependemos del locale del navegador
 const EU_MONTHS=['urtarrila','otsaila','martxoa','apirila','maiatza','ekaina','uztaila','abuztua','iraila','urria','azaroa','abendua'];
@@ -3797,7 +3801,7 @@ function render(){
   }else if(isAdminPC()){
     // Admin PC views — wrapped in shell
     const viewFn=({
-      home:aHome, session:aSession, calendar:aCalendar, library:aLibrary,
+      home:aHome, session:aSession, calendar:aPlanning, library:aLibrary,
       ideas:aIdeas, reports:aReports, monitors:aMonitors, planning:aPlanning
     }[S.view]||aHome);
     html=aShell(viewFn);
@@ -4105,14 +4109,24 @@ ${sessionBody()}
 // ─────────────────────────────────────────
 function vCalendar(){
   if(!S.selDay)S.selDay=TODAY;
-  const days=weekOf(S.selDay);
+  const mode=S.vCalMode||'week';
   const entries=DB.entries();
   const sessions=DB.sessions();
+
+  const toggleHTML=`<div class="vcal-tabs">
+    <button class="vcal-tab${mode==='week'?' on':''}" data-vcalmode="week">📆 Astekoa</button>
+    <button class="vcal-tab${mode==='month'?' on':''}" data-vcalmode="month">🗓️ Hilabetekoa</button>
+  </div>`;
+
+  if(mode==='month'){
+    return vCalendarMonth(toggleHTML,entries,sessions);
+  }
+
+  // WEEK mode (existing logic)
+  const days=weekOf(S.selDay);
   const dayEntries=myEntries(S.selDay).sort((a,b)=>a.hora.localeCompare(b.hora));
-  // Calcular semana anterior y siguiente (lunes de cada una)
   const prevWk=isoDate(days[0],-7);
   const nextWk=isoDate(days[0],7);
-  // Mes/año visible: primer día de la semana
   const firstD=new Date(days[0]+'T12:00:00');
   const monthLbl=`${EU_MONTHS_CAP[firstD.getMonth()]} ${firstD.getFullYear()}`;
   const isCurrentWeek=days.includes(TODAY);
@@ -4120,6 +4134,7 @@ function vCalendar(){
 ${nav('calendar')}
 ${hdr('',false)}
 <div class="main fu">
+  ${toggleHTML}
   <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
     <button class="wk-nav-btn" data-wk-day="${prevWk}" aria-label="Aurreko astea">←</button>
     <div style="flex:1;text-align:center;font-size:13px;font-weight:800;color:var(--txt2);text-transform:capitalize">${monthLbl}</div>
@@ -4135,6 +4150,81 @@ ${hdr('',false)}
         ${cnt>0?`<div class="wd-dot"></div>`:`<div style="height:5px"></div>`}
       </div>`;
     }).join('')}
+  </div>
+  <div class="sh">${fmtDate(S.selDay)}<span class="tag tg">${dayEntries.length} saio</span></div>
+  ${dayEntries.length===0
+    ?`<div class="empty" style="padding:28px 16px"><div class="empty-i">📅</div><div class="empty-t">Saiorik ez</div></div>`
+    :dayEntries.map(en=>{const ss=sessions.find(s=>s.id===en.sid);if(!ss)return'';
+      return sessionCard(en,ss,`go('session',{selEid:'${en.id}',selSid:'${ss.id}'})`);
+    }).join('')}
+</div>`}
+
+function vCalendarMonth(toggleHTML,entries,sessions){
+  const anchor=S.selDay||TODAY;
+  const d=new Date(anchor+'T12:00:00');
+  const monthStart=new Date(d.getFullYear(),d.getMonth(),1);
+  const monthEnd=new Date(d.getFullYear(),d.getMonth()+1,0);
+  const startDow=(monthStart.getDay()+6)%7;
+  const gridStart=new Date(monthStart);gridStart.setDate(monthStart.getDate()-startDow);
+  const cells=[];
+  for(let i=0;i<42;i++){
+    const c=new Date(gridStart);c.setDate(gridStart.getDate()+i);
+    cells.push(dateToISO(c));
+    if(cells.length>=35&&c>=monthEnd)break;
+  }
+  const prevMonth=dateToISO(new Date(d.getFullYear(),d.getMonth()-1,15));
+  const nextMonth=dateToISO(new Date(d.getFullYear(),d.getMonth()+1,15));
+  const monthLbl=`${EU_MONTHS_CAP[d.getMonth()]} ${d.getFullYear()}`;
+  const isCurrentMonth=(d.getFullYear()===new Date().getFullYear()&&d.getMonth()===new Date().getMonth());
+  const dayEntries=myEntries(S.selDay).sort((a,b)=>a.hora.localeCompare(b.hora));
+  return`
+${nav('calendar')}
+${hdr('',false)}
+<div class="main fu">
+  ${toggleHTML}
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+    <button class="wk-nav-btn" data-wk-day="${prevMonth}" aria-label="Aurreko hilabetea">←</button>
+    <div style="flex:1;text-align:center;font-size:13px;font-weight:800;color:var(--txt2);text-transform:capitalize">${monthLbl}</div>
+    <button class="wk-nav-btn ${isCurrentMonth?'':'pri'}" data-wk-day="${TODAY}" ${isCurrentMonth?'disabled':''}>📍 Gaur</button>
+    <button class="wk-nav-btn" data-wk-day="${nextMonth}" aria-label="Hurrengo hilabetea">→</button>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:14px">
+    ${['L','A','A','O','O','L','I'].map(x=>`<div style="text-align:center;font-size:10px;font-weight:900;color:var(--txtm);padding:5px 0">${x}</div>`).join('')}
+    ${cells.map(cd=>{
+      const cdate=new Date(cd+'T12:00:00');
+      const inMonth=cdate.getMonth()===d.getMonth();
+      const isToday=cd===TODAY;
+      const isSel=cd===S.selDay;
+      const myDayEntries=entries.filter(e=>e.data===cd&&(S.role==='admin'||e.mon===S.user));
+      const cnt=myDayEntries.length;
+      const evald=myDayEntries.filter(e=>DB.getEval(e.id)).length;
+      let bg='';
+      if(cnt>0){
+        const ratio=evald/cnt;
+        if(ratio>=0.9)bg='background:var(--gl3)';
+        else if(ratio>=0.5)bg='background:#fff8e1';
+        else bg='background:var(--reds)';
+      }
+      return`<div data-day="${cd}" style="
+        ${bg};
+        ${isToday?'border:2px solid var(--g);':''}
+        ${isSel&&!isToday?'border:2px solid var(--b);':''}
+        ${!isToday&&!isSel?'border:1px solid var(--bdr);':''}
+        border-radius:6px;
+        aspect-ratio:1;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        cursor:pointer;
+        padding:2px;
+        ${inMonth?'':'opacity:.35'}
+      ">
+        <div style="font-size:13px;font-weight:800;color:var(--txt)">${cdate.getDate()}</div>
+        ${cnt>0?`<div style="font-size:9px;font-weight:800;color:var(--txt2);line-height:1">${cnt}</div>`:''}
+      </div>`;
+    }).join('')}
+  </div>
+  <div style="display:flex;gap:10px;font-size:10px;color:var(--txtm);font-weight:700;margin-bottom:10px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--gl3);border:1px solid var(--bdr);border-radius:3px"></span>Baloratuta</div>
+    <div style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--reds);border:1px solid var(--bdr);border-radius:3px"></span>Egiteko</div>
   </div>
   <div class="sh">${fmtDate(S.selDay)}<span class="tag tg">${dayEntries.length} saio</span></div>
   ${dayEntries.length===0
@@ -4317,7 +4407,6 @@ ${hdr('',false)}
 function aShell(viewFn){
   const items=[
     {id:'home',i:'📊',l:'Dashboard'},
-    {id:'planning',i:'🗓️',l:'Planninga'},
     {id:'calendar',i:'📅',l:'Egutegia'},
     {id:'library',i:'📚',l:'Saio-bilduma'},
     {id:'monitors',i:'👥',l:'Begiraleak'},
@@ -4394,7 +4483,7 @@ function aHome(){
 
   return`${aTopbar('Dashboard',fmtDate(TODAY),`
     <button class="atop-btn sec" data-nav="reports">📈 Txostena</button>
-    <button class="atop-btn pri" data-nav="planning">🗓️ Planninga</button>
+    <button class="atop-btn pri" data-nav="calendar">📅 Egutegia ireki</button>
   `)}
   <div class="abody fu">
     <div class="akpi-grid">
@@ -4406,7 +4495,7 @@ function aHome(){
 
     <div class="acol2">
       <div class="apanel">
-        <div class="apanel-hdr"><div class="apanel-t">📅 Gaurko saioak · Begiraleka</div><button class="apanel-act" data-nav="planning">Ikusi denak →</button></div>
+        <div class="apanel-hdr"><div class="apanel-t">📅 Gaurko saioak · Begiraleka</div><button class="apanel-act" data-nav="calendar">Ikusi denak →</button></div>
         <div class="apanel-body">
           ${todayEntries.length===0?`<div class="empty" style="padding:20px"><div class="empty-t">Gaur ez dago saiorik antolatuta</div></div>`:
             todayEntries.sort((a,b)=>a.hora.localeCompare(b.hora)).map(en=>{
@@ -4499,7 +4588,7 @@ function aPlanning(){
     if(hours.length===0)hours.push('17:00','17:40','18:20','19:00');
     const prev=isoDate(days[0],-7), next=isoDate(days[0],7);
 
-    return`${aTopbar('Planninga','Astearen ikuspegi orokorra',`
+    return`${aTopbar('Egutegia','Astearen ikuspegi orokorra',`
       <button class="atop-btn sec" data-day="${prev}">← Aurreko</button>
       <button class="atop-btn sec" data-day="${TODAY}">📅 Gaur</button>
       <button class="atop-btn sec" data-day="${next}">Hurrengoa →</button>
@@ -4539,6 +4628,7 @@ function aPlanning(){
         <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:14px;background:var(--gl3);border-left:3px solid var(--gl);border-radius:3px"></span>Baloratuta</div>
         <div style="margin-left:auto">Guztira aste honetan: <b style="color:var(--txt)">${entries.filter(e=>days.includes(e.data)).length} saio</b></div>
       </div>
+      ${aPlanningDayTable()}
     </div>`;
   }
 
@@ -4551,7 +4641,7 @@ function aPlanning(){
   const startDow=(monthStart.getDay()+6)%7;
   const gridStart=new Date(monthStart);gridStart.setDate(monthStart.getDate()-startDow);
   const cells=[];
-  for(let i=0;i<42;i++){const c=new Date(gridStart);c.setDate(gridStart.getDate()+i);cells.push(c.toISOString().split('T')[0]);if(cells.length>=35&&c>=monthEnd)break;}
+  for(let i=0;i<42;i++){const c=new Date(gridStart);c.setDate(gridStart.getDate()+i);cells.push(dateToISO(c));if(cells.length>=35&&c>=monthEnd)break;}
   const prevMonth=new Date(d.getFullYear(),d.getMonth()-1,15).toISOString().split('T')[0];
   const nextMonth=new Date(d.getFullYear(),d.getMonth()+1,15).toISOString().split('T')[0];
   const monthName=fmtMonth(anchor);
@@ -4605,7 +4695,7 @@ function aPlanning(){
     return'';
   }
 
-  return`${aTopbar('Planninga',monthName,`
+  return`${aTopbar('Egutegia',monthName,`
     <button class="atop-btn sec" data-day="${prevMonth}">← Aurrekoa</button>
     <button class="atop-btn sec" data-day="${TODAY}">📅 Gaur</button>
     <button class="atop-btn sec" data-day="${nextMonth}">Hurrengoa →</button>
@@ -4641,8 +4731,9 @@ function aPlanning(){
         <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:14px;background:var(--gl3);border-left:3px solid var(--gl);border-radius:3px"></span>★≥4</div>
         <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:14px;background:var(--reds);border-left:3px solid var(--red);border-radius:3px"></span>★&lt;2</div>
       `:''}
-      <div style="margin-left:auto">💡 Klikatu egunean egutegia irekitzeko</div>
+      <div style="margin-left:auto">💡 Klikatu egunean hautatzeko</div>
     </div>
+    ${aPlanningDayTable()}
   </div>`;
   }
 
@@ -4653,6 +4744,38 @@ function aPlanning(){
 }
 
 // YEAR HEATMAP — temporada completa (sept→jun)
+function aPlanningDayTable(){
+  // Tabla de sesiones del día seleccionado (S.selDay)
+  const day=S.selDay||TODAY;
+  const entries=DB.entries();
+  const sessions=DB.sessions();
+  const dayEntries=entries.filter(e=>e.data===day).sort((a,b)=>a.hora.localeCompare(b.hora));
+  return`<div class="apanel" style="margin-top:18px">
+    <div class="apanel-hdr">
+      <div class="apanel-t">${fmtDate(day)}</div>
+      <span class="tag tg">${dayEntries.length} saio</span>
+    </div>
+    <div class="apanel-body">
+      ${dayEntries.length===0?`<div class="empty" style="padding:30px"><div class="empty-i">📅</div><div class="empty-t">Egun honetan saiorik ez</div></div>`:
+        `<table class="dtbl"><thead><tr>
+          <th style="width:72px">ORDUA</th><th>SAIOA</th><th>TALDEA</th><th>INSTALAZIOA</th><th>BEGIRALEA</th><th style="width:120px">EGOERA</th>
+        </tr></thead><tbody>
+        ${dayEntries.map(en=>{
+          const ss=sessions.find(s=>s.id===en.sid);if(!ss)return'';
+          const ev=DB.getEval(en.id);
+          return`<tr data-click="go('session',{selEid:'${en.id}',selSid:'${ss.id}'})">
+            <td><b style="color:var(--g);font-size:15px">${en.hora}</b></td>
+            <td><b>${ss.nom}</b><div style="font-size:11px;color:var(--txtm);font-weight:700">${ss.cod} · ${ss.adina}</div></td>
+            <td>${en.grupo}</td>
+            <td style="font-size:12px;color:var(--txt2)">${ss.inst}</td>
+            <td><span class="tag tb">👤 ${en.mon}</span></td>
+            <td>${ev?`<span class="tag tgl">✓ Baloratuta ${ev.global?`★${ev.global}`:''}</span>`:`<span class="tag tb">◉ Egiteko</span>`}</td>
+          </tr>`;
+        }).join('')}
+        </tbody></table>`}
+    </div>
+  </div>`;
+}
 function aPlanningYear(entries,sessions,layer,layerSel,toggle){
   const anchor=S.selDay||TODAY;
   const d=new Date(anchor+'T12:00:00');
@@ -4674,7 +4797,7 @@ function aPlanningYear(entries,sessions,layer,layerSel,toggle){
     const wk=[];
     for(let i=0;i<6;i++){
       const cdt=new Date(cur);cdt.setDate(cur.getDate()+i);
-      wk.push(cdt.toISOString().split('T')[0]);
+      wk.push(dateToISO(cdt));
     }
     weeks.push({mon:new Date(cur),days:wk});
     cur.setDate(cur.getDate()+7);
@@ -4721,7 +4844,7 @@ function aPlanningYear(entries,sessions,layer,layerSel,toggle){
   const nextSeasonStart=new Date(startYear+1,8,15).toISOString().split('T')[0];
   const prevSeasonStart=new Date(startYear-1,8,15).toISOString().split('T')[0];
 
-  return`${aTopbar('Planninga',`Denboraldia ${startYear}-${String(startYear+1).slice(2)}`,`
+  return`${aTopbar('Egutegia',`Denboraldia ${startYear}-${String(startYear+1).slice(2)}`,`
     <button class="atop-btn sec" data-day="${prevSeasonStart}">← Aurreko denboraldia</button>
     <button class="atop-btn sec" data-day="${TODAY}">📅 Gaur</button>
     <button class="atop-btn sec" data-day="${nextSeasonStart}">Hurrengoa →</button>
@@ -4772,8 +4895,9 @@ function aPlanningYear(entries,sessions,layer,layerSel,toggle){
       <div style="display:flex;align-items:center;gap:4px">
         <span style="width:12px;height:12px;background:#5fbf7a;border-radius:2px"></span><span>oso handia</span>
       </div>
-      <div style="margin-left:auto">💡 Klikatu egun batean</div>
+      <div style="margin-left:auto">💡 Klikatu egunean hautatzeko</div>
     </div>
+    ${aPlanningDayTable()}
   </div>`;
 }
 
@@ -5609,6 +5733,7 @@ function attachEvents(){
   // ─── v5 HANDLERS ───
   // Planning mode toggle
   document.querySelectorAll('[data-plan-mode]').forEach(b=>b.addEventListener('click',()=>{S.planMode=b.dataset.planMode;render()}));
+  document.querySelectorAll('[data-vcalmode]').forEach(b=>b.addEventListener('click',()=>{S.vCalMode=b.dataset.vcalmode;render()}));
   document.querySelectorAll('[data-plan-layer]').forEach(b=>b.addEventListener('click',()=>{S.planLayer=b.dataset.planLayer;render()}));
   // Library search (live)
   const lsrch=document.getElementById('lib-search');
